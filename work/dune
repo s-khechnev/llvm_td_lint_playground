@@ -1,0 +1,6 @@
+(executable
+ (name test1)
+ (libraries libsail))
+
+(cram
+ (deps ./test1.exe))
