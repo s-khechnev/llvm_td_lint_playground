@@ -332,7 +332,16 @@ let register_default_target () =
   Target.register ~name:"default" (fun _ _ _ _ _ _ -> ())
 
 module Manifest = struct
-  let dir = "/mnt/mand/.opam/4.14.2+flambda/share/sail"
+  let _dir =
+    try Sys.getenv "SAIL_DIR" |> String.trim
+    with Not_found -> "/mnt/mand/.opam/4.14.2+flambda/share/sail"
+
+  (* let dir = "/media/work2/.opam/4.14.2+flambda/share/sail/" *)
+  let dir =
+    let ch = Unix.open_process_in "opam var share" in
+    let path = In_channel.input_all ch |> String.trim in
+    In_channel.close ch;
+    path ^ "/sail"
 end
 
 let run_sail (config : Yojson.Basic.t option) tgt =
@@ -342,8 +351,9 @@ let run_sail (config : Yojson.Basic.t option) tgt =
     (* Printf.printf "%s %d\n" __FILE__ __LINE__;
        Printf.printf "opt-file-args = %s\n%!"
          (String.concat " " !opt_file_arguments);
-       Printf.printf "Manifest.dir = %s\n%!" Manifest.dir;
+
        Printf.printf "tgt.name = %s\n%!" (Target.name tgt); *)
+    Printf.printf "Manifest.dir = %S\n%!" Manifest.dir;
     Frontend.load_files ~target:tgt Manifest.dir !options Type_check.initial_env
       !opt_file_arguments
   in

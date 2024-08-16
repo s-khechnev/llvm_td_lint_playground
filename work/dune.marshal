@@ -1,12 +1,15 @@
 (rule
  (target riscv.sail.json)
  (deps
+  opam-var-share.txt
   ../sail-riscv/model/mapping.sail
   ../sail-riscv/model/hex_bits.sail
+  ../sail-riscv/model/riscv_insts_hints.sail
   ../sail-riscv/model/hex_bits_signed.sail)
  (mode
   (promote (until-clean)))
  (action
+  (setenv SAIL_DIR2222 %{read:opam-var-share.txt}
   (run
    ./mysail.exe
    ../sail-riscv/model/prelude.sail
@@ -95,4 +98,8 @@
    ../sail-riscv/model/riscv_fetch.sail
    ../sail-riscv/model/riscv_step.sail
    ;
-   )))
+   ))))
+
+(rule
+ (with-stdout-to opam-var-share.txt
+  (system "echo `opam var share`/sail")))
