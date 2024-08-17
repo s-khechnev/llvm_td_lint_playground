@@ -1,0 +1,33 @@
+(rule
+ (targets ./RISCV.td.json)
+ (deps llvm19/RISCV.tar.xz)
+ ;  (mode
+ ;   (promote (until-clean)))
+ (action
+  (run tar -xvf %{deps})))
+
+(rule
+ (targets ./RISCV.instructions.json)
+ (deps ./RISCV.td.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run
+    sh
+    -c
+    "jq -c '. | with_entries( select (.value| type == \"object\")   | select(.value.\"!superclasses\" != null)  | select (  .value.\"!superclasses\"[] | contains(\"Instruction\") ) ) | .' %{deps} | jq ."))))
+
+(executable
+ (name dissect)
+ (modules dissect)
+ (libraries yojson))
+
+(rule
+ (targets allkeys.txt)
+ (deps RISCV.instructions.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run ./dissect.exe %{deps} -o %{targets} -get-keys)))

@@ -1,0 +1,7 @@
+(rule
+ (targets CPOP.json CPOPW.json ADDI.json ANDI.json)
+ (deps ../RISCV.instructions.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run ../dissect.exe %{deps} -split-by-keys)))
