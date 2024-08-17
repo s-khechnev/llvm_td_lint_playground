@@ -182,4 +182,15 @@
   ;
   ))
 
-(include dune.marshal)
+(executable
+ (name lookup)
+ (modules lookup from6159)
+ (libraries yojson analysis))
+
+(rule
+ (target from6159.ml)
+ (deps tmp/from6159.ml)
+ (mode
+  (promote (until-clean)))
+ (action
+  (copy tmp/from6159.ml %{target})))

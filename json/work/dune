@@ -1,5 +1,5 @@
 (rule
- (targets CPOP.json CPOPW.json ADDI.json ANDI.json)
+ (targets ADD.json CPOP.json CPOPW.json ADDI.json ANDI.json ADD_UW.json)
  (deps ../RISCV.instructions.json)
  (mode
   (promote (until-clean)))

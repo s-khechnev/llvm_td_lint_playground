@@ -15,19 +15,24 @@ let is_bad_LLVM_key = function
   | s when String.starts_with ~prefix:"int_aarch64" s -> true
   | s when String.starts_with ~prefix:"int_hexagon_" s -> true
   | s when String.starts_with ~prefix:"int_loongarch_" s -> true
+  | s when String.starts_with ~prefix:"Pseudo" s -> true
   | _ -> false
 
 let file_keys () =
   let xs = read_td_json cfg.filename in
   let key_count = ref 0 in
-  Out_channel.with_open_text cfg.outfile (fun outch ->
-      List.iteri
-        (fun i (name, _) ->
-          if not (is_bad_LLVM_key name) then (
-            if i > 0 then Printf.fprintf outch " ";
-            incr key_count;
-            Printf.fprintf outch "%s.json" name))
-        xs);
+  Out_channel.with_open_text cfg.outfile (fun outch_text ->
+      Out_channel.with_open_text "allkeys.json.txt" (fun outch ->
+          List.iteri
+            (fun i (name, _) ->
+              if not (is_bad_LLVM_key name) then (
+                if i > 0 then (
+                  Printf.fprintf outch " ";
+                  Printf.fprintf outch_text "\n");
+                incr key_count;
+                Printf.fprintf outch "%s.json" name;
+                Printf.fprintf outch_text "%s" name))
+            xs));
   Printf.printf "Keys generated: %d\n" !key_count
 (*
 let has_instruction_class = function

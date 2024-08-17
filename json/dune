@@ -25,9 +25,9 @@
  (libraries yojson))
 
 (rule
- (targets allkeys.txt)
+ (targets allkeys.json.txt allkeys.txt)
  (deps RISCV.instructions.json)
  (mode
   (promote (until-clean)))
  (action
-  (run ./dissect.exe %{deps} -o %{targets} -get-keys)))
+  (run ./dissect.exe %{deps} -o allkeys.txt -get-keys)))
