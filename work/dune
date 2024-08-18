@@ -3,6 +3,8 @@
   (flags
    (:standard -warn-error -unused-var-strict))))
 
+(include dune.marshal)
+
 (executable
  (name test1)
  (modules test1)
@@ -23,8 +25,9 @@
  (deps ./reload.exe riscv.sail.json))
 
 (library
- (name myast)
- (modules myast)
+ (name sail_ast_tools)
+ (modules myast myast_iterator)
+ (wrapped false)
  (libraries libsail ppx_deriving_yojson.runtime)
  (preprocess
   (pps ;
@@ -35,7 +38,7 @@
  (name analysis)
  (wrapped false)
  (modules analyzer)
- (libraries myast libsail ppx_deriving_yojson.runtime)
+ (libraries sail_ast_tools libsail ppx_deriving_yojson.runtime)
  ;  (flags
  ;   (:standard -dsource))
  (preprocess
@@ -46,7 +49,7 @@
  (name mysail)
  (modules mysail)
  (link_flags -linkall)
- (libraries libsail linenoise dynlink myast))
+ (libraries libsail linenoise dynlink sail_ast_tools))
 
 (cram
  (applies_to mysail)
