@@ -28,10 +28,30 @@ let report () =
 let omitted_explicitly = [ ""; "ANNOTATION_LABEL" ]
 
 let is_omitted_explicitly s =
-  (* AMOADD_D* and AMOADD_B* not found in sail *)
-  String.starts_with ~prefix:"AMOADD_" s
-  || String.starts_with ~prefix:"AMOAND_" s
-  || String.starts_with ~prefix:"AMOCAS_" s
+  let bad_prefixes =
+    [
+      (* AMOADD_D* and AMOADD_B* not found in sail *)
+      "AMOADD_";
+      "AMOAND_";
+      "AMOCAS_";
+      (* Can't find CBO in SAIL *)
+      "CBO_";
+      (* Can't find Zcmt in SAIL *)
+      "CM_";
+      (* CSR is not defined in  riscv_csr_ext.sail *)
+      "CSRR";
+      (* I don't even know what it is  *)
+      "CV_";
+      (* Zimop https://github.com/riscv/riscv-isa-manual/blob/main/src/zimop.adoc *)
+      "C_MOP";
+      (* Compresed instructions will be difficult to support
+         because they call recursively to other instructions.
+         riscv_insts_zca.sail  253 *)
+      "C_";
+    ]
+  in
+  Option.is_some
+  @@ List.find_opt (fun prefix -> String.starts_with ~prefix s) bad_prefixes
   || List.mem s omitted_explicitly
 
 let () =
@@ -53,8 +73,10 @@ let () =
         match iname with
         | s when is_omitted_explicitly s -> ()
         | _ ->
-            if List.mem mangled_iname From6159.from6159 then
-              stats.from6159 <- stats.from6159 + 1
+            if
+              List.mem mangled_iname From6159.from6159
+              || List.mem ("RISCV_" ^ mangled_iname) From6159.from6159
+            then stats.from6159 <- stats.from6159 + 1
             else if
               List.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
               || List.mem mangled_iname From6159.from6159_hacky

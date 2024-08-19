@@ -191,7 +191,7 @@
 (executable
  (name lookup)
  (modules lookup from6159)
- (preprocessor_deps ../json/work/ADD.json)
+ (preprocessor_deps ../json/work/ADD.json ../json/allkeys.txt)
  (libraries yojson analysis)
  (preprocess
   (pps ppx_deriving_yojson)))

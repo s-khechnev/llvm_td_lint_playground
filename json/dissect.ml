@@ -20,14 +20,14 @@ let is_bad_LLVM_key = function
 
 let is_bad_JSON_data key : Yojson.Safe.t -> bool =
  fun j ->
-  if key = "ADJCALLSTACKDOWN" then
-    Format.printf "@[%a@]\n\n" (Yojson.Safe.pretty_print ~std:false) j;
-
   match j with
   | `Assoc xs -> (
       match List.assoc "!superclasses" xs with
       | `List classes ->
-          let ans = List.mem (`String "Pseudo") classes in
+          let ans =
+            List.mem (`String "Pseudo") classes
+            || List.mem (`String "StandardPseudoInstruction") classes
+          in
           if ans then
             Printf.printf "Key %S filtered because of Pseudo class\n" key;
           ans
@@ -52,9 +52,6 @@ let file_keys () =
                 Printf.fprintf outch_text "%s" name))
             xs));
   Printf.printf "Keys generated: %d\n" !key_count
-(*
-let has_instruction_class = function
-|  *)
 
 let split_to () =
   let xs = read_td_json cfg.filename in
