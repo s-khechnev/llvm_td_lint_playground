@@ -1,5 +1,14 @@
 (rule
- (targets ADD.json CPOP.json CPOPW.json ADDI.json ANDI.json ADD_UW.json)
+ (targets
+  AMOADD_D.json
+  ;ADJCALLSTACKDOWN.json ; Pseudo
+  ADD_UW.json
+  ADD.json
+  CPOP.json
+  CPOPW.json
+  ADDI.json
+  ANDI.json
+  ADD_UW.json)
  (deps ../RISCV.instructions.json)
  (mode
   (promote (until-clean)))

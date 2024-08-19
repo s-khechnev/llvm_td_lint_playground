@@ -26,7 +26,7 @@
 
 (library
  (name sail_ast_tools)
- (modules myast myast_iterator)
+ (modules myast)
  (wrapped false)
  (libraries libsail ppx_deriving_yojson.runtime)
  (preprocess
@@ -35,15 +35,18 @@
    ppx_deriving.show)))
 
 (library
+ (name myast_iterator)
+ (modules myast_iterator)
+ (libraries sail_ast_tools))
+
+(library
  (name analysis)
  (wrapped false)
  (modules analyzer)
  (libraries sail_ast_tools libsail ppx_deriving_yojson.runtime)
- ;  (flags
- ;   (:standard -dsource))
+ (inline_tests)
  (preprocess
-  (pps ;
-   ppx_deriving_yojson)))
+  (pps ppx_deriving_yojson ppx_expect)))
 
 (executable
  (name mysail)
@@ -188,7 +191,10 @@
 (executable
  (name lookup)
  (modules lookup from6159)
- (libraries yojson analysis))
+ (preprocessor_deps ../json/work/ADD.json)
+ (libraries yojson analysis)
+ (preprocess
+  (pps ppx_deriving_yojson)))
 
 (rule
  (target from6159.ml)

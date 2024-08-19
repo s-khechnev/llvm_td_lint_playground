@@ -17,7 +17,7 @@
    (run
     sh
     -c
-    "jq -c '. | with_entries( select (.value| type == \"object\")   | select(.value.\"!superclasses\" != null)  | select (  .value.\"!superclasses\"[] | contains(\"Instruction\") ) ) | .' %{deps} | jq ."))))
+    "jq -c '. | with_entries( select(.value | type == \"object\") | select(.value.\"!superclasses\" != null)  | select(.value.\"!superclasses\"[] | contains(\"Instruction\") ) | select(.value.\"!superclasses\"[] | contains(\"Pseudo\") | not) ) | .' %{deps} | jq ."))))
 
 (executable
  (name dissect)

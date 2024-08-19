@@ -7,7 +7,7 @@ let post_process ast =
          Out_channel.with_open_text file (fun ch ->
              let j = Myast.def_to_yojson Myast.tannot_to_yojson def in
              let fmt = Format.formatter_of_out_channel ch in
-             Format.pp_set_max_indent fmt 1000;
+             Format.pp_set_max_indent fmt 2000;
              Yojson.Safe.pretty_print fmt j;
              Format.pp_print_flush fmt ());
          let file = Printf.sprintf "./%05d.txt" n in

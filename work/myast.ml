@@ -617,6 +617,8 @@ type 'a def_aux = 'a Ast.def_aux =
 and 'a def = 'a Ast.def = DEF_aux of 'a def_aux * def_annot
 [@@deriving yojson, show { with_path = false }]
 
+(* type tannot = Type_check.tannot *)
+
 let pp_tannot ppf _ = Format.fprintf ppf "???"
 let tannot_to_yojson _ = `Int 42
 

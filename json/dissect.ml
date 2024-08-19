@@ -18,14 +18,32 @@ let is_bad_LLVM_key = function
   | s when String.starts_with ~prefix:"Pseudo" s -> true
   | _ -> false
 
+let is_bad_JSON_data key : Yojson.Safe.t -> bool =
+ fun j ->
+  if key = "ADJCALLSTACKDOWN" then
+    Format.printf "@[%a@]\n\n" (Yojson.Safe.pretty_print ~std:false) j;
+
+  match j with
+  | `Assoc xs -> (
+      match List.assoc "!superclasses" xs with
+      | `List classes ->
+          let ans = List.mem (`String "Pseudo") classes in
+          if ans then
+            Printf.printf "Key %S filtered because of Pseudo class\n" key;
+          ans
+      | exception Not_found -> false
+      | _ -> false)
+  | _ -> false
+
 let file_keys () =
   let xs = read_td_json cfg.filename in
   let key_count = ref 0 in
   Out_channel.with_open_text cfg.outfile (fun outch_text ->
       Out_channel.with_open_text "allkeys.json.txt" (fun outch ->
           List.iteri
-            (fun i (name, _) ->
-              if not (is_bad_LLVM_key name) then (
+            (fun i (name, jdata) ->
+              if is_bad_LLVM_key name || is_bad_JSON_data name jdata then ()
+              else (
                 if i > 0 then (
                   Printf.fprintf outch " ";
                   Printf.fprintf outch_text "\n");
@@ -42,11 +60,12 @@ let split_to () =
   let xs = read_td_json cfg.filename in
   let key_count = ref 0 in
   ListLabels.iter xs ~f:(fun (key, v) ->
-      if not (is_bad_LLVM_key key) then
+      if not (is_bad_LLVM_key key) then (
         let outfile = Printf.sprintf "./%s.json" key in
+        if Sys.file_exists outfile then Sys.remove outfile;
         Out_channel.with_open_text outfile (fun outch ->
             incr key_count;
-            Yojson.Safe.pretty_to_channel outch v));
+            Yojson.Safe.pretty_to_channel outch v)));
   Printf.printf "JSONs generated: %d\n" !key_count
 
 let () =
