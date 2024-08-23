@@ -1,0 +1,26 @@
+(rule
+ (targets 05377.txt 06157.txt 06159.txt 06159.json 06160.txt)
+ (mode
+  (promote (until-clean)))
+ (deps ../riscv.sail.json)
+ (action
+  (run ../reload.exe -dump-from %{deps})))
+
+(rule
+ (targets 06159dump.txt from6159.ml)
+ (mode (promote))
+ (deps 06159.json)
+ (action
+  (run
+   ./dump2.exe
+   -ocaml-code
+   from6159.ml
+   -ocaml-ident
+   from6159
+   -dump-execute
+   %{deps})))
+
+(executable
+ (name dump2)
+ (modules dump2)
+ (libraries yojson analysis myast_iterator))
