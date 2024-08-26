@@ -1,6 +1,27 @@
-type config = { mutable instructions_file : string }
+let failwithf = Myast.failwithf
 
-let config = { instructions_file = "./json/allkeys.txt" }
+type config = {
+  mutable instructions_file : string;
+  mutable instr_to_process : string;
+  mutable riscv_td_file : string;
+}
+
+let config =
+  {
+    instructions_file = "./json/allkeys.txt";
+    instr_to_process = "";
+    riscv_td_file = "json/RISCV.instructions.json";
+  }
+
+let () =
+  Arg.parse
+    [
+      ( "-i",
+        Arg.String (fun s -> config.instr_to_process <- s),
+        " Name of instruction to lookup" );
+    ]
+    (fun s -> config.instructions_file <- s)
+    "help TODO"
 
 type stats = {
   mutable from6159 : int;
@@ -54,34 +75,75 @@ let is_omitted_explicitly s =
   @@ List.find_opt (fun prefix -> String.starts_with ~prefix s) bad_prefixes
   || List.mem s omitted_explicitly
 
-let () =
-  let all_iname =
-    In_channel.with_open_text config.instructions_file In_channel.input_all
-    |> String.split_on_char '\n'
+let extract_operands_info key =
+  let read_td_json filename =
+    let j = In_channel.with_open_text filename Yojson.Safe.from_channel in
+    match j with `Assoc xs -> xs | _ -> exit 1
   in
-  stats.total <- List.length all_iname;
-  ListLabels.iter all_iname ~f:(fun iname ->
-      let mangled_iname =
-        match iname with
-        | "ADD_UW" -> "ADDUW"
-        | _ -> (
-            match Analyzer.smart_rewrite iname with
-            | Some x -> x
-            | None -> iname)
-      in
-      let () =
-        match iname with
-        | s when is_omitted_explicitly s -> ()
-        | _ ->
-            if
-              List.mem mangled_iname From6159.from6159
-              || List.mem ("RISCV_" ^ mangled_iname) From6159.from6159
-            then stats.from6159 <- stats.from6159 + 1
-            else if
-              List.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
-              || List.mem mangled_iname From6159.from6159_hacky
-            then stats.from6159 <- stats.from6159 + 1
-            else save_unknown iname mangled_iname
-      in
-      ());
-  report ()
+  let from_assoc = function `Assoc xs -> xs | _ -> assert false in
+  let from_list = function `List xs -> xs | _ -> assert false in
+  let j : (string * Yojson.Safe.t) list =
+    match List.assoc key (read_td_json config.riscv_td_file) with
+    | `Assoc xs -> xs
+    | exception Not_found ->
+        Printf.eprintf "Can't get key %S\n" key;
+        exit 1
+    | _ -> assert false
+  in
+  let exract_operands j =
+    j |> from_assoc |> List.assoc "args" |> from_list
+    |> List.map (function
+         | `List [ `Assoc [ _; _; _ ]; `String s ] -> s
+         | other ->
+             Myast.failwithf "Unsupported case: %a\n"
+               (Yojson.Safe.pretty_print ~std:false)
+               other)
+  in
+  let in_operands = exract_operands (List.assoc "InOperandList" j) in
+  let out_operands = exract_operands (List.assoc "OutOperandList" j) in
+  print_endline "";
+  Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
+  Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands);
+  (in_operands, out_operands)
+
+let process_single iname =
+  print_endline __FUNCTION__;
+  let mangled_iname =
+    match iname with
+    | "ADD_UW" -> "ADDUW"
+    | _ -> (
+        match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
+  in
+  let on_found iname =
+    stats.from6159 <- stats.from6159 + 1;
+    let _ = extract_operands_info iname in
+    ()
+  in
+  let () =
+    match iname with
+    | s when is_omitted_explicitly s -> ()
+    | _ ->
+        if
+          List.mem mangled_iname From6159.from6159
+          || List.mem ("RISCV_" ^ mangled_iname) From6159.from6159
+        then on_found iname
+        else if
+          List.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
+          || List.mem mangled_iname From6159.from6159_hacky
+        then on_found iname
+        else save_unknown iname mangled_iname
+  in
+  ()
+
+let () =
+  if config.instr_to_process <> "" then (
+    process_single config.instr_to_process;
+    report ())
+  else
+    let all_iname =
+      In_channel.with_open_text config.instructions_file In_channel.input_all
+      |> String.split_on_char '\n'
+    in
+    stats.total <- List.length all_iname;
+    ListLabels.iter all_iname ~f:process_single;
+    report ()
