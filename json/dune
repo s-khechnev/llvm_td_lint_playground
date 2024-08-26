@@ -7,17 +7,32 @@
   (run tar -xvf %{deps})))
 
 (rule
+ (targets script.jq.online)
+ (deps script.jq)
+ (action
+  (pipe-stdout
+   (with-stdin-from
+    %{deps}
+    (run sed "/^#/d"))
+   (with-stdout-to
+    %{targets}
+    (run tr "'\\n'" " ")))))
+
+(rule
  (targets ./RISCV.instructions.json)
- (deps ./RISCV.td.json)
+ (deps
+  (:riscv ./RISCV.td.json)
+  (:script script.jq.online))
  (mode
   (promote (until-clean)))
  (action
-  (with-stdout-to
-   %{targets}
-   (run
-    sh
-    -c
-    "jq -c '. | with_entries( select(.value | type == \"object\") | select(.value.\"!superclasses\" != null)  | select(.value.\"!superclasses\"[] | contains(\"Instruction\") ) | select(.value.\"!superclasses\"[] | contains(\"Pseudo\") | not) | select(.value.\"!superclasses\"[] | contains(\"StandardPseudoInstruction\") | not) ) | .' %{deps} | jq ."))))
+  (progn
+   (with-stdout-to
+    %{targets}
+    (run sh -c "jq -f %{script}  %{riscv} | jq ."))
+   (run ls -lh %{targets})
+   ;
+   )))
 
 (executable
  (name dissect)
