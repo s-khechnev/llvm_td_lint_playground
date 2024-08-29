@@ -4,6 +4,7 @@ type config = {
   mutable instructions_file : string;
   mutable instr_to_process : string;
   mutable riscv_td_file : string;
+  mutable sail_json : string;
   mutable verbose : bool;
 }
 
@@ -12,6 +13,7 @@ let config =
     instructions_file = "./json/allkeys.txt";
     instr_to_process = "";
     riscv_td_file = "json/RISCV.instructions.json";
+    sail_json = "work/tmp/06159.json";
     verbose = false;
   }
 
@@ -21,9 +23,15 @@ let () =
       ( "-i",
         Arg.String (fun s -> config.instr_to_process <- s),
         " Name of instruction to lookup" );
+      ("-sail-json", Arg.String (fun s -> config.sail_json <- s), " ");
+      ("-v", Arg.Unit (fun () -> config.verbose <- true), " ");
     ]
     (fun s -> config.instructions_file <- s)
     "help TODO"
+
+let log fmt =
+  if config.verbose then Format.kasprintf print_endline fmt
+  else Format.ikfprintf (fun _ -> ()) Format.std_formatter fmt
 
 type stats = {
   mutable from6159 : int;
@@ -118,6 +126,45 @@ let chop_suffix ~suffix s =
     String.sub s 0 (String.length s - String.length suffix)
   else s
 
+let sail_AST =
+  lazy
+    (let j =
+       In_channel.with_open_text config.sail_json Yojson.Safe.from_channel
+     in
+     match Myast.def_of_yojson Myast.tannot_of_yojson j with
+     | Result.Error err ->
+         Format.eprintf "Error: %s\n%!" err;
+         exit 1
+     | Ok ast -> ast)
+
+let get_sail_clause cname =
+  let open Myast in
+  let exception
+    Found of
+      Libsail.Type_check.tannot Libsail.Ast.pat list
+      * Libsail.Type_check.tannot Myast.exp
+  in
+  try
+    match Lazy.force sail_AST with
+    | DEF_aux (DEF_fundef (FD_aux (FD_function (_, _, body), _)), _) ->
+        List.iter
+          (function
+            | Myast.FCL_aux (FCL_funcl (Id_aux (Id "execute", _), fdecl), _)
+              -> (
+                match fdecl with
+                | Pat_aux
+                    ( Pat_exp
+                        (P_aux (P_app (Id_aux (Id name, _), pargs), _), exp),
+                      _ )
+                  when name = cname ->
+                    raise (Found (pargs, exp))
+                | _ -> ())
+            | _ -> ())
+          body;
+        failwithf "%s %d" __FILE__ __LINE__
+    | _ -> failwithf "%s %d" __FILE__ __LINE__
+  with Found (pats, expr) -> (pats, expr)
+
 let process_single iname =
   let mangled_iname =
     match iname with
@@ -129,19 +176,27 @@ let process_single iname =
     | _ -> (
         match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
   in
-  let on_found iname =
+  let on_found iname ~mangled =
     stats.from6159 <- stats.from6159 + 1;
+    let info = Hashtbl.find From6159.from6159 mangled in
     let _ = extract_operands_info iname in
+    let top_cname =
+      match info with
+      | From6159.CI_default s -> s
+      | From6159.CI_hacky (s, _) -> s
+    in
+    let _ = get_sail_clause top_cname in
+    log "Got a SAIL clause";
     ()
   in
   let () =
     match iname with
     | s when is_omitted_explicitly s -> ()
     | _ ->
-        if
-          Hashtbl.mem From6159.from6159 mangled_iname
-          || Hashtbl.mem From6159.from6159 ("RISCV_" ^ mangled_iname)
-        then on_found iname
+        if Hashtbl.mem From6159.from6159 mangled_iname then
+          on_found iname ~mangled:mangled_iname
+        else if Hashtbl.mem From6159.from6159 ("RISCV_" ^ mangled_iname) then
+          on_found iname ~mangled:("RISCV_" ^ mangled_iname)
           (* else if
                Hashtbl.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
                || Hashtbl.mem mangled_iname From6159.from6159_hacky
