@@ -9,7 +9,9 @@
 (rule
  (targets 06159dump.txt from6159.ml)
  (mode (promote))
- (deps 06159.json)
+ (deps
+  (:json 06159.json)
+  ./dump2.exe)
  (action
   (run
    ./dump2.exe
@@ -18,7 +20,7 @@
    -ocaml-ident
    from6159
    -dump-execute
-   %{deps})))
+   %{json})))
 
 (executable
  (name dump2)

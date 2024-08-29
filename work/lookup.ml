@@ -4,6 +4,7 @@ type config = {
   mutable instructions_file : string;
   mutable instr_to_process : string;
   mutable riscv_td_file : string;
+  mutable verbose : bool;
 }
 
 let config =
@@ -11,6 +12,7 @@ let config =
     instructions_file = "./json/allkeys.txt";
     instr_to_process = "";
     riscv_td_file = "json/RISCV.instructions.json";
+    verbose = false;
   }
 
 let () =
@@ -55,6 +57,8 @@ let is_omitted_explicitly s =
       "AMOADD_";
       "AMOAND_";
       "AMOCAS_";
+      "DIVU";
+      "DRET";
       (* Can't find CBO in SAIL *)
       "CBO_";
       (* Can't find Zcmt in SAIL *)
@@ -75,15 +79,17 @@ let is_omitted_explicitly s =
   @@ List.find_opt (fun prefix -> String.starts_with ~prefix s) bad_prefixes
   || List.mem s omitted_explicitly
 
+let read_td_json filename =
+  let j = In_channel.with_open_text filename Yojson.Safe.from_channel in
+  match j with `Assoc xs -> xs | _ -> exit 1
+
+let llvm_JSON = lazy (read_td_json config.riscv_td_file)
+
 let extract_operands_info key =
-  let read_td_json filename =
-    let j = In_channel.with_open_text filename Yojson.Safe.from_channel in
-    match j with `Assoc xs -> xs | _ -> exit 1
-  in
   let from_assoc = function `Assoc xs -> xs | _ -> assert false in
   let from_list = function `List xs -> xs | _ -> assert false in
   let j : (string * Yojson.Safe.t) list =
-    match List.assoc key (read_td_json config.riscv_td_file) with
+    match List.assoc key (Lazy.force llvm_JSON) with
     | `Assoc xs -> xs
     | exception Not_found ->
         Printf.eprintf "Can't get key %S\n" key;
@@ -101,16 +107,25 @@ let extract_operands_info key =
   in
   let in_operands = exract_operands (List.assoc "InOperandList" j) in
   let out_operands = exract_operands (List.assoc "OutOperandList" j) in
-  print_endline "";
-  Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
-  Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands);
+  if config.verbose then (
+    print_endline "";
+    Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
+    Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
   (in_operands, out_operands)
 
+let chop_suffix ~suffix s =
+  if String.ends_with ~suffix s then
+    String.sub s 0 (String.length s - String.length suffix)
+  else s
+
 let process_single iname =
-  print_endline __FUNCTION__;
   let mangled_iname =
     match iname with
     | "ADD_UW" -> "ADDUW"
+    | "FADD_H" | "FADD_D" -> iname
+    | s when String.ends_with ~suffix:"_INX" s -> chop_suffix ~suffix:"_INX" s
+    | s when String.ends_with ~suffix:"_IN32X" s ->
+        chop_suffix ~suffix:"_IN32X" s
     | _ -> (
         match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
   in
@@ -124,13 +139,13 @@ let process_single iname =
     | s when is_omitted_explicitly s -> ()
     | _ ->
         if
-          List.mem mangled_iname From6159.from6159
-          || List.mem ("RISCV_" ^ mangled_iname) From6159.from6159
+          Hashtbl.mem From6159.from6159 mangled_iname
+          || Hashtbl.mem From6159.from6159 ("RISCV_" ^ mangled_iname)
         then on_found iname
-        else if
-          List.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
-          || List.mem mangled_iname From6159.from6159_hacky
-        then on_found iname
+          (* else if
+               Hashtbl.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
+               || Hashtbl.mem mangled_iname From6159.from6159_hacky
+             then on_found iname *)
         else save_unknown iname mangled_iname
   in
   ()

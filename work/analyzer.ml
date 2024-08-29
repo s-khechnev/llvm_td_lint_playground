@@ -28,7 +28,8 @@ let is_good_suffix = function 'B' | 'W' | 'D' | 'H' -> true | _ -> false
 
 let is_good_suffix_s = function
   | "UW" | "B_AQ" | "B_AQ_RL" | "B_RL" | "D_AQ" | "D_AQ_RL" | "D_RL" | "H_AQ"
-  | "H_AQ_RL" | "H_RL" | "W_AQ" | "W_AQ_RL" | "W_RL" ->
+  | "H_AQ_RL" | "H_RL" | "W_AQ" | "W_AQ_RL" | "W_RL" | "INX" | "IN32X" ->
+      (* TODO: Understand which if this suffixes are about *)
       true
   | _ -> false
 
