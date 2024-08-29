@@ -33,6 +33,8 @@ let log fmt =
   if config.verbose then Format.kasprintf print_endline fmt
   else Format.ikfprintf (fun _ -> ()) Format.std_formatter fmt
 
+let loge fmt = Format.kasprintf (Printf.eprintf "%s\n%!") fmt
+
 type stats = {
   mutable from6159 : int;
   mutable total : int;
@@ -165,6 +167,52 @@ let get_sail_clause cname =
     | _ -> failwithf "%s %d" __FILE__ __LINE__
   with Found (pats, expr) -> (pats, expr)
 
+include struct
+  open Myast_iterator
+  open Myast
+
+  exception Assignment_found
+
+  let opd_store = ref []
+  let is_right_opnd x = List.mem x !opd_store
+  let found_assmts : (string, unit) Hashtbl.t = Hashtbl.create 100
+  let register_assmt s = Hashtbl.add found_assmts s ()
+
+  let clear () =
+    Hashtbl.clear found_assmts;
+    opd_store := []
+
+  let has_match =
+    {
+      default_iterator with
+      exp_aux =
+        (fun self e ->
+          match e with
+          | E_app
+              ( Id_aux (Id "wX_bits", _),
+                [ E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
+            when is_right_opnd rd ->
+              register_assmt rd
+          | _ -> default_iterator.exp_aux self e);
+    }
+
+  let is_assignment_to_rd opds expr =
+    clear ();
+    match opds with
+    | [] -> failwith "Bad argument"
+    | opds ->
+        opd_store := opds;
+        has_match.exp has_match expr;
+        if Hashtbl.length found_assmts < List.length !opd_store then
+          let missing =
+            List.filter
+              (fun name -> not (Hashtbl.mem found_assmts name))
+              !opd_store
+          in
+          Result.Error missing
+        else Result.Ok ()
+end
+
 let process_single iname =
   let mangled_iname =
     match iname with
@@ -179,16 +227,23 @@ let process_single iname =
   let on_found iname ~mangled =
     stats.from6159 <- stats.from6159 + 1;
     let info = Hashtbl.find From6159.from6159 mangled in
-    let _ = extract_operands_info iname in
+    let _, out_opds = extract_operands_info iname in
     let top_cname =
       match info with
       | From6159.CI_default s -> s
       | From6159.CI_hacky (s, _) -> s
     in
-    let _ = get_sail_clause top_cname in
-    log "Got a SAIL clause";
-    ()
+    let pat, body = get_sail_clause top_cname in
+    (* log "Got a SAIL clause"; *)
+    match is_assignment_to_rd out_opds body with
+    | Result.Ok _ -> ()
+    | Error xs ->
+        (* log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body; *)
+        loge "No assignemnt to rd for name = %S: %s" iname
+          (String.concat " " xs);
+        exit 1
   in
+
   let () =
     match iname with
     | s when is_omitted_explicitly s -> ()

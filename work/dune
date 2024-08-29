@@ -192,7 +192,7 @@
  (name lookup)
  (modules lookup from6159)
  (preprocessor_deps ../json/work/ADD.json ../json/allkeys.txt)
- (libraries yojson analysis)
+ (libraries yojson analysis myast_iterator)
  (preprocess
   (pps ppx_deriving_yojson)))
 
