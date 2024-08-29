@@ -117,10 +117,10 @@ let extract_operands_info key =
   in
   let in_operands = exract_operands (List.assoc "InOperandList" j) in
   let out_operands = exract_operands (List.assoc "OutOperandList" j) in
-  if config.verbose then (
-    print_endline "";
-    Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
-    Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
+  (* if config.verbose then (
+     print_endline "";
+     Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
+     Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands)); *)
   (in_operands, out_operands)
 
 let chop_suffix ~suffix s =
@@ -186,20 +186,33 @@ include struct
     {
       default_iterator with
       exp_aux =
-        (fun self e ->
-          match e with
+        (fun self -> function
           | E_app
-              ( Id_aux (Id "wX_bits", _),
+              ( Id_aux
+                  ( Id
+                      ( "wX_bits" | "wF_or_X_D" | "wF_or_X_H" | "wF_or_X_S"
+                      | "wF_S" | "wF_D" ),
+                    _ ),
                 [ E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
               register_assmt rd
-          | _ -> default_iterator.exp_aux self e);
+          | E_app
+              ( Id_aux (Id "write_vreg", _),
+                [ _; _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
+            when is_right_opnd rd ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "write_vmask", _),
+                [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
+            when is_right_opnd rd ->
+              register_assmt rd
+          | e -> default_iterator.exp_aux self e);
     }
 
   let is_assignment_to_rd opds expr =
     clear ();
     match opds with
-    | [] -> failwith "Bad argument"
+    | [] -> Result.Ok ()
     | opds ->
         opd_store := opds;
         has_match.exp has_match expr;
@@ -224,23 +237,40 @@ let process_single iname =
     | _ -> (
         match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
   in
+  let fix_operands ~pat ~in_opnds ~out_opnds iname info =
+    let pat : _ Myast.pat list =
+      (* Fix for ADD instruction *)
+      match pat with [ Myast.P_aux (P_tuple xs, _) ] -> xs | _ -> pat
+    in
+    let map f = (List.map f in_opnds, List.map f out_opnds) in
+    match iname with
+    (* | "VID_V"  *)
+    | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
+    | _ -> (in_opnds, out_opnds)
+  in
+
   let on_found iname ~mangled =
     stats.from6159 <- stats.from6159 + 1;
     let info = Hashtbl.find From6159.from6159 mangled in
-    let _, out_opds = extract_operands_info iname in
+    let in_opnds, out_opnds = extract_operands_info iname in
     let top_cname =
       match info with
       | From6159.CI_default s -> s
       | From6159.CI_hacky (s, _) -> s
     in
     let pat, body = get_sail_clause top_cname in
+    let in_opnds, out_opds =
+      fix_operands ~in_opnds ~out_opnds ~pat iname info
+    in
     (* log "Got a SAIL clause"; *)
     match is_assignment_to_rd out_opds body with
     | Result.Ok _ -> ()
     | Error xs ->
-        (* log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body; *)
-        loge "No assignemnt to rd for name = %S: %s" iname
+        log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body;
+        loge "No assignemnt to RDEST for name = %S: %s" iname
           (String.concat " " xs);
+        loge "New out_opnds = %s" (String.concat " " out_opds);
+        loge "pat = @[%a@]" Myast.(pp_pat_aux pp_tannot) (Myast.P_tuple pat);
         exit 1
   in
 
