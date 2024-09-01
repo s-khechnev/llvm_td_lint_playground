@@ -82,7 +82,7 @@ let is_omitted_explicitly s =
       (* Compresed instructions will be difficult to support
          because they call recursively to other instructions.
          riscv_insts_zca.sail  253 *)
-      "C_";
+      (* "C_"; *)
     ]
   in
   Option.is_some
@@ -167,13 +167,31 @@ let get_sail_clause cname =
     | _ -> failwithf "%s %d" __FILE__ __LINE__
   with Found (pats, expr) -> (pats, expr)
 
+let get_sail_clauses cname _spec =
+  let open Myast in
+  match Lazy.force sail_AST with
+  | DEF_aux (DEF_fundef (FD_aux (FD_function (_, _, body), _)), _) ->
+      List.filter_map
+        (function
+          | Myast.FCL_aux (FCL_funcl (Id_aux (Id "execute", _), fdecl), _) -> (
+              match fdecl with
+              | Pat_aux
+                  ( Pat_exp (P_aux (P_app (Id_aux (Id name, _), pargs), _), exp),
+                    _ )
+                when name = cname ->
+                  Some (pargs, exp)
+              | _ -> None)
+          | _ -> None)
+        body
+  | _ -> []
+
 include struct
   open Myast_iterator
   open Myast
 
   exception Assignment_found
 
-  let opd_store = ref []
+  let opd_store : string list ref = ref []
   let is_right_opnd x = List.mem x !opd_store
   let found_assmts : (string, unit) Hashtbl.t = Hashtbl.create 100
   let register_assmt s = Hashtbl.add found_assmts s ()
@@ -182,7 +200,32 @@ include struct
     Hashtbl.clear found_assmts;
     opd_store := []
 
-  let has_match =
+  let memo_lookup =
+    let module Key = struct
+      type t = {
+        cname : string;  (** Top constructor name*)
+        argc : string option list;  (** specializations *)
+      }
+
+      let equal = Stdlib.( = )
+      let hash = Stdlib.Hashtbl.hash
+    end in
+    let module Tbl = Hashtbl.Make (Key) in
+    let lookup cname spec arg =
+      (* spec --- TODO *)
+      let _ : string option list = spec in
+      let _ : int = arg in
+      let sail_ast = get_sail_clauses cname spec in
+      log "%s %d cname= %S, closes.count = %d" __FILE__ __LINE__ cname
+        (List.length sail_ast);
+      match sail_ast with
+      | [] -> failwith "not implemented"
+      | _ :: _ :: _ -> failwith "not implemented"
+      | [ h ] -> 1
+    in
+    lookup
+
+  let make_iterator is_right_opnd register_assmt =
     {
       default_iterator with
       exp_aux =
@@ -206,24 +249,46 @@ include struct
                 [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
               register_assmt rd
+          | E_app
+              ( Id_aux (Id "execute", _),
+                [
+                  E_aux
+                    ( E_app (Id_aux (Id rtype, _), [ E_aux (E_tuple args, _) ]),
+                      _ );
+                ] ) as e ->
+              log "%s %d rtype = %S, argc = %d" __FILE__ __LINE__ rtype
+                (List.length args);
+              let spec_args =
+                List.map
+                  (function
+                    | E_aux (E_id (Id_aux (Id id, _)), _) ->
+                        log "%s %d arg.id = %S" __FILE__ __LINE__ id;
+                        if Char.uppercase_ascii id.[0] = id.[0] then Some id
+                        else None
+                    | _ -> None)
+                  args
+              in
+              let _ = memo_lookup rtype spec_args 0 in
+
+              default_iterator.exp_aux self e
           | e -> default_iterator.exp_aux self e);
     }
 
-  let is_assignment_to_rd opds expr =
-    clear ();
-    match opds with
-    | [] -> Result.Ok ()
-    | opds ->
-        opd_store := opds;
-        has_match.exp has_match expr;
-        if Hashtbl.length found_assmts < List.length !opd_store then
-          let missing =
-            List.filter
-              (fun name -> not (Hashtbl.mem found_assmts name))
-              !opd_store
-          in
-          Result.Error missing
-        else Result.Ok ()
+  (* let is_assignment_to_rd opds expr =
+     clear ();
+     match opds with
+     | [] -> Result.Ok ()
+     | opds ->
+         opd_store := opds;
+         has_match.exp has_match expr;
+         if Hashtbl.length found_assmts < List.length !opd_store then
+           let missing =
+             List.filter
+               (fun name -> not (Hashtbl.mem found_assmts name))
+               !opd_store
+           in
+           Result.Error missing
+         else Result.Ok () *)
 end
 
 let process_single iname =
@@ -246,6 +311,7 @@ let process_single iname =
     match iname with
     (* | "VID_V"  *)
     | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
+    | "C_ADD" -> map (function "rs1_wb" -> "rsd" | x -> x)
     | _ -> (in_opnds, out_opnds)
   in
 
@@ -262,16 +328,16 @@ let process_single iname =
     let in_opnds, out_opds =
       fix_operands ~in_opnds ~out_opnds ~pat iname info
     in
-    (* log "Got a SAIL clause"; *)
-    match is_assignment_to_rd out_opds body with
-    | Result.Ok _ -> ()
-    | Error xs ->
-        log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body;
-        loge "No assignemnt to RDEST for name = %S: %s" iname
-          (String.concat " " xs);
-        loge "New out_opnds = %s" (String.concat " " out_opds);
-        loge "pat = @[%a@]" Myast.(pp_pat_aux pp_tannot) (Myast.P_tuple pat);
-        exit 1
+    ()
+    (* match is_assignment_to_rd out_opds body with
+       | Result.Ok _ -> ()
+       | Error xs ->
+           log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body;
+           loge "No assignemnt to RDEST for name = %S: %s" iname
+             (String.concat " " xs);
+           loge "New out_opnds = %s" (String.concat " " out_opds);
+           loge "pat = @[%a@]" Myast.(pp_pat_aux pp_tannot) (Myast.P_tuple pat);
+           exit 1 *)
   in
 
   let () =

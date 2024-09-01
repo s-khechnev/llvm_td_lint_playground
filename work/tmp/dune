@@ -7,7 +7,7 @@
   (run ../reload.exe -dump-from %{deps})))
 
 (rule
- (targets 06159dump.txt from6159.ml)
+ (targets 06159dump.txt from6159.ml graph.dot)
  (mode (promote))
  (deps
   (:json 06159.json)
@@ -22,7 +22,23 @@
    -dump-execute
    %{json})))
 
+(rule
+ (targets graph.png)
+ (mode (promote))
+ (deps graph.dot)
+ (action
+  (run
+   ;dot -Tpng %{deps} -o %{targets}
+   neato
+   -Nlen=1.8
+   -Gmode=hier
+   -Goverlap=false
+   -Tpng
+   %{deps}
+   -o
+   %{targets})))
+
 (executable
  (name dump2)
  (modules dump2)
- (libraries yojson analysis myast_iterator))
+ (libraries yojson analysis myast_iterator ocamlgraph))
