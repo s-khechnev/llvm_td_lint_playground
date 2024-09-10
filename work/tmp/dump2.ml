@@ -1,6 +1,7 @@
 [@@@ocaml.warnerror "-unused-extension"]
 
 let failwithf fmt = Format.kasprintf failwith fmt
+let sprintf fmt = Printf.sprintf fmt
 
 let log fmt =
   if true then Format.kasprintf print_endline fmt
@@ -41,13 +42,29 @@ include struct
     with Match_op_found xs -> Some xs
 end
 
+let is_name_for_tracing = function
+  | "RTYPE" | "RISCV_ADD" | "C_ADD" -> true
+  | _ -> false
+
 module Collect_out_info = struct
   open Myast_iterator
   open Myast
 
+  type formal_params = string option list
+
+  let pp_formal_params ppf : formal_params -> unit =
+    let open Format in
+    fprintf ppf "[ %a ]"
+      (pp_print_list
+         ~pp_sep:(fun ppf () -> fprintf ppf "; ")
+         (fun ppf -> function
+           | None -> fprintf ppf "_"
+           | Some x -> pp_print_string ppf x))
+
   module V = struct
     type t = string
 
+    let make l = l
     let compare = Stdlib.compare
     let equal = Stdlib.( = )
     let hash = Stdlib.Hashtbl.hash
@@ -64,8 +81,12 @@ module Collect_out_info = struct
   end
 
   module G = Graph.Imperative.Digraph.ConcreteLabeled (V) (Edge)
+  module Top = Graph.Topological.Make (G)
 
   let g = G.create ()
+
+  let formal_params_hash : (string, formal_params) Hashtbl.t =
+    Hashtbl.create 111
 
   let make_iterator curV is_right_opnd register_assmt =
     {
@@ -104,15 +125,16 @@ module Collect_out_info = struct
                 List.map
                   (function
                     | E_aux (E_id (Id_aux (Id id, _)), _) ->
-                        log "%s %d arg.id = %S" __FILE__ __LINE__ id;
-                        if Char.uppercase_ascii id.[0] = id.[0] then Some id
-                        else None
+                        (* log "%s %d arg.id = %S" __FILE__ __LINE__ id; *)
+                        if Char.uppercase_ascii id.[0] = id.[0] then None
+                        else Some id
                     | _ -> None)
                   args
               in
+              let v_dest = rtype in
               G.add_vertex g curV;
-              G.add_vertex g rtype;
-              G.add_edge_e g (rtype, Edge.make spec_args, curV);
+              G.add_vertex g v_dest;
+              G.add_edge_e g (v_dest, Edge.make spec_args, curV);
               default_iterator.exp_aux self e
           | e -> default_iterator.exp_aux self e);
     }
@@ -130,6 +152,46 @@ module Collect_out_info = struct
       let default_edge_attributes _ = []
     end) in
     Out_channel.with_open_text config.dot_file (fun ch -> Dot.output_graph ch g)
+
+  let saturate_graph is_out extend =
+    let on_edge : V.t * Edge.t * V.t -> _ =
+     fun (v_from, spec_args, vdest) ->
+      let formal_params_dest =
+        match Hashtbl.find formal_params_hash v_from with
+        | exception Not_found ->
+            failwithf "Can't get formal params for %s" vdest
+        | xs -> xs
+      in
+      (* if is_name_for_tracing v_from then (
+         log "vfrom = %s, dest = %s" v_from vdest;
+         log "spec_args = %a" pp_formal_params spec_args;
+         log "dest_args = %a" pp_formal_params formal_params_dest); *)
+      assert (List.length spec_args = List.length formal_params_dest);
+
+      let interestring_args =
+        List.map2
+          (fun a b ->
+            match (a, b) with
+            | _, None | None, _ -> None
+            | Some x, Some y -> Some (x, y))
+          spec_args formal_params_dest
+        |> List.filter_map Fun.id
+      in
+      (* if is_name_for_tracing v_from then
+         log "\nInteresting args for %S: %s" v_from
+           (String.concat " "
+              (List.map (fun (a, b) -> sprintf "(%s,%s)" a b) interestring_args)); *)
+      List.iter
+        (fun (spec, dest) ->
+          if is_out v_from ~arg:dest then extend vdest ~arg:spec)
+        interestring_args;
+      ()
+    in
+    Top.iter
+      (fun v ->
+        let edges = G.succ_e g v in
+        List.iter on_edge edges)
+      g
 end
 
 type collected_info =
@@ -153,51 +215,82 @@ let dump_execute jfile =
   let on_rtype key pargs body =
     let _ : Libsail.Type_check.tannot exp = body in
     (* printfn "%s %d" __FUNCTION__ __LINE__; *)
-    let args_idents =
+    let args =
       match pargs with
       | [ P_aux (P_tuple ps, _) ] ->
-          List.filter_map
+          List.map
             (function
               | P_aux (P_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
             ps
       | _ -> []
     in
-    let () =
+    let out_args =
       let out_args = ref [] in
       let iterator =
-        Collect_out_info.make_iterator key
+        Collect_out_info.make_iterator
+          (Collect_out_info.V.make key)
           (fun _ -> true)
           (fun s -> out_args := s :: !out_args)
       in
       iterator.exp iterator body;
-      Hashtbl.add out_info key !out_args
+      if is_name_for_tracing key then
+        log "Out_args for %S: %a" key
+          Format.(pp_print_list pp_print_string)
+          !out_args;
+      !out_args
     in
+
     let argidx =
+      let formal_params =
+        match pargs with
+        | [ P_aux (P_lit (L_aux (L_unit, _)), _) ] -> []
+        | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ Some id ]
+        | [ P_aux (P_tuple ps, _) ] ->
+            List.map
+              (function
+                | P_aux (P_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
+              ps
+        | _ ->
+            Format.eprintf "%a"
+              (Format.pp_print_list (Myast.pp_pat Myast.pp_tannot))
+              pargs;
+            failwithf "Extraction of formal params not implemented for %s" key
+      in
+      Hashtbl.add Collect_out_info.formal_params_hash key formal_params;
       let exception Arg_found of int in
-      match pargs with
-      | [ P_aux (P_tuple ps, _) ] -> (
-          try
-            List.iteri
-              (fun i -> function
-                | P_aux (P_id (Id_aux (Id "op", _)), _) -> raise (Arg_found i)
-                | _ -> ())
-              ps;
-            -1
-          with Arg_found n -> n)
-      | _ -> -1
+      try
+        List.iteri
+          (fun i x -> if x = Some "op" then raise (Arg_found i))
+          formal_params;
+        -1
+      with Arg_found n -> n
     in
-    match has_right_match body with
-    | None when argidx = -1 -> Hashtbl.add collected key (CI_default key)
-    | None ->
-        (* failwithf "can't decide what to do when key = %S" key *)
-        Hashtbl.add weird_stuff key ()
-    | Some args ->
-        (* Format.printf "The clause for %S HAS right match\n%!" key; *)
-        ListLabels.iter args ~f:(function
-          | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _) ->
-              Hashtbl.add collected name (CI_hacky (key, argidx))
-          (* collected_hacky := name :: !collected_hacky *)
-          | _ -> ())
+
+    let () =
+      match has_right_match body with
+      | None when argidx = -1 ->
+          Hashtbl.add collected key (CI_default key);
+          Hashtbl.add out_info key out_args
+      | None ->
+          (* failwithf "can't decide what to do when key = %S" key *)
+          Hashtbl.add weird_stuff key ()
+      | Some args ->
+          (* Format.printf "The clause for %S HAS right match\n%!" key; *)
+          Hashtbl.add out_info key out_args;
+          ListLabels.iter args ~f:(function
+            | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _) ->
+                (* Hashtbl.replace collected name (CI_hacky (key, argidx)); *)
+                (* Hashtbl.replace collected key (CI_hacky (name, argidx)); *)
+                (* Hashtbl.add out_info name out_args; *)
+                (* Hashtbl.add out_info key out_args *)
+                if is_name_for_tracing name then
+                  log "Adding hacky: key = %s, name = %s" key name;
+                Hashtbl.add collected name (CI_hacky (key, argidx));
+                Hashtbl.add out_info key out_args;
+                Hashtbl.add out_info name out_args
+            | _ -> ())
+    in
+    ()
   in
 
   Out_channel.with_open_text "06159dump.txt" (fun ch ->
@@ -230,37 +323,41 @@ let dump_execute jfile =
                         ] ) ->
                         Hashtbl.add collected id (CI_hacky (name, 4))
                     | _ ->
-                        printfn "@[%s: %a@]@," name
-                          (pp_pat_aux Myast.pp_tannot)
-                          aux;
+                        if is_name_for_tracing name then
+                          printfn "@[%s: %a@]@," name
+                            (pp_pat_aux Myast.pp_tannot)
+                            aux;
                         on_rtype name pargs exp)
                 | _ -> assert false)
             | _ -> assert false)
       | _ -> assert false);
 
+  let () =
+    Collect_out_info.saturate_graph
+      (fun op ~arg ->
+        match Hashtbl.find out_info op with
+        | exception Not_found -> false
+        | xs -> List.mem arg xs)
+      (fun op ~arg ->
+        match Hashtbl.find out_info op with
+        | exception Not_found -> Hashtbl.add out_info op [ arg ]
+        | xs -> Hashtbl.replace out_info op (arg :: xs))
+  in
   Collect_out_info.dump_graph ();
   assert (config.ocaml_ident <> "");
   assert (config.ocaml_code <> "");
   Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
       let printf fmt = Format.fprintf ppf fmt in
-      (* let printfn fmt =
-           Format.kasprintf (fun s -> Format.fprintf ppf "%s@ " s) fmt
-         in *)
-      printf "(* This file was auto generated *)@ ";
-      printf "@[<v>@[type t =@]@ ";
-      printf "@[ | CI_hacky of string * int@]@ ";
-      printf "@[ | CI_default of string@]@ ";
-      printf "@]";
-      printf "@[type info = { out: string list }@]@ ";
+
+      printf "@[<v>";
+      printf "@[(* This file was auto generated *)@]@ ";
+      printf "@[include From6159_helper@]@ ";
+      printf "@]@ ";
+
       printf "@[<v 2>";
       printf "@[let %s =@]@," config.ocaml_ident;
-      printf "@[let ans = Hashtbl.create 1000 in@]@ ";
-      printf
-        "@[let def k name info = Hashtbl.add ans (CI_default name) info in@]@ ";
-      printf
-        "@[let hacky k name arity info = Hashtbl.add ans \
-         (CI_hacky(name,arity)) info in@]@ ";
+      printf "@[let ans = Hash_info.create 1000 in@]@ ";
 
       collected
       |> Hashtbl.iter (fun key ->
@@ -277,13 +374,15 @@ let dump_execute jfile =
              in
              function
              | CI_default name ->
-                 printf "@[def %S %S {out=[%a]};@]@," key name out_str out
+                 printf "@[def ans  %S {out=[%a]};@]@," name out_str out
              | CI_hacky (name, n) ->
-                 printf "@[hacky %S %S %d {out=[%a]};@]@," key name n out_str
-                   out);
-      printf "@[ans@]";
+                 printf "@[hacky ans %S %S %d {out=[%a]};@]@," key name n
+                   out_str out);
+      printf "@[ans@]@ ";
       printf "@]@ ";
       Format.pp_print_cut ppf ();
+      printf "@[let lookup_exn = Hash_info.find %s @]@," config.ocaml_ident;
+      printf "@[let mem = Hash_info.mem %s @]@," config.ocaml_ident;
 
       printf "let %s_hacky = [ " config.ocaml_ident;
       weird_stuff |> Hashtbl.iter (fun s () -> printf "%S; " s);

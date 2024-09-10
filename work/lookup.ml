@@ -95,6 +95,7 @@ let read_td_json filename =
 
 let llvm_JSON = lazy (read_td_json config.riscv_td_file)
 
+(** Return in and out operands info from LLVM JSON  *)
 let extract_operands_info key =
   let from_assoc = function `Assoc xs -> xs | _ -> assert false in
   let from_list = function `List xs -> xs | _ -> assert false in
@@ -163,7 +164,7 @@ let get_sail_clause cname =
                 | _ -> ())
             | _ -> ())
           body;
-        failwithf "%s %d" __FILE__ __LINE__
+        failwithf "%s %d: Can't find execute for %s" __FILE__ __LINE__ cname
     | _ -> failwithf "%s %d" __FILE__ __LINE__
   with Found (pats, expr) -> (pats, expr)
 
@@ -302,51 +303,45 @@ let process_single iname =
     | _ -> (
         match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
   in
-  let fix_operands ~pat ~in_opnds ~out_opnds iname info =
-    let pat : _ Myast.pat list =
-      (* Fix for ADD instruction *)
-      match pat with [ Myast.P_aux (P_tuple xs, _) ] -> xs | _ -> pat
-    in
+  let fix_operands ~in_opnds ~out_opnds iname =
+    (* VERY AD HOC stuff  *)
+    (* let pat : _ Myast.pat list =
+         (* Fix for ADD instruction *)
+         match pat with [ Myast.P_aux (P_tuple xs, _) ] -> xs | _ -> pat
+       in *)
     let map f = (List.map f in_opnds, List.map f out_opnds) in
     match iname with
     (* | "VID_V"  *)
     | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
     | "C_ADD" -> map (function "rs1_wb" -> "rsd" | x -> x)
+    | "C_ZEXT_W" -> map (function "rd_wb" -> "rsdc" | x -> x)
     | _ -> (in_opnds, out_opnds)
   in
 
   let on_found iname ~mangled =
     stats.from6159 <- stats.from6159 + 1;
-    let info = Hashtbl.find From6159.from6159 mangled in
+    let info = From6159.lookup_exn mangled in
     let in_opnds, out_opnds = extract_operands_info iname in
-    let top_cname =
+    let _in_opnds, out_opnds = fix_operands ~in_opnds ~out_opnds iname in
+    let _top_cname, info =
       match info with
-      | From6159.CI_default s -> s
-      | From6159.CI_hacky (s, _) -> s
+      | From6159.CI_default s, info -> (s, info)
+      | From6159.CI_hacky (s, _), info -> (s, info)
     in
-    let pat, body = get_sail_clause top_cname in
-    let in_opnds, out_opds =
-      fix_operands ~in_opnds ~out_opnds ~pat iname info
-    in
-    ()
-    (* match is_assignment_to_rd out_opds body with
-       | Result.Ok _ -> ()
-       | Error xs ->
-           log "@[%s: %a@]@," iname (Myast.pp_exp Myast.pp_tannot) body;
-           loge "No assignemnt to RDEST for name = %S: %s" iname
-             (String.concat " " xs);
-           loge "New out_opnds = %s" (String.concat " " out_opds);
-           loge "pat = @[%a@]" Myast.(pp_pat_aux pp_tannot) (Myast.P_tuple pat);
-           exit 1 *)
+    List.iter
+      (fun llvm_out ->
+        if not (List.mem llvm_out info.out) then
+          Printf.eprintf "Diversion for %S: not an out operand %S\n%!" iname
+            llvm_out)
+      out_opnds
   in
 
   let () =
     match iname with
     | s when is_omitted_explicitly s -> ()
     | _ ->
-        if Hashtbl.mem From6159.from6159 mangled_iname then
-          on_found iname ~mangled:mangled_iname
-        else if Hashtbl.mem From6159.from6159 ("RISCV_" ^ mangled_iname) then
+        if From6159.mem mangled_iname then on_found iname ~mangled:mangled_iname
+        else if From6159.mem ("RISCV_" ^ mangled_iname) then
           on_found iname ~mangled:("RISCV_" ^ mangled_iname)
           (* else if
                Hashtbl.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
