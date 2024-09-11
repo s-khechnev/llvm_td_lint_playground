@@ -313,7 +313,10 @@ let process_single iname =
     match iname with
     (* | "VID_V"  *)
     | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
-    | "C_ADD" -> map (function "rs1_wb" -> "rsd" | x -> x)
+    | "C_ADDW" | "C_ADDI" | "C_ADDIW" ->
+        map (function "rd_wb" -> "rsd" | x -> x)
+    (* | "C_ADD"
+        map (function "rs1_wb" -> "rsd" | x -> x) *)
     | "C_ZEXT_W" -> map (function "rd_wb" -> "rsdc" | x -> x)
     | _ -> (in_opnds, out_opnds)
   in

@@ -1,8 +1,8 @@
 (rule
  (targets
   ;ADJCALLSTACKDOWN.json ; Pseudo
-  C_ADDI_HINT_IMM_ZERO.json
-  C_MOP11.json
+  ;C_ADDI_HINT_IMM_ZERO.json
+  C_ADD.json
   CPOP.json
   CPOPW.json
   ADD.json

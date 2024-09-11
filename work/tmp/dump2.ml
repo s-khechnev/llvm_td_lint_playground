@@ -43,9 +43,10 @@ include struct
 end
 
 let is_name_for_tracing = function
-  | "RTYPE" | "RISCV_ADD" | "C_ADD" -> true
+  | "RTYPE" | "RISCV_ADD" | "C_ADD" | "ZICOND_RTYPE" -> true
   | _ -> false
 
+(*  *)
 module Collect_out_info = struct
   open Myast_iterator
   open Myast
@@ -309,7 +310,7 @@ let dump_execute jfile =
                           exp ),
                       _ ) -> (
                     match (name, pargs) with
-                    | ( "ZICOND_RTYPE",
+                    (* | ( "ZICOND_RTYPE",
                         [
                           P_aux
                             ( P_tuple
@@ -321,7 +322,7 @@ let dump_execute jfile =
                                 ],
                               _ );
                         ] ) ->
-                        Hashtbl.add collected id (CI_hacky (name, 4))
+                        Hashtbl.add collected id (CI_hacky (name, 4)) *)
                     | _ ->
                         if is_name_for_tracing name then
                           printfn "@[%s: %a@]@," name
