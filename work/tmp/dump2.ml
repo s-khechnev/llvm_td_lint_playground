@@ -203,17 +203,36 @@ type collected_info =
   | CI_default of string
 
 type implementation_kind =
-  | IK_multidef of string * Libsail.Type_check.tannot Myast.pexp_funcl list
-      (** [AMO(op, aq, ...)] *)
-  | Stright of string  (**  [C_MUL(rsdc, rs2c)] *)
-  | OK_singledef of string * string
+  | IK_straight of string  (**  [C_MUL(rsdc, rs2c)] *)
+  | IK_multidef of string * string list  (** [AMO(op, aq, ...)] *)
+  | IK_singledef of string * string
       (** [ZICOND_RTYPE(rs2, rs1, rd, RISCV_CZERO_EQZ)]
           So called hacky definition
        *)
-(*
-   let classify_def key pargs body =
-     let has_constructor_arg =
-       List.fi *)
+
+let classify_def key pargs body =
+  let open Myast in
+  let has_constructor_arg =
+    List.find_map
+      (function
+        | E_aux (E_id (Id_aux (Id id, _)), _) ->
+            if Char.uppercase_ascii id.[0] = id.[0] then None else Some id
+        | _ -> None)
+      pargs
+  in
+  match has_constructor_arg with
+  | Some s -> IK_singledef (key, s)
+  | None -> (
+      match has_right_match body with
+      | None -> IK_straight key
+      | Some args ->
+          IK_multidef
+            ( key,
+              ListLabels.filter_map args ~f:(function
+                | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _)
+                  ->
+                    Some name
+                | _ -> None) ))
 
 let dump_execute jfile =
   let ast =
