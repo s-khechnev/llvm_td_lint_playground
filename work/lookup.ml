@@ -82,7 +82,8 @@ let is_omitted_explicitly s =
       (* Compresed instructions will be difficult to support
          because they call recursively to other instructions.
          riscv_insts_zca.sail  253 *)
-      (* "C_"; *)
+      "C_";
+      "FCLASS";
     ]
   in
   Option.is_some
@@ -305,19 +306,16 @@ let process_single iname =
   in
   let fix_operands ~in_opnds ~out_opnds iname =
     (* VERY AD HOC stuff  *)
-    (* let pat : _ Myast.pat list =
-         (* Fix for ADD instruction *)
-         match pat with [ Myast.P_aux (P_tuple xs, _) ] -> xs | _ -> pat
-       in *)
     let map f = (List.map f in_opnds, List.map f out_opnds) in
     match iname with
     (* | "VID_V"  *)
+    | "C_FLD" -> map (function "rd" -> "rdc" | x -> x)
     | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
     | "C_ADDW" | "C_ADDI" | "C_ADDIW" ->
         map (function "rd_wb" -> "rsd" | x -> x)
-    (* | "C_ADD"
-        map (function "rs1_wb" -> "rsd" | x -> x) *)
-    | "C_ZEXT_W" -> map (function "rd_wb" -> "rsdc" | x -> x)
+    | "C_ADD" | "C_ANDI" -> map (function "rs1_wb" -> "rsd" | x -> x)
+    | "C_AND" -> map (function "rd_wb" -> "rsd" | x -> x)
+    | "C_MUL" | "C_ZEXT_W" -> map (function "rd_wb" -> "rsdc" | x -> x)
     | _ -> (in_opnds, out_opnds)
   in
 

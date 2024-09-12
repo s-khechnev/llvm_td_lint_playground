@@ -35,6 +35,7 @@ include struct
           | _ -> default_iterator.exp_aux self e);
     }
 
+  (** Checks that we match argument [op] in body *)
   let has_right_match expr =
     try
       has_match.exp has_match expr;
@@ -43,10 +44,12 @@ include struct
 end
 
 let is_name_for_tracing = function
-  | "RTYPE" | "RISCV_ADD" | "C_ADD" | "ZICOND_RTYPE" -> true
+  | "RISCV_CZERO_EQZ"
+  (* | "RTYPE" | "RISCV_ADD" | "C_ADD"  *)
+  | "ZICOND_RTYPE" ->
+      true
   | _ -> false
 
-(*  *)
 module Collect_out_info = struct
   open Myast_iterator
   open Myast
@@ -199,6 +202,19 @@ type collected_info =
   | CI_hacky of string * int (* Cname + index of 'op' constructor*)
   | CI_default of string
 
+type implementation_kind =
+  | IK_multidef of string * Libsail.Type_check.tannot Myast.pexp_funcl list
+      (** [AMO(op, aq, ...)] *)
+  | Stright of string  (**  [C_MUL(rsdc, rs2c)] *)
+  | OK_singledef of string * string
+      (** [ZICOND_RTYPE(rs2, rs1, rd, RISCV_CZERO_EQZ)]
+          So called hacky definition
+       *)
+(*
+   let classify_def key pargs body =
+     let has_constructor_arg =
+       List.fi *)
+
 let dump_execute jfile =
   let ast =
     let j = In_channel.with_open_text jfile Yojson.Safe.from_channel in
@@ -215,7 +231,7 @@ let dump_execute jfile =
   let open Myast in
   let on_rtype key pargs body =
     let _ : Libsail.Type_check.tannot exp = body in
-    (* printfn "%s %d" __FUNCTION__ __LINE__; *)
+    (* printfn "%s %d key = %S" __FUNCTION__ __LINE__ key; *)
     let args =
       match pargs with
       | [ P_aux (P_tuple ps, _) ] ->
@@ -270,13 +286,16 @@ let dump_execute jfile =
     let () =
       match has_right_match body with
       | None when argidx = -1 ->
+          (* No argument called op *)
+          (* printfn "%s %d key = %S" __FUNCTION__ __LINE__ key; *)
           Hashtbl.add collected key (CI_default key);
           Hashtbl.add out_info key out_args
       | None ->
+          (* printfn "%s %d key = %S" __FUNCTION__ __LINE__ key; *)
           (* failwithf "can't decide what to do when key = %S" key *)
           Hashtbl.add weird_stuff key ()
       | Some args ->
-          (* Format.printf "The clause for %S HAS right match\n%!" key; *)
+          log "The clause for %S HAS right match\n%!" key;
           Hashtbl.add out_info key out_args;
           ListLabels.iter args ~f:(function
             | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _) ->
