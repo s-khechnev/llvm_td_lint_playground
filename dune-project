@@ -6,10 +6,16 @@
 
 (name checker)
 
+(maintainers Kakadu)
+
 (package
  (name checker)
  (synopsis "TODO")
  (description "TODO")
  (depends
-  (libsail
+  ppx_deriving_yojson
+  linenoise
+  (ocamlformat
+   (= 0.26.2))
+  (sail
    (= 0.17.1))))

@@ -83,7 +83,8 @@ let is_omitted_explicitly s =
          because they call recursively to other instructions.
          riscv_insts_zca.sail  253 *)
       "C_";
-      "FCLASS";
+      (* "FCLASS"; *)
+      (* defined via F_UN_TYPE_D*)
     ]
   in
   Option.is_some
@@ -329,10 +330,12 @@ let process_single iname =
       | From6159.CI_default s, info -> (s, info)
       | From6159.CI_hacky (s, _), info -> (s, info)
     in
+    (* log "info.out = %s" (String.concat " " info.out);
+       log "cur.out = %s" (String.concat " " out_opnds); *)
     List.iter
       (fun llvm_out ->
         if not (List.mem llvm_out info.out) then
-          Printf.eprintf "Diversion for %S: not an out operand %S\n%!" iname
+          Printf.printf "Diversion for %S: not an out operand %S\n%!" iname
             llvm_out)
       out_opnds
   in
