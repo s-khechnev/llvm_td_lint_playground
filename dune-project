@@ -14,6 +14,7 @@
  (description "TODO")
  (depends
   ppx_deriving_yojson
+  ppx_expect
   linenoise
   (ocamlformat
    (= 0.26.2))
