@@ -44,10 +44,10 @@ include struct
 end
 
 let is_name_for_tracing = function
-  | "RISCV_CZERO_EQZ"
+  (* | "RISCV_CZERO_EQZ" | "F_UN_TYPE_D" *)
   (* | "RTYPE" | "RISCV_ADD" | "C_ADD"  *)
-  | "ZICOND_RTYPE" ->
-      true
+  (* | "ZICOND_RTYPE" -> *)
+  (* | "RISCV_UNZIP" -> true *)
   | _ -> false
 
 module Collect_out_info = struct
@@ -100,8 +100,8 @@ module Collect_out_info = struct
           | E_app
               ( Id_aux
                   ( Id
-                      ( "wX_bits" | "wF_or_X_D" | "wF_or_X_H" | "wF_or_X_S"
-                      | "wF_S" | "wF_D" ),
+                      ( "wX_bits" | "wF_bits" | "wF_or_X_D" | "wF_or_X_H"
+                      | "wF_or_X_S" | "wF_S" | "wF_D" | "wF_H" ),
                     _ ),
                 [ E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
@@ -115,6 +115,55 @@ module Collect_out_info = struct
               ( Id_aux (Id "write_vmask", _),
                 [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "write_single_element", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] ) ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "process_vlxseg", _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
+                  _;
+                  _;
+                  _;
+                  _;
+                  _;
+                  _;
+                  _;
+                  _;
+                ] ) ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "process_vlsseg", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _; _ ] )
+            ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "process_vlsegff", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "process_vlre", _),
+                [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] ) ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "process_vlseg", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id ("process_rfvv_widen" | "process_rfvv_single"), _),
+                [ _; _; _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] )
+            ->
+              register_assmt rd
+          | E_app
+              ( Id_aux
+                  ( Id
+                      ("process_fload16" | "process_fload32" | "process_fload64"),
+                    _ ),
+                [ E_aux (E_id (Id_aux (Id rd, _)), _); _; _ ] ) ->
               register_assmt rd
           | E_app
               ( Id_aux (Id "execute", _),

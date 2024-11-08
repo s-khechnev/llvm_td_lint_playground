@@ -11,6 +11,11 @@
  (link_flags -linkall)
  (libraries libsail linenoise dynlink))
 
+(executable
+ (name assembly)
+ (modules assembly)
+ (libraries libsail yojson analysis myast_iterator))
+
 (cram
  (applies_to run)
  (deps ./test1.exe))

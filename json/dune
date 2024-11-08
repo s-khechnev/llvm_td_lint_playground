@@ -19,10 +19,38 @@
     (run tr "'\\n'" " ")))))
 
 (rule
+ (targets script_key_asm.jq.online)
+ (deps script_key_asm.jq)
+ (action
+  (pipe-stdout
+   (with-stdin-from
+    %{deps}
+    (run sed "/^#/d"))
+   (with-stdout-to
+    %{targets}
+    (run tr "'\\n'" " ")))))
+
+(rule
  (targets ./RISCV.instructions.json)
  (deps
   (:riscv ./RISCV.td.json)
   (:script script.jq.online))
+ (mode
+  (promote (until-clean)))
+ (action
+  (progn
+   (with-stdout-to
+    %{targets}
+    (run sh -c "jq -f %{script}  %{riscv} | jq ."))
+   (run ls -lh %{targets})
+   ;
+   )))
+
+(rule
+ (targets ./RISCV.instructions.key.asm.json)
+ (deps
+  (:riscv ./RISCV.td.json)
+  (:script script_key_asm.jq.online))
  (mode
   (promote (until-clean)))
  (action

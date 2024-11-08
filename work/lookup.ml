@@ -44,13 +44,15 @@ type stats = {
 let stats = { from6159 = 0; total = 0; first_unknown = [] }
 
 let save_unknown orig s =
+  (* let s = if orig <> s then Printf.sprintf "%s(%s)" s orig else s in
+     match stats.first_unknown with
+     | [] -> stats.first_unknown <- [ s ]
+     | [ a ] -> stats.first_unknown <- [ a; s ]
+     | [ a; b ] -> stats.first_unknown <- [ a; b; s ]
+     | [ a; b; c ] -> stats.first_unknown <- [ a; b; c; s ]
+     | _ -> () *)
   let s = if orig <> s then Printf.sprintf "%s(%s)" s orig else s in
-  match stats.first_unknown with
-  | [] -> stats.first_unknown <- [ s ]
-  | [ a ] -> stats.first_unknown <- [ a; s ]
-  | [ a; b ] -> stats.first_unknown <- [ a; b; s ]
-  | [ a; b; c ] -> stats.first_unknown <- [ a; b; c; s ]
-  | _ -> ()
+  stats.first_unknown <- s :: stats.first_unknown
 
 let report () =
   let open Format in
@@ -251,6 +253,10 @@ include struct
               ( Id_aux (Id "write_vmask", _),
                 [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
+              register_assmt rd
+          | E_app
+              ( Id_aux (Id "write_single_element", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] ) ->
               register_assmt rd
           | E_app
               ( Id_aux (Id "execute", _),
