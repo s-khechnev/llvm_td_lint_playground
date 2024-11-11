@@ -10,9 +10,9 @@ type config = {
 
 let config =
   {
-    instructions_file = "./json/allkeys.txt";
+    instructions_file = "./json/allmnemonics.txt";
     instr_to_process = "";
-    riscv_td_file = "json/RISCV.instructions.json";
+    riscv_td_file = "json/RISCV.instructions.key.asm.json";
     sail_json = "work/tmp/06159.json";
     verbose = false;
   }
@@ -301,29 +301,30 @@ include struct
 end
 
 let process_single iname =
-  let mangled_iname =
-    match iname with
-    | "ADD_UW" -> "ADDUW"
-    | "FADD_H" | "FADD_D" -> iname
-    | s when String.ends_with ~suffix:"_INX" s -> chop_suffix ~suffix:"_INX" s
-    | s when String.ends_with ~suffix:"_IN32X" s ->
-        chop_suffix ~suffix:"_IN32X" s
-    | _ -> (
-        match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
-  in
+  (* let mangled_iname =
+       match iname with
+       | "ADD_UW" -> "ADDUW"
+       | "FADD_H" | "FADD_D" -> iname
+       | s when String.ends_with ~suffix:"_INX" s -> chop_suffix ~suffix:"_INX" s
+       | s when String.ends_with ~suffix:"_IN32X" s ->
+           chop_suffix ~suffix:"_IN32X" s
+       | _ -> (
+           match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
+     in *)
   let fix_operands ~in_opnds ~out_opnds iname =
     (* VERY AD HOC stuff  *)
     let map f = (List.map f in_opnds, List.map f out_opnds) in
-    match iname with
-    (* | "VID_V"  *)
-    | "C_FLD" -> map (function "rd" -> "rdc" | x -> x)
-    | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
-    | "C_ADDW" | "C_ADDI" | "C_ADDIW" ->
-        map (function "rd_wb" -> "rsd" | x -> x)
-    | "C_ADD" | "C_ANDI" -> map (function "rs1_wb" -> "rsd" | x -> x)
-    | "C_AND" -> map (function "rd_wb" -> "rsd" | x -> x)
-    | "C_MUL" | "C_ZEXT_W" -> map (function "rd_wb" -> "rsdc" | x -> x)
-    | _ -> (in_opnds, out_opnds)
+    (* match iname with
+       (* | "VID_V"  *)
+       | "c.fld" -> map (function "rd" -> "rdc" | x -> x)
+       | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
+       | "c.addw" | "c.addi" | "c.addiw" ->
+           map (function "rd_wb" -> "rsd" | x -> x)
+       | "c.add" | "c.andi" -> map (function "rs1_wb" -> "rsd" | x -> x)
+       | "c.and" -> map (function "rd_wb" -> "rsd" | x -> x)
+       | "c.mul" | "c.zext.w" -> map (function "rd_wb" -> "rsdc" | x -> x)
+       | _ -> (in_opnds, out_opnds) *)
+    map (chop_suffix ~suffix:"_wb")
   in
 
   let on_found iname ~mangled =
@@ -341,8 +342,8 @@ let process_single iname =
     List.iter
       (fun llvm_out ->
         if not (List.mem llvm_out info.out) then
-          Printf.printf "Diversion for %S: not an out operand %S\n%!" iname
-            llvm_out)
+          Printf.printf "Diversion for %S(%S): not an out operand %S\n%!" iname
+            mangled llvm_out)
       out_opnds
   in
 
@@ -350,14 +351,18 @@ let process_single iname =
     match iname with
     | s when is_omitted_explicitly s -> ()
     | _ ->
-        if From6159.mem mangled_iname then on_found iname ~mangled:mangled_iname
-        else if From6159.mem ("RISCV_" ^ mangled_iname) then
-          on_found iname ~mangled:("RISCV_" ^ mangled_iname)
-          (* else if
-               Hashtbl.mem ("RISCV_" ^ mangled_iname) From6159.from6159_hacky
-               || Hashtbl.mem mangled_iname From6159.from6159_hacky
-             then on_found iname *)
-        else save_unknown iname mangled_iname
+        let mangled =
+          if String.ends_with iname ~suffix:"aqrl" then
+            let iname = chop_suffix ~suffix:"rl" iname in
+            iname ^ ".rl"
+          else iname
+        in
+        (* print_endline mangled; *)
+        let sail_name =
+          try Mnemonic_hashtbl.find mangled with Not_found -> ""
+        in
+        if From6159.mem sail_name then on_found iname ~mangled:sail_name
+        else save_unknown iname ""
   in
   ()
 

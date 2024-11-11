@@ -68,9 +68,17 @@
  (libraries yojson))
 
 (rule
- (targets allkeys.json.txt allkeys.txt)
+ (targets allkeys.txt.json allkeys.txt)
  (deps RISCV.instructions.json)
  (mode
   (promote (until-clean)))
  (action
   (run ./dissect.exe %{deps} -o allkeys.txt -get-keys)))
+
+(rule
+ (targets allmnemonics.txt.json allmnemonics.txt)
+ (deps RISCV.instructions.key.asm.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run ./dissect.exe %{deps} -o allmnemonics.txt -get-keys)))

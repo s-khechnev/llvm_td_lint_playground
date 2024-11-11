@@ -195,8 +195,11 @@
 
 (executable
  (name lookup)
- (modules lookup from6159 from6159_helper)
- (preprocessor_deps ../json/work/ADD.json ../json/allkeys.txt)
+ (modules lookup from6159 from6159_helper mnemonic_hashtbl)
+ (preprocessor_deps
+  ../json/work/ADD.json
+  ../json/allkeys.txt
+  ../json/allmnemonics.txt)
  (libraries yojson analysis myast_iterator stdune)
  (preprocess
   (pps ppx_deriving_yojson)))
@@ -208,3 +211,11 @@
   (promote (until-clean)))
  (action
   (copy tmp/from6159.ml %{target})))
+
+(rule
+ (target mnemonic_hashtbl.ml)
+ (deps assembly.ml riscv.sail.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run ./assembly.exe)))

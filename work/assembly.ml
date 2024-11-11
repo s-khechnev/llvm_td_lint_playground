@@ -1,4 +1,4 @@
-let input = "./work/riscv.sail.json"
+let input = "./riscv.sail.json"
 
 open Myast
 
@@ -47,6 +47,7 @@ let () =
   (* Format.printf "Count mnemonics: %d\n" (List.length assemblies);
      Format.printf "Count mappings: %d\n" (Hashtbl.length mappings); *)
   (* Hashtbl.iter (fun id _ -> print_endline id) mappings; *)
+  let hashtbl = Hashtbl.create 3000 in
   List.iter
     (function
       | MCL_aux
@@ -114,9 +115,32 @@ let () =
                     []
               in
 
-              List.iter (fun s -> Format.printf "%s -> %s\n" ident s) mnemonic
+              List.iter
+                (fun s ->
+                  Hashtbl.add hashtbl s ident
+                  (* Format.printf "%s -> %s\n" ident s *))
+                mnemonic
           | MP_lit (L_aux (L_string mnemonic, _)) ->
-              Format.printf "%s -> %s\n" ident mnemonic
+              Hashtbl.add hashtbl mnemonic ident
+          (* Format.printf "%s -> %s\n" ident mnemonic *)
           | _ -> assert false)
       | _ -> print_endline "not match")
-    assemblies
+    assemblies;
+  Out_channel.with_open_text "mnemonic_hashtbl.ml" (fun ch ->
+      let ppf = Format.formatter_of_out_channel ch in
+      let printf fmt = Format.fprintf ppf fmt in
+
+      printf "@[<v>";
+      printf "@[(* This file was auto generated *)@]@ ";
+      printf "@]@ ";
+
+      printf "@[<v 2>";
+      printf "@[let ans = \n        let ans = Hashtbl.create 3000 in@]@ ";
+
+      hashtbl
+      |> Hashtbl.iter (fun key v ->
+             printf "@[Hashtbl.add ans \"%s\" \"%s\";@]@," key v);
+      printf "@[ans@]@ ";
+      printf "@]@ ";
+      Format.pp_print_cut ppf ();
+      printf "@[let find = Hashtbl.find ans@]@\n%!")

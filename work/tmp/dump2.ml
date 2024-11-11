@@ -464,7 +464,7 @@ let dump_execute jfile =
              | CI_default name ->
                  printf "@[def ans  %S {out=[%a]};@]@," name out_str out
              | CI_hacky (name, n) ->
-                 printf "@[hacky ans %S %S %d {out=[%a]};@]@," key name n
+                 printf "@[hacky ans %S %S %d {out=[%a]};@]@," name key n
                    out_str out);
       printf "@[ans@]@ ";
       printf "@]@ ";

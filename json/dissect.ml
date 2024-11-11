@@ -39,7 +39,7 @@ let file_keys () =
   let xs = read_td_json cfg.filename in
   let key_count = ref 0 in
   Out_channel.with_open_text cfg.outfile (fun outch_text ->
-      Out_channel.with_open_text "allkeys.json.txt" (fun outch ->
+      Out_channel.with_open_text (cfg.outfile ^ ".json") (fun outch ->
           List.iteri
             (fun i (name, jdata) ->
               if is_bad_LLVM_key name || is_bad_JSON_data name jdata then ()
