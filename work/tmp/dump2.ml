@@ -315,7 +315,8 @@ let dump_execute jfile =
         Collect_out_info.make_iterator
           (Collect_out_info.V.make key)
           (fun _ -> true)
-          (fun s -> out_args := s :: !out_args)
+          (fun s ->
+            if not (List.mem s !out_args) then out_args := s :: !out_args)
       in
       iterator.exp iterator body;
       if is_name_for_tracing key then

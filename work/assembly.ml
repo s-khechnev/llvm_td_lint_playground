@@ -62,69 +62,97 @@ let () =
                   ( MPat_when (MP_aux (MP_app (Id_aux (Id ident, _), _), _), _),
                     _ ),
                 MPat_aux (MPat_when (MP_aux (x, _), _), _) ),
-            _ ) -> (
+            _ )
+        when not
+               (String.equal ident "FENCEI_RESERVED"
+               || String.equal ident "FENCE_RESERVED") -> (
           match x with
           | MP_string_append xs ->
-              let mnemonic =
-                let exception ReachSpc of string list in
-                try
-                  List.fold_left
-                    (fun acc ->
-                      let trash lst1 lst2 =
-                        if List.is_empty lst1 then lst2
-                        else
-                          List.concat
-                            (List.map
-                               (fun s2 -> List.map (fun s1 -> s1 ^ s2) lst1)
-                               lst2)
-                      in
-                      function
-                      | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
-                          trash acc [ str ]
-                      | MP_aux (MP_app (Id_aux (Id map_id, _), _), _) ->
-                          if String.equal map_id "spc" then raise (ReachSpc acc)
-                          else
-                            let maps_strs =
-                              let maps = Hashtbl.find mappings map_id in
-                              List.map
-                                (function
-                                  | MCL_aux
-                                      ( MCL_bidir
-                                          ( _,
-                                            MPat_aux
-                                              ( MPat_pat
-                                                  (MP_aux
-                                                    ( MP_lit
-                                                        (L_aux
-                                                          (L_string str, _)),
-                                                      _ )),
-                                                _ ) ),
-                                        _ ) ->
-                                      str
-                                  | _ -> "")
-                                maps
-                            in
-                            if List.is_empty acc then maps_strs
-                            else trash acc maps_strs
-                      | _ -> assert false)
-                    [] xs
-                with
+              let stupid_concat lst1 lst2 =
+                if List.is_empty lst1 then lst2
+                else
+                  List.concat
+                    (List.map
+                       (fun s2 -> List.map (fun s1 -> s1 ^ s2) lst1)
+                       lst2)
+              in
+              let exception
+                ReachSpc of (string list * Libsail.Type_check.tannot mpat list)
+              in
+              let mnemonics, args =
+                (* also returns tail after spc *)
+                let rec get_mnemonics accu = function
+                  | [] -> (accu, [])
+                  | a :: l ->
+                      get_mnemonics
+                        (match a with
+                        | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
+                            stupid_concat accu [ str ]
+                        | MP_aux (MP_app (Id_aux (Id map_id, _), _), _) ->
+                            if String.equal map_id "spc" then
+                              raise (ReachSpc (accu, l))
+                            else
+                              let maps_strs =
+                                let maps = Hashtbl.find mappings map_id in
+                                List.map
+                                  (function
+                                    | MCL_aux
+                                        ( MCL_bidir
+                                            ( _,
+                                              MPat_aux
+                                                ( MPat_pat
+                                                    (MP_aux
+                                                      ( MP_lit
+                                                          (L_aux
+                                                            (L_string str, _)),
+                                                        _ )),
+                                                  _ ) ),
+                                          _ ) ->
+                                        str
+                                    | _ -> "")
+                                  maps
+                              in
+                              stupid_concat accu maps_strs
+                        | _ -> assert false)
+                        l
+                in
+                try get_mnemonics [] xs with
                 | ReachSpc result -> result
                 | _ ->
                     Format.printf "Not reach spc for %s\n" ident;
-                    []
+                    ([], [])
               in
-
+              let regs =
+                let regs =
+                  List.fold_left
+                    (fun acc -> function
+                      | MP_aux
+                          ( MP_app
+                              ( Id_aux
+                                  ( Id
+                                      ( "reg_name" | "creg_name" | "vreg_name"
+                                      | "freg_or_reg_name" | "freg_name" ),
+                                    _ ),
+                                [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ]
+                              ),
+                            _ ) ->
+                          (* Format.printf "%s -> %s\n" ident reg_name; *)
+                          reg_name :: acc
+                      | _ -> acc)
+                    [] args
+                in
+                Array.of_list @@ List.rev regs
+              in
               List.iter
                 (fun s ->
-                  Hashtbl.add hashtbl s ident
+                  Hashtbl.add hashtbl s (ident, regs)
                   (* Format.printf "%s -> %s\n" ident s *))
-                mnemonic
+                mnemonics
           | MP_lit (L_aux (L_string mnemonic, _)) ->
-              Hashtbl.add hashtbl mnemonic ident
+              Hashtbl.add hashtbl mnemonic (ident, [||])
           (* Format.printf "%s -> %s\n" ident mnemonic *)
           | _ -> assert false)
-      | _ -> print_endline "not match")
+      | _ -> ())
     assemblies;
   Out_channel.with_open_text "mnemonic_hashtbl.ml" (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
@@ -135,11 +163,19 @@ let () =
       printf "@]@ ";
 
       printf "@[<v 2>";
-      printf "@[let ans = \n        let ans = Hashtbl.create 3000 in@]@ ";
+      printf "@[let ans = \n  let ans = Hashtbl.create 3000 in@]@ ";
+
+      let out_str ppf out =
+        Format.pp_print_array
+          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
+          (fun ppf -> Format.fprintf ppf "%S")
+          ppf out
+      in
 
       hashtbl
-      |> Hashtbl.iter (fun key v ->
-             printf "@[Hashtbl.add ans \"%s\" \"%s\";@]@," key v);
+      |> Hashtbl.iter (fun key (v, regs) ->
+             printf "@[Hashtbl.add ans \"%s\" (\"%s\", [|%a|]);@]@," key v
+               out_str regs);
       printf "@[ans@]@ ";
       printf "@]@ ";
       Format.pp_print_cut ppf ();

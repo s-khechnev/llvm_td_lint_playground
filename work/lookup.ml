@@ -99,10 +99,16 @@ let read_td_json filename =
 
 let llvm_JSON = lazy (read_td_json config.riscv_td_file)
 
+let chop_suffix ~suffix s =
+  if String.ends_with ~suffix s then
+    String.sub s 0 (String.length s - String.length suffix)
+  else s
+
 (** Return in and out operands info from LLVM JSON  *)
 let extract_operands_info key =
   let from_assoc = function `Assoc xs -> xs | _ -> assert false in
   let from_list = function `List xs -> xs | _ -> assert false in
+  let from_str = function `String s -> s | _ -> assert false in
   let j : (string * Yojson.Safe.t) list =
     match List.assoc key (Lazy.force llvm_JSON) with
     | `Assoc xs -> xs
@@ -114,7 +120,8 @@ let extract_operands_info key =
   let exract_operands j =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
-         | `List [ `Assoc [ _; _; _ ]; `String s ] -> s
+         | `List [ `Assoc [ _; _; _ ]; `String s ] ->
+             chop_suffix ~suffix:"_wb" s
          | other ->
              Myast.failwithf "Unsupported case: %a\n"
                (Yojson.Safe.pretty_print ~std:false)
@@ -122,16 +129,32 @@ let extract_operands_info key =
   in
   let in_operands = exract_operands (List.assoc "InOperandList" j) in
   let out_operands = exract_operands (List.assoc "OutOperandList" j) in
+  let regs =
+    match List.assoc "AsmString" j with
+    | `String asm_str -> (
+        match String.split_on_char '\t' asm_str with
+        | _ :: [ operands ] ->
+            operands |> String.split_on_char ','
+            |> List.concat_map (String.split_on_char '$')
+            |> List.filter_map (fun s ->
+                   let s = String.trim s in
+                   if
+                     String.equal s "" || String.equal s "src"
+                     || String.starts_with ~prefix:"imm" s
+                   then None
+                   else Some s)
+            |> Array.of_list
+        | _ -> [||])
+    | _ -> assert false
+  in
   (* if config.verbose then (
-     print_endline "";
-     Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
-     Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands)); *)
-  (in_operands, out_operands)
-
-let chop_suffix ~suffix s =
-  if String.ends_with ~suffix s then
-    String.sub s 0 (String.length s - String.length suffix)
-  else s
+        print_endline "";
+        Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
+        Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
+     (in_operands, out_operands) *)
+  List.map
+    (fun oper -> Option.get @@ Array.find_index (String.equal oper) regs)
+    out_operands
 
 let sail_AST =
   lazy
@@ -301,68 +324,47 @@ include struct
 end
 
 let process_single iname =
-  (* let mangled_iname =
-       match iname with
-       | "ADD_UW" -> "ADDUW"
-       | "FADD_H" | "FADD_D" -> iname
-       | s when String.ends_with ~suffix:"_INX" s -> chop_suffix ~suffix:"_INX" s
-       | s when String.ends_with ~suffix:"_IN32X" s ->
-           chop_suffix ~suffix:"_IN32X" s
-       | _ -> (
-           match Analyzer.smart_rewrite iname with Some x -> x | None -> iname)
-     in *)
-  let fix_operands ~in_opnds ~out_opnds iname =
-    (* VERY AD HOC stuff  *)
-    let map f = (List.map f in_opnds, List.map f out_opnds) in
-    (* match iname with
-       (* | "VID_V"  *)
-       | "c.fld" -> map (function "rd" -> "rdc" | x -> x)
-       | "VFIRST_M" | "VCPOP_M" -> map (function "vd" -> "rd" | x -> x)
-       | "c.addw" | "c.addi" | "c.addiw" ->
-           map (function "rd_wb" -> "rsd" | x -> x)
-       | "c.add" | "c.andi" -> map (function "rs1_wb" -> "rsd" | x -> x)
-       | "c.and" -> map (function "rd_wb" -> "rsd" | x -> x)
-       | "c.mul" | "c.zext.w" -> map (function "rd_wb" -> "rsdc" | x -> x)
-       | _ -> (in_opnds, out_opnds) *)
-    map (chop_suffix ~suffix:"_wb")
-  in
-
-  let on_found iname ~mangled =
+  let on_found iname mangled_iname sail_name =
     stats.from6159 <- stats.from6159 + 1;
-    let info = From6159.lookup_exn mangled in
-    let in_opnds, out_opnds = extract_operands_info iname in
-    let _in_opnds, out_opnds = fix_operands ~in_opnds ~out_opnds iname in
-    let _top_cname, info =
-      match info with
-      | From6159.CI_default s, info -> (s, info)
-      | From6159.CI_hacky (s, _), info -> (s, info)
+    let llvm_outs = extract_operands_info iname in
+    let sail_outs =
+      let outs =
+        match From6159.lookup_exn sail_name with
+        | From6159.CI_default _, info -> info.out
+        | From6159.CI_hacky (_, _), info -> info.out
+      in
+      let _, regs = Mnemonic_hashtbl.find mangled_iname in
+      List.map
+        (fun oper ->
+          match Array.find_index (String.equal oper) regs with
+          | Some s -> s
+          | None ->
+              Format.printf "%s qwerty\n" iname;
+              -1)
+        outs
     in
-    (* log "info.out = %s" (String.concat " " info.out);
-       log "cur.out = %s" (String.concat " " out_opnds); *)
-    List.iter
-      (fun llvm_out ->
-        if not (List.mem llvm_out info.out) then
-          Printf.printf "Diversion for %S(%S): not an out operand %S\n%!" iname
-            mangled llvm_out)
-      out_opnds
+    try
+      List.iter2
+        (fun llvm_reg sail_reg ->
+          if llvm_reg <> sail_reg then Format.printf "diff out regs: %s\n" iname)
+        llvm_outs sail_outs
+    with
+    | Invalid_argument _ -> Format.printf "Invalid argument: %s\n" iname
+    | _ -> ()
   in
 
   let () =
-    match iname with
-    | s when is_omitted_explicitly s -> ()
-    | _ ->
-        let mangled =
-          if String.ends_with iname ~suffix:"aqrl" then
-            let iname = chop_suffix ~suffix:"rl" iname in
-            iname ^ ".rl"
-          else iname
-        in
-        (* print_endline mangled; *)
-        let sail_name =
-          try Mnemonic_hashtbl.find mangled with Not_found -> ""
-        in
-        if From6159.mem sail_name then on_found iname ~mangled:sail_name
-        else save_unknown iname ""
+    let mangled =
+      if String.ends_with iname ~suffix:"aqrl" then
+        let iname = chop_suffix ~suffix:"rl" iname in
+        iname ^ ".rl"
+      else iname
+    in
+    try
+      let sail_name, regs = Mnemonic_hashtbl.find mangled in
+      if From6159.mem sail_name then on_found iname mangled sail_name
+      else save_unknown iname ""
+    with Not_found -> save_unknown iname ""
   in
   ()
 
