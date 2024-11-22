@@ -43,7 +43,7 @@ type stats = {
 
 let stats = { from6159 = 0; total = 0; first_unknown = [] }
 
-let save_unknown orig s =
+let save_unknown s =
   (* let s = if orig <> s then Printf.sprintf "%s(%s)" s orig else s in
      match stats.first_unknown with
      | [] -> stats.first_unknown <- [ s ]
@@ -51,14 +51,13 @@ let save_unknown orig s =
      | [ a; b ] -> stats.first_unknown <- [ a; b; s ]
      | [ a; b; c ] -> stats.first_unknown <- [ a; b; c; s ]
      | _ -> () *)
-  let s = if orig <> s then Printf.sprintf "%s(%s)" s orig else s in
   stats.first_unknown <- s :: stats.first_unknown
 
 let report () =
   let open Format in
   printf "Total instructions: %d\n" stats.total;
   printf "from6159: %d\n" stats.from6159;
-  printf "First unknown: %s\n" (String.concat " " stats.first_unknown)
+  printf "First unknown:\n%s\n" (String.concat "\n" stats.first_unknown)
 
 let omitted_explicitly = [ ""; "ANNOTATION_LABEL" ]
 
@@ -363,8 +362,8 @@ let process_single iname =
     try
       let sail_name, regs = Mnemonic_hashtbl.find mangled in
       if From6159.mem sail_name then on_found iname mangled sail_name
-      else save_unknown iname ""
-    with Not_found -> save_unknown iname ""
+      else save_unknown iname
+    with Not_found -> save_unknown iname
   in
   ()
 

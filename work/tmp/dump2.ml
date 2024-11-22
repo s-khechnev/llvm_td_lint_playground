@@ -47,7 +47,7 @@ let is_name_for_tracing = function
   (* | "RISCV_CZERO_EQZ" | "F_UN_TYPE_D" *)
   (* | "RTYPE" | "RISCV_ADD" | "C_ADD"  *)
   (* | "ZICOND_RTYPE" -> *)
-  (* | "RISCV_UNZIP" -> true *)
+  | "C_FLD" -> true
   | _ -> false
 
 module Collect_out_info = struct
@@ -92,7 +92,7 @@ module Collect_out_info = struct
   let formal_params_hash : (string, formal_params) Hashtbl.t =
     Hashtbl.create 111
 
-  let make_iterator curV is_right_opnd register_assmt =
+  let make_iterator curV is_right_opnd register_assmt add_alias check_alias =
     {
       default_iterator with
       exp_aux =
@@ -177,10 +177,15 @@ module Collect_out_info = struct
               let spec_args =
                 List.map
                   (function
-                    | E_aux (E_id (Id_aux (Id id, _)), _) ->
-                        (* log "%s %d arg.id = %S" __FILE__ __LINE__ id; *)
-                        if Char.uppercase_ascii id.[0] = id.[0] then None
-                        else Some id
+                    | E_aux (E_id (Id_aux (Id id, _)), _) -> (
+                        if
+                          (* log "%s %d arg.id = %S" __FILE__ __LINE__ id; *)
+                          Char.uppercase_ascii id.[0] = id.[0]
+                        then None
+                        else
+                          match check_alias id with
+                          | Some alias -> Some alias
+                          | None -> Some id)
                     | _ -> None)
                   args
               in
@@ -189,7 +194,20 @@ module Collect_out_info = struct
               G.add_vertex g v_dest;
               G.add_edge_e g (v_dest, Edge.make spec_args, curV);
               default_iterator.exp_aux self e
-          | e -> default_iterator.exp_aux self e);
+          | e ->
+              let () =
+                match e with
+                | E_let
+                    ( LB_aux
+                        ( LB_val
+                            ( P_aux (P_id (Id_aux (Id alias, _)), _),
+                              E_aux (E_app (Id_aux (_, _), [ arg ]), _) ),
+                          _ ),
+                      _ ) ->
+                    add_alias alias arg
+                | _ -> ()
+              in
+              default_iterator.exp_aux self e);
     }
 
   let dump_graph () =
@@ -215,10 +233,10 @@ module Collect_out_info = struct
             failwithf "Can't get formal params for %s" vdest
         | xs -> xs
       in
-      (* if is_name_for_tracing v_from then (
-         log "vfrom = %s, dest = %s" v_from vdest;
-         log "spec_args = %a" pp_formal_params spec_args;
-         log "dest_args = %a" pp_formal_params formal_params_dest); *)
+      if is_name_for_tracing v_from || is_name_for_tracing vdest then (
+        log "vfrom = %s, dest = %s" v_from vdest;
+        log "spec_args = %a" pp_formal_params spec_args;
+        log "dest_args = %a" pp_formal_params formal_params_dest);
       assert (List.length spec_args = List.length formal_params_dest);
 
       let interestring_args =
@@ -230,10 +248,10 @@ module Collect_out_info = struct
           spec_args formal_params_dest
         |> List.filter_map Fun.id
       in
-      (* if is_name_for_tracing v_from then
-         log "\nInteresting args for %S: %s" v_from
-           (String.concat " "
-              (List.map (fun (a, b) -> sprintf "(%s,%s)" a b) interestring_args)); *)
+      if is_name_for_tracing v_from || is_name_for_tracing vdest then
+        log "\nInteresting args for %S: %s" v_from
+          (String.concat " "
+             (List.map (fun (a, b) -> sprintf "(%s,%s)" a b) interestring_args));
       List.iter
         (fun (spec, dest) ->
           if is_out v_from ~arg:dest then extend vdest ~arg:spec)
@@ -307,23 +325,42 @@ let dump_execute jfile =
             (function
               | P_aux (P_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
             ps
+      | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ Some id ]
       | _ -> []
     in
+
     let out_args =
       let out_args = ref [] in
+      let aliases = Hashtbl.create 100 in
       let iterator =
         Collect_out_info.make_iterator
           (Collect_out_info.V.make key)
           (fun _ -> true)
           (fun s ->
             if not (List.mem s !out_args) then out_args := s :: !out_args)
+          (fun alias -> function
+            | E_aux (E_id (Id_aux (Id arg, _)), _) ->
+                if List.mem (Some arg) args then Hashtbl.add aliases alias arg
+                else if Hashtbl.mem aliases arg then
+                  Hashtbl.replace aliases alias arg
+            | _ -> ())
+          (Hashtbl.find_opt aliases)
       in
       iterator.exp iterator body;
-      if is_name_for_tracing key then
+
+      if is_name_for_tracing key then (
         log "Out_args for %S: %a" key
           Format.(pp_print_list pp_print_string)
           !out_args;
-      !out_args
+        Format.printf "count: %d\n" (Hashtbl.length aliases);
+        Hashtbl.iter (fun k v -> Format.printf "%s -> %s\n" k v) aliases);
+
+      List.map
+        (fun arg ->
+          match Hashtbl.find_opt aliases arg with
+          | Some alias -> alias
+          | None -> arg)
+        !out_args
     in
 
     let argidx =
@@ -364,7 +401,7 @@ let dump_execute jfile =
           (* failwithf "can't decide what to do when key = %S" key *)
           Hashtbl.add weird_stuff key ()
       | Some args ->
-          log "The clause for %S HAS right match\n%!" key;
+          (* log "The clause for %S HAS right match\n%!" key; *)
           Hashtbl.add out_info key out_args;
           ListLabels.iter args ~f:(function
             | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _) ->
