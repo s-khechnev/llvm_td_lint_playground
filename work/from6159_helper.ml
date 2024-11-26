@@ -1,6 +1,6 @@
 (* This file was auto generated *)
 type t = CI_hacky of string * int | CI_default of string
-type info = { out : string list }
+type info = { out : string list; inputs : string list }
 
 module Hash_info = Hashtbl.Make (struct
   include String

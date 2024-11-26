@@ -47,7 +47,7 @@ let is_name_for_tracing = function
   (* | "RISCV_CZERO_EQZ" | "F_UN_TYPE_D" *)
   (* | "RTYPE" | "RISCV_ADD" | "C_ADD"  *)
   (* | "ZICOND_RTYPE" -> *)
-  | "C_FLD" -> true
+  | "C_ADDI" -> true
   | _ -> false
 
 module Collect_out_info = struct
@@ -92,11 +92,13 @@ module Collect_out_info = struct
   let formal_params_hash : (string, formal_params) Hashtbl.t =
     Hashtbl.create 111
 
-  let make_iterator curV is_right_opnd register_assmt add_alias check_alias =
+  let make_iterator curV is_right_opnd out_register_assmt in_register_assmt
+      add_alias try_get_alias =
     {
       default_iterator with
       exp_aux =
-        (fun self -> function
+        (fun self e ->
+          (match e with
           | E_app
               ( Id_aux
                   ( Id
@@ -105,21 +107,21 @@ module Collect_out_info = struct
                     _ ),
                 [ E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "write_vreg", _),
                 [ _; _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "write_vmask", _),
                 [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] )
             when is_right_opnd rd ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "write_single_element", _),
                 [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _ ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "process_vlxseg", _),
                 [
@@ -135,36 +137,36 @@ module Collect_out_info = struct
                   _;
                   _;
                 ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "process_vlsseg", _),
                 [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _; _ ] )
             ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "process_vlsegff", _),
                 [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "process_vlre", _),
                 [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "process_vlseg", _),
                 [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id ("process_rfvv_widen" | "process_rfvv_single"), _),
                 [ _; _; _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] )
             ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux
                   ( Id
                       ("process_fload16" | "process_fload32" | "process_fload64"),
                     _ ),
                 [ E_aux (E_id (Id_aux (Id rd, _)), _); _; _ ] ) ->
-              register_assmt rd
+              out_register_assmt rd
           | E_app
               ( Id_aux (Id "execute", _),
                 [
@@ -183,7 +185,7 @@ module Collect_out_info = struct
                           Char.uppercase_ascii id.[0] = id.[0]
                         then None
                         else
-                          match check_alias id with
+                          match try_get_alias id with
                           | Some alias -> Some alias
                           | None -> Some id)
                     | _ -> None)
@@ -194,20 +196,32 @@ module Collect_out_info = struct
               G.add_vertex g v_dest;
               G.add_edge_e g (v_dest, Edge.make spec_args, curV);
               default_iterator.exp_aux self e
-          | e ->
-              let () =
-                match e with
-                | E_let
-                    ( LB_aux
-                        ( LB_val
-                            ( P_aux (P_id (Id_aux (Id alias, _)), _),
-                              E_aux (E_app (Id_aux (_, _), [ arg ]), _) ),
-                          _ ),
-                      _ ) ->
-                    add_alias alias arg
-                | _ -> ()
-              in
-              default_iterator.exp_aux self e);
+          | E_app
+              ( Id_aux
+                  ( Id
+                      ( "rX_bits" | "rF_D" | "rF_or_X_D" | "rF_or_X_S"
+                      | "rF_or_X_H" | "rF_S" | "rF_H" | "rF_bits" ),
+                    _ ),
+                [ E_aux (E_id (Id_aux (Id rs, _)), _) ] ) ->
+              in_register_assmt rs
+          | E_app
+              ( Id_aux (Id "ext_data_get_addr", _),
+                [ E_aux (E_id (Id_aux (Id rs, _)), _); _; _; _ ] ) ->
+              in_register_assmt rs
+          | E_app
+              ( Id_aux (Id "read_vreg", _),
+                [ _; _; _; E_aux (E_id (Id_aux (Id rs, _)), _) ] ) ->
+              in_register_assmt rs
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux (P_id (Id_aux (Id alias, _)), _),
+                        E_aux (E_app (Id_aux (_, _), [ arg ]), _) ),
+                    _ ),
+                _ ) ->
+              add_alias alias arg
+          | _ -> ());
+          default_iterator.exp_aux self e);
     }
 
   let dump_graph () =
@@ -224,7 +238,7 @@ module Collect_out_info = struct
     end) in
     Out_channel.with_open_text config.dot_file (fun ch -> Dot.output_graph ch g)
 
-  let saturate_graph is_out extend =
+  let saturate_graph is_out extend_out is_in extend_in =
     let on_edge : V.t * Edge.t * V.t -> _ =
      fun (v_from, spec_args, vdest) ->
       let formal_params_dest =
@@ -254,7 +268,8 @@ module Collect_out_info = struct
              (List.map (fun (a, b) -> sprintf "(%s,%s)" a b) interestring_args));
       List.iter
         (fun (spec, dest) ->
-          if is_out v_from ~arg:dest then extend vdest ~arg:spec)
+          if is_out v_from ~arg:dest then extend_out vdest ~arg:spec;
+          if is_in v_from ~arg:dest then extend_in vdest ~arg:spec)
         interestring_args;
       ()
     in
@@ -314,6 +329,7 @@ let dump_execute jfile =
   let collected : (string, collected_info) Hashtbl.t = Hashtbl.create 100 in
   let weird_stuff : (string, unit) Hashtbl.t = Hashtbl.create 100 in
   let out_info : (string, string list) Hashtbl.t = Hashtbl.create 100 in
+  let in_info : (string, string list) Hashtbl.t = Hashtbl.create 100 in
   let open Myast in
   let on_rtype key pargs body =
     let _ : Libsail.Type_check.tannot exp = body in
@@ -329,7 +345,8 @@ let dump_execute jfile =
       | _ -> []
     in
 
-    let out_args =
+    let out_args, in_args =
+      let in_args = ref [] in
       let out_args = ref [] in
       let aliases = Hashtbl.create 100 in
       let iterator =
@@ -338,6 +355,7 @@ let dump_execute jfile =
           (fun _ -> true)
           (fun s ->
             if not (List.mem s !out_args) then out_args := s :: !out_args)
+          (fun s -> if not (List.mem s !in_args) then in_args := s :: !in_args)
           (fun alias -> function
             | E_aux (E_id (Id_aux (Id arg, _)), _) ->
                 if List.mem (Some arg) args then Hashtbl.add aliases alias arg
@@ -355,13 +373,21 @@ let dump_execute jfile =
         Format.printf "count: %d\n" (Hashtbl.length aliases);
         Hashtbl.iter (fun k v -> Format.printf "%s -> %s\n" k v) aliases);
 
-      List.map
-        (fun arg ->
-          match Hashtbl.find_opt aliases arg with
-          | Some alias -> alias
-          | None -> arg)
-        !out_args
+      ( List.map
+          (fun arg ->
+            match Hashtbl.find_opt aliases arg with
+            | Some alias -> alias
+            | None -> arg)
+          !out_args,
+        List.map
+          (fun arg ->
+            match Hashtbl.find_opt aliases arg with
+            | Some alias -> alias
+            | None -> arg)
+          !in_args )
     in
+
+    Hashtbl.add in_info key in_args;
 
     let argidx =
       let formal_params =
@@ -413,7 +439,8 @@ let dump_execute jfile =
                   log "Adding hacky: key = %s, name = %s" key name;
                 Hashtbl.add collected name (CI_hacky (key, argidx));
                 Hashtbl.add out_info key out_args;
-                Hashtbl.add out_info name out_args
+                Hashtbl.add out_info name out_args;
+                Hashtbl.add in_info name in_args
             | _ -> ())
     in
     ()
@@ -468,6 +495,14 @@ let dump_execute jfile =
         match Hashtbl.find out_info op with
         | exception Not_found -> Hashtbl.add out_info op [ arg ]
         | xs -> Hashtbl.replace out_info op (arg :: xs))
+      (fun op ~arg ->
+        match Hashtbl.find in_info op with
+        | exception Not_found -> false
+        | xs -> List.mem arg xs)
+      (fun op ~arg ->
+        match Hashtbl.find in_info op with
+        | exception Not_found -> Hashtbl.add in_info op [ arg ]
+        | xs -> Hashtbl.replace in_info op (arg :: xs))
   in
   Collect_out_info.dump_graph ();
   assert (config.ocaml_ident <> "");
@@ -492,6 +527,11 @@ let dump_execute jfile =
                | xs -> xs
                | exception Not_found -> []
              in
+             let inputs =
+               match Hashtbl.find in_info key with
+               | xs -> xs
+               | exception Not_found -> []
+             in
              let out_str ppf out =
                Format.pp_print_list
                  ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
@@ -500,10 +540,11 @@ let dump_execute jfile =
              in
              function
              | CI_default name ->
-                 printf "@[def ans  %S {out=[%a]};@]@," name out_str out
+                 printf "@[def ans  %S {out=[%a]; inputs=[%a]};@]@," name
+                   out_str out out_str inputs
              | CI_hacky (name, n) ->
-                 printf "@[hacky ans %S %S %d {out=[%a]};@]@," name key n
-                   out_str out);
+                 printf "@[hacky ans %S %S %d {out=[%a]; inputs=[%a]};@]@," name
+                   key n out_str out out_str inputs);
       printf "@[ans@]@ ";
       printf "@]@ ";
       Format.pp_print_cut ppf ();
