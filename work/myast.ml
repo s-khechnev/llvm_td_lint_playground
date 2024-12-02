@@ -617,14 +617,48 @@ type 'a def_aux = 'a Ast.def_aux =
 and 'a def = 'a Ast.def = DEF_aux of 'a def_aux * def_annot
 [@@deriving yojson, show { with_path = false }]
 
-(* type tannot = Type_check.tannot *)
+let to_null_yojson _ = `Null
+let dummy_pp fmt _ = Format.fprintf fmt "???"
 
-let pp_tannot ppf _ = Format.fprintf ppf "???"
-let tannot_to_yojson _ = `Int 42
+type tannot' = {
+  env : Type_env.t;
+      [@to_yojson to_null_yojson]
+      [@of_yojson fun _ -> Result.Ok Type_env.empty]
+      [@printer dummy_pp]
+  typ : typ;
+  monadic : Ast_util.effect;
+      [@to_yojson to_null_yojson]
+      [@of_yojson fun _ -> Result.Ok Ast_util.no_effect]
+      [@printer dummy_pp]
+  expected : typ option;
+      [@to_yojson to_null_yojson]
+      [@of_yojson fun _ -> Result.Ok None]
+      [@printer dummy_pp]
+  instantiation : typ_arg Ast_util.KBindings.t option;
+      [@to_yojson to_null_yojson]
+      [@of_yojson fun _ -> Result.Ok None]
+      [@printer dummy_pp]
+}
+[@@deriving yojson, show { with_path = false }]
 
-let tannot_of_yojson _ : Type_check.tannot Ppx_deriving_yojson_runtime.error_or
-    =
-  Result.Ok Type_check.empty_tannot
+type uannot = Ast_util.uannot
+
+let uannot_to_yojson = to_null_yojson
+let uannot_of_yojson _ = Result.Ok Ast_util.empty_uannot
+let pp_uannot = dummy_pp
+
+type tannot = tannot' option * uannot
+[@@deriving yojson, show { with_path = false }]
+
+let pp_tannot : Format.formatter -> Type_check.tannot -> unit =
+ fun ppf t -> pp_tannot ppf (Obj.magic t)
+
+let tannot_to_yojson : Type_check.tannot -> Yojson.Safe.t =
+ fun tannot -> tannot_to_yojson (Obj.magic tannot)
+
+let tannot_of_yojson :
+    Yojson.Safe.t -> Type_check.tannot Ppx_deriving_yojson_runtime.error_or =
+ fun tannot -> Obj.magic (tannot_of_yojson tannot)
 
 let save filename ast =
   print_endline __FUNCTION__;
