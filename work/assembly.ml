@@ -44,28 +44,38 @@ let () =
          asts
   in
 
-  (* Format.printf "Count mnemonics: %d\n" (List.length assemblies);
-     Format.printf "Count mappings: %d\n" (Hashtbl.length mappings); *)
-  (* Hashtbl.iter (fun id _ -> print_endline id) mappings; *)
   let hashtbl = Hashtbl.create 3000 in
   List.iter
     (function
       | MCL_aux
           ( MCL_bidir
               ( MPat_aux
-                  (MPat_pat (MP_aux (MP_app (Id_aux (Id ident, _), _), _)), _),
+                  (MPat_pat (MP_aux (MP_app (Id_aux (Id ident, _), args), _)), _),
                 MPat_aux (MPat_pat (MP_aux (x, _)), _) ),
             _ )
       | MCL_aux
           ( MCL_bidir
               ( MPat_aux
-                  ( MPat_when (MP_aux (MP_app (Id_aux (Id ident, _), _), _), _),
+                  ( MPat_when
+                      (MP_aux (MP_app (Id_aux (Id ident, _), args), _), _),
                     _ ),
                 MPat_aux (MPat_when (MP_aux (x, _), _), _) ),
             _ )
         when not
                (String.equal ident "FENCEI_RESERVED"
                || String.equal ident "FENCE_RESERVED") -> (
+          List.iter
+            (function
+              | MP_aux (MP_id (Id_aux (Id arg_id, _)), (_, tannot)) -> (
+                  match Obj.magic tannot with
+                  | Some { env; typ; _ }, _ -> (
+                      match typ with
+                      | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                          Format.printf "%s %s -> %s\n" ident arg_id typ_id
+                      | _ -> ())
+                  | _ -> ())
+              | _ -> ())
+            args;
           match x with
           | MP_string_append xs ->
               let stupid_concat lst1 lst2 =
@@ -136,6 +146,15 @@ let () =
                                 [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ]
                               ),
                             _ ) ->
+                          (* Format.printf "%s -> %s\n" ident reg_name; *)
+                          reg_name :: acc
+                      | MP_aux
+                          ( MP_app
+                              ( Id_aux (Id f_id, _),
+                                [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ]
+                              ),
+                            _ )
+                        when String.starts_with ~prefix:"hex_bits" f_id ->
                           (* Format.printf "%s -> %s\n" ident reg_name; *)
                           reg_name :: acc
                       | _ -> acc)

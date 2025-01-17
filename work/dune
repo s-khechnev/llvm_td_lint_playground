@@ -16,6 +16,11 @@
  (modules assembly)
  (libraries libsail yojson analysis myast_iterator))
 
+(executable
+ (name enums)
+ (modules enums)
+ (libraries libsail yojson analysis myast_iterator))
+
 (cram
  (applies_to run)
  (deps ./test1.exe))
@@ -195,7 +200,7 @@
 
 (executable
  (name lookup)
- (modules lookup from6159 from6159_helper mnemonic_hashtbl)
+ (modules lookup from6159 from6159_helper mnemonic_hashtbl enum_hashtbl)
  (preprocessor_deps
   ../json/work/ADD.json
   ../json/allkeys.txt
@@ -219,3 +224,11 @@
   (promote (until-clean)))
  (action
   (run ./assembly.exe)))
+
+(rule
+ (target enum_hashtbl.ml)
+ (deps enums.ml riscv.sail.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run ./enums.exe)))

@@ -18,7 +18,7 @@ let is_bad_LLVM_key = function
   | s when String.starts_with ~prefix:"Pseudo" s -> true
   | _ -> false
 
-let is_bad_JSON_data key : Yojson.Safe.t -> bool =
+let is_bad_JSON_data _ : Yojson.Safe.t -> bool =
  fun j ->
   match j with
   | `Assoc xs -> (
@@ -28,8 +28,8 @@ let is_bad_JSON_data key : Yojson.Safe.t -> bool =
             List.mem (`String "Pseudo") classes
             || List.mem (`String "StandardPseudoInstruction") classes
           in
-          if ans then
-            Printf.printf "Key %S filtered because of Pseudo class\n" key;
+          (* if ans then
+             Printf.printf "Key %S filtered because of Pseudo class\n" key; *)
           ans
       | exception Not_found -> false
       | _ -> false)

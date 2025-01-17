@@ -47,7 +47,7 @@ let is_name_for_tracing = function
   (* | "RISCV_CZERO_EQZ" | "F_UN_TYPE_D" *)
   (* | "RTYPE" | "RISCV_ADD" | "C_ADD"  *)
   (* | "ZICOND_RTYPE" -> *)
-  | "C_ADDI" -> true
+  (* | "C_ADDI" -> true *)
   | _ -> false
 
 module Collect_out_info = struct
@@ -292,15 +292,15 @@ type implementation_kind =
           So called hacky definition
        *)
 
-let classify_def key pargs body =
+let classify_def key args body =
   let open Myast in
   let has_constructor_arg =
     List.find_map
-      (function
-        | E_aux (E_id (Id_aux (Id id, _)), _) ->
-            if Char.uppercase_ascii id.[0] = id.[0] then None else Some id
-        | _ -> None)
-      pargs
+      (fun (a, b) ->
+        match Enum_hashtbl.find b with
+        | xs -> if List.mem a xs then Some a else None
+        | exception Not_found -> None)
+      args
   in
   match has_constructor_arg with
   | Some s -> IK_singledef (key, s)
@@ -334,17 +334,48 @@ let dump_execute jfile =
   let on_rtype key pargs body =
     let _ : Libsail.Type_check.tannot exp = body in
     (* printfn "%s %d key = %S" __FUNCTION__ __LINE__ key; *)
+    let args_w_typ =
+      match pargs with
+      | [ P_aux (P_tuple ps, _) ] ->
+          List.filter_map
+            (function
+              | P_aux (P_id (Id_aux (Id id, _)), (_, tannot)) -> (
+                  match Obj.magic tannot with
+                  | Some { env; typ; _ }, _ -> (
+                      match typ with
+                      | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
+                      | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                          Some (id, typ_id)
+                      | _ -> None)
+                  | _ -> None)
+              | _ -> None)
+            ps
+      | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ (id, "qwe") ]
+      | _ -> []
+    in
     let args =
       match pargs with
       | [ P_aux (P_tuple ps, _) ] ->
-          List.map
+          List.filter_map
             (function
               | P_aux (P_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
             ps
-      | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ Some id ]
+      | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ id ]
       | _ -> []
     in
 
+    (* let () =
+      match classify_def key args_w_typ body with
+      | IK_straight s -> Format.printf "IK_straight %s\n" s
+      | IK_singledef (key, op) -> Format.printf "IK_singledef %s - %s\n" key op
+      | IK_multidef (key, xs) ->
+          log "IK_multidef %S: %a" key
+            Format.(
+              pp_print_list
+                ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
+                pp_print_string)
+            xs
+    in *)
     let out_args, in_args =
       let in_args = ref [] in
       let out_args = ref [] in
@@ -358,7 +389,7 @@ let dump_execute jfile =
           (fun s -> if not (List.mem s !in_args) then in_args := s :: !in_args)
           (fun alias -> function
             | E_aux (E_id (Id_aux (Id arg, _)), _) ->
-                if List.mem (Some arg) args then Hashtbl.add aliases alias arg
+                if List.mem arg args then Hashtbl.add aliases alias arg
                 else if Hashtbl.mem aliases arg then
                   Hashtbl.replace aliases alias arg
             | _ -> ())

@@ -38,7 +38,15 @@
    -o
    %{targets})))
 
+(rule
+ (target enum_hashtbl.ml)
+ (deps ../enum_hashtbl.ml)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run cp %{deps} %{target})))
+
 (executable
  (name dump2)
- (modules dump2)
+ (modules dump2 enum_hashtbl)
  (libraries yojson analysis myast_iterator ocamlgraph))

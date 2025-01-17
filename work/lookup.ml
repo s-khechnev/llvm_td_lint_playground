@@ -137,23 +137,32 @@ let extract_operands_info key =
             |> List.concat_map (String.split_on_char '$')
             |> List.filter_map (fun s ->
                    let s = String.trim s in
-                   if
-                     String.equal s "" || String.equal s "src"
-                     || String.starts_with ~prefix:"imm" s
-                   then None
-                   else Some s)
+                   if String.equal s "" then None
+                   else
+                     let regex = Str.regexp "{\\(.*?\\)}" in
+                     if Str.string_match regex s 0 then
+                       Some (Str.matched_group 1 s)
+                     else Some s)
             |> Array.of_list
         | _ -> [||])
     | _ -> assert false
   in
-  (* if config.verbose then (
-        print_endline "";
-        Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
-        Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
-     (in_operands, out_operands) *)
-  List.map
-    (fun oper -> Option.get @@ Array.find_index (String.equal oper) regs)
-    out_operands
+  if config.verbose then (
+    Format.printf "key: %s\n" key;
+    Format.printf "@[Regs: %s@]\n%!" (String.concat " " (Array.to_list regs));
+    Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
+    Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
+  let f a =
+    List.map
+      (fun oper ->
+        match Array.find_index (String.equal oper) regs with
+        | Some a -> a
+        | None ->
+            (* Format.printf "trash asm string: %s: %s\n" key oper; *)
+            -1)
+      a
+  in
+  (f out_operands, f in_operands)
 
 let sail_AST =
   lazy
@@ -325,30 +334,44 @@ end
 let process_single iname =
   let on_found iname mangled_iname sail_name =
     stats.from6159 <- stats.from6159 + 1;
-    let llvm_outs = extract_operands_info iname in
-    let sail_outs =
-      let outs =
+    let llvm_outs, llvm_ins = extract_operands_info iname in
+    let sail_outs, sail_ins =
+      let outs, ins =
         match From6159.lookup_exn sail_name with
-        | From6159.CI_default _, info -> info.out
-        | From6159.CI_hacky (_, _), info -> info.out
+        | From6159.CI_default _, info -> (info.out, info.inputs)
+        | From6159.CI_hacky (_, _), info -> (info.out, info.inputs)
       in
       let _, regs = Mnemonic_hashtbl.find mangled_iname in
-      List.map
-        (fun oper ->
-          match Array.find_index (String.equal oper) regs with
-          | Some s -> s
-          | None ->
-              Format.printf "%s qwerty\n" iname;
-              -1)
-        outs
+      ( List.map
+          (fun oper ->
+            match Array.find_index (String.equal oper) regs with
+            | Some s -> s
+            | None ->
+                Format.printf "%s (sail): %s - implicit out\n" sail_name oper;
+                -1)
+          outs,
+        List.map
+          (fun oper ->
+            match Array.find_index (String.equal oper) regs with
+            | Some s -> s
+            | None ->
+                Format.printf "%s (sail): %s - implicit in\n" sail_name oper;
+                -1)
+          ins )
     in
+    (* Format.printf "@[%s: llvm_outs: %s@]\n%!" iname
+         (String.concat " " (List.map string_of_int llvm_outs));
+       Format.printf "@[%s: sail_outs: %s@]\n%!" iname
+         (String.concat " " (List.map string_of_int sail_outs)); *)
     try
       List.iter2
         (fun llvm_reg sail_reg ->
-          if llvm_reg <> sail_reg then Format.printf "diff out regs: %s\n" iname)
+          if llvm_reg <> sail_reg then
+            Format.printf "different outs: %s\n" iname)
         llvm_outs sail_outs
     with
-    | Invalid_argument _ -> Format.printf "Invalid argument: %s\n" iname
+    | Invalid_argument _ ->
+        Format.printf "Different outs regs number: %s\n" iname
     | _ -> ()
   in
 

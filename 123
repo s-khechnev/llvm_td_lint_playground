@@ -1,15 +1,29 @@
-c.addi16sp qwerty
-diff out regs: c.addi16sp
-c.j qwerty
-Invalid argument: c.j
-c.jal qwerty
-Invalid argument: c.jal
-c.jalr qwerty
-Invalid argument: c.jalr
-c.jr qwerty
-Invalid argument: c.jr
-Invalid argument: unzip
-Invalid argument: zip
+C_ADDI16SP (sail): sp - implicit in
+C_ADDI16SP (sail): sp - implicit out
+different outs: c.addi16sp
+C_ADDI4SPN (sail): sp - implicit in
+C_BEQZ (sail): zreg - implicit in
+C_BNEZ (sail): zreg - implicit in
+C_FLDSP (sail): sp - implicit in
+C_FLWSP (sail): sp - implicit in
+C_FSDSP (sail): sp - implicit in
+C_FSWSP (sail): sp - implicit in
+C_J (sail): zreg - implicit out
+Different outs regs number: c.j
+C_JAL (sail): ra - implicit out
+Different outs regs number: c.jal
+C_JALR (sail): ra - implicit out
+Different outs regs number: c.jalr
+C_JR (sail): zreg - implicit out
+Different outs regs number: c.jr
+C_LDSP (sail): sp - implicit in
+C_LI (sail): zreg - implicit in
+C_LWSP (sail): sp - implicit in
+C_MV (sail): zreg - implicit in
+C_SDSP (sail): sp - implicit in
+C_SWSP (sail): sp - implicit in
+Different outs regs number: unzip
+Different outs regs number: zip
 Total instructions: 1769
 from6159: 1101
 First unknown:
