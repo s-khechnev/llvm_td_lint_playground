@@ -1,6 +1,2 @@
-/RISCV.td.json
-/RISCV.instructions.json
-/allkeys.txt
-/allkeys.txt.json
-/allmnemonics.txt
-/allmnemonics.txt.json
+*.txt
+*.json
