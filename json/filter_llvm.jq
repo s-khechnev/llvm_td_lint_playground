@@ -1,3 +1,4 @@
+# filter llvm td json
 .
 | with_entries
 ( select(.value | type == "object")
@@ -7,9 +8,10 @@
 | select(.value."!superclasses"[] | contains("Pseudo") | not)
 | select(.value."!superclasses"[] | contains("StandardPseudoInstruction") | not)
 | select(.value | del(.TSFlags) )
+| del(.value.SoftFail, .value.TSFlags, .value.SchedRW, .value.Inst)
+| select(.value."AsmString" != null)
+| select(.value."AsmString" != "")
+| select(.value."AsmString" | startswith(".insn") | not)
+| .key = (.value."AsmString" | split("\t") | .[0])
 )
-# a comment
-| with_entries(
-    select(.value | type == "object" )
-    | del(.value.SoftFail, .value.TSFlags, .value.SchedRW, .value.Inst) )
 | .

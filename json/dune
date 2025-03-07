@@ -1,26 +1,12 @@
 (rule
  (targets ./RISCV.td.json)
  (deps llvm19/RISCV.tar.xz)
- ;  (mode
- ;   (promote (until-clean)))
  (action
   (run tar -xvf %{deps})))
 
 (rule
- (targets script.jq.online)
- (deps script.jq)
- (action
-  (pipe-stdout
-   (with-stdin-from
-    %{deps}
-    (run sed "/^#/d"))
-   (with-stdout-to
-    %{targets}
-    (run tr "'\\n'" " ")))))
-
-(rule
- (targets script_key_asm.jq.online)
- (deps script_key_asm.jq)
+ (targets filter_llvm.jq.online)
+ (deps filter_llvm.jq)
  (action
   (pipe-stdout
    (with-stdin-from
@@ -34,7 +20,7 @@
  (targets ./RISCV.instructions.json)
  (deps
   (:riscv ./RISCV.td.json)
-  (:script script.jq.online))
+  (:script filter_llvm.jq.online))
  (mode
   (promote (until-clean)))
  (action
@@ -42,25 +28,7 @@
    (with-stdout-to
     %{targets}
     (run sh -c "jq -f %{script}  %{riscv} | jq ."))
-   (run ls -lh %{targets})
-   ;
-   )))
-
-(rule
- (targets ./RISCV.instructions.key.asm.json)
- (deps
-  (:riscv ./RISCV.td.json)
-  (:script script_key_asm.jq.online))
- (mode
-  (promote (until-clean)))
- (action
-  (progn
-   (with-stdout-to
-    %{targets}
-    (run sh -c "jq -f %{script}  %{riscv} | jq ."))
-   (run ls -lh %{targets})
-   ;
-   )))
+   (run ls -lh %{targets}))))
 
 (executable
  (name dissect)
@@ -68,16 +36,8 @@
  (libraries yojson))
 
 (rule
- (targets allkeys.txt.json allkeys.txt)
+ (targets allmnemonics.txt)
  (deps RISCV.instructions.json)
- (mode
-  (promote (until-clean)))
- (action
-  (run ./dissect.exe %{deps} -o allkeys.txt -get-keys)))
-
-(rule
- (targets allmnemonics.txt.json allmnemonics.txt)
- (deps RISCV.instructions.key.asm.json)
  (mode
   (promote (until-clean)))
  (action

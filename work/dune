@@ -202,8 +202,6 @@
  (name lookup)
  (modules lookup from6159 from6159_helper mnemonic_hashtbl enum_hashtbl)
  (preprocessor_deps
-  ../json/work/ADD.json
-  ../json/allkeys.txt
   ../json/allmnemonics.txt)
  (libraries yojson analysis myast_iterator stdune)
  (preprocess
