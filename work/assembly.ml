@@ -64,18 +64,18 @@ let () =
         when not
                (String.equal ident "FENCEI_RESERVED"
                || String.equal ident "FENCE_RESERVED") -> (
-          List.iter
-            (function
-              | MP_aux (MP_id (Id_aux (Id arg_id, _)), (_, tannot)) -> (
-                  match Obj.magic tannot with
-                  | Some { env; typ; _ }, _ -> (
-                      match typ with
-                      | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
-                          Format.printf "%s %s -> %s\n" ident arg_id typ_id
-                      | _ -> ())
-                  | _ -> ())
-              | _ -> ())
-            args;
+          (* List.iter
+             (function
+               | MP_aux (MP_id (Id_aux (Id arg_id, _)), (_, tannot)) -> (
+                   match Obj.magic tannot with
+                   | Some { env; typ; _ }, _ -> (
+                       match typ with
+                       | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                           Format.printf "%s %s -> %s\n" ident arg_id typ_id
+                       | _ -> ())
+                   | _ -> ())
+               | _ -> ())
+             args; *)
           match x with
           | MP_string_append xs ->
               let stupid_concat lst1 lst2 =
@@ -141,7 +141,8 @@ let () =
                               ( Id_aux
                                   ( Id
                                       ( "reg_name" | "creg_name" | "vreg_name"
-                                      | "freg_or_reg_name" | "freg_name" ),
+                                      | "freg_or_reg_name" | "freg_name"
+                                      | "csr_name_map" | "fence_bits" ),
                                     _ ),
                                 [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ]
                               ),
@@ -154,8 +155,34 @@ let () =
                                 [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ]
                               ),
                             _ )
-                        when String.starts_with ~prefix:"hex_bits" f_id ->
+                        when String.starts_with ~prefix:"hex_bits" f_id
+                             || String.equal "frm_mnemonic" f_id
+                             || String.equal "maybe_vmask" f_id ->
                           (* Format.printf "%s -> %s\n" ident reg_name; *)
+                          reg_name :: acc
+                      | MP_aux
+                          ( MP_app
+                              ( Id_aux (Id f_id, _),
+                                [ MP_aux (MP_vector_concat xs, _) ] ),
+                            _ )
+                        when String.starts_with ~prefix:"hex_bits" f_id ->
+                          let reg_name =
+                            Option.get
+                            @@ List.find_map
+                                 (function
+                                   | MP_aux
+                                       ( MP_typ
+                                           ( MP_aux
+                                               (MP_id (Id_aux (Id id, _)), _),
+                                             _ ),
+                                         _ ) ->
+                                       Some id
+                                   | _ -> None)
+                                 xs
+                          in
+                          reg_name :: acc
+                      | MP_aux (MP_lit (L_aux (L_string reg_name, _)), _)
+                        when String.equal reg_name "v0" ->
                           reg_name :: acc
                       | _ -> acc)
                     [] args

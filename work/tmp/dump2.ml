@@ -132,34 +132,145 @@ module Collect_out_info = struct
                   _;
                   _;
                   _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
                   _;
+                  _;
+                ] ) ->
+              out_register_assmt rd;
+              in_register_assmt rs1;
+              in_register_assmt rs2
+          | E_app
+              ( Id_aux (Id "process_vlsseg", _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              out_register_assmt rd;
+              in_register_assmt rs1;
+              in_register_assmt rs2
+          | E_app
+              ( Id_aux (Id "process_vlsegff", _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              out_register_assmt rd;
+              in_register_assmt rs1
+          | E_app
+              ( Id_aux (Id "process_vlre", _),
+                [
+                  _;
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  _;
+                ] ) ->
+              out_register_assmt rd;
+              in_register_assmt rs1
+          | E_app
+              ( Id_aux (Id "process_vlseg", _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              out_register_assmt rd;
+              in_register_assmt rs
+          | E_app
+              ( Id_aux (Id ("process_rfvv_widen" | "process_rfvv_single"), _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
+                  E_aux (E_id (Id_aux (Id rd, _)), _);
                   _;
                   _;
                   _;
                 ] ) ->
-              out_register_assmt rd
+              out_register_assmt rd;
+              in_register_assmt rs1;
+              in_register_assmt rs2
           | E_app
-              ( Id_aux (Id "process_vlsseg", _),
-                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _; _ ] )
-            ->
-              out_register_assmt rd
+              ( Id_aux (Id "process_vsseg", _),
+                [
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              in_register_assmt rs1;
+              in_register_assmt rs2
           | E_app
-              ( Id_aux (Id "process_vlsegff", _),
-                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
-              out_register_assmt rd
+              ( Id_aux (Id "process_vsxseg", _),
+                [
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
+                  _;
+                  _;
+                  _;
+                  _;
+                  E_aux (E_id (Id_aux (Id rs3, _)), _);
+                  E_aux (E_id (Id_aux (Id rs4, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              in_register_assmt rs1;
+              in_register_assmt rs2;
+              in_register_assmt rs3;
+              in_register_assmt rs4
           | E_app
-              ( Id_aux (Id "process_vlre", _),
-                [ _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] ) ->
-              out_register_assmt rd
+              ( Id_aux (Id "process_vssseg", _),
+                [
+                  _;
+                  E_aux (E_id (Id_aux (Id rs1, _)), _);
+                  E_aux (E_id (Id_aux (Id rs2, _)), _);
+                  _;
+                  E_aux (E_id (Id_aux (Id rs3, _)), _);
+                  E_aux (E_id (Id_aux (Id rs4, _)), _);
+                  _;
+                  _;
+                ] ) ->
+              in_register_assmt rs1;
+              in_register_assmt rs2;
+              in_register_assmt rs3;
+              in_register_assmt rs4
           | E_app
-              ( Id_aux (Id "process_vlseg", _),
-                [ _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _; _ ] ) ->
-              out_register_assmt rd
+              ( Id_aux (Id "read_vmask_carry", _),
+                [ _; _; E_aux (E_lit (L_aux (L_bin "00000", _)), _) ] ) ->
+              in_register_assmt "v0"
           | E_app
-              ( Id_aux (Id ("process_rfvv_widen" | "process_rfvv_single"), _),
-                [ _; _; _; _; E_aux (E_id (Id_aux (Id rd, _)), _); _; _; _ ] )
-            ->
-              out_register_assmt rd
+              ( Id_aux (Id "read_vmask", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rs1, _)), _) ] ) ->
+              in_register_assmt rs1
+          | E_app
+              ( Id_aux (Id "read_vmask", _),
+                [ _; _; E_aux (E_lit (L_aux (L_bin "00000", _)), _) ] ) ->
+              in_register_assmt "v0"
+          | E_app
+              ( Id_aux (Id "read_single_element", _),
+                [ _; _; E_aux (E_id (Id_aux (Id rs1, _)), _) ] ) ->
+              in_register_assmt rs1
           | E_app
               ( Id_aux
                   ( Id
@@ -176,18 +287,50 @@ module Collect_out_info = struct
                 ] ) as e ->
               (* log "%s %d rtype = %S, argc = %d" __FILE__ __LINE__ rtype
                  (List.length args); *)
+              let f a =
+                if Char.uppercase_ascii a.[0] = a.[0] then None
+                else
+                  match try_get_alias a with
+                  | Some alias -> Some alias
+                  | None -> Some a
+              in
               let spec_args =
                 List.map
                   (function
-                    | E_aux (E_id (Id_aux (Id id, _)), _) -> (
-                        if
-                          (* log "%s %d arg.id = %S" __FILE__ __LINE__ id; *)
-                          Char.uppercase_ascii id.[0] = id.[0]
-                        then None
-                        else
-                          match try_get_alias id with
-                          | Some alias -> Some alias
-                          | None -> Some id)
+                    | E_aux (E_id (Id_aux (Id id, _)), _)
+                    | E_aux
+                        ( E_app
+                            ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                              [ _; E_aux (E_id (Id_aux (Id id, _)), _) ] ),
+                          _ ) ->
+                        f id
+                    | E_aux
+                        ( E_app
+                            ( Id_aux (Id "creg2reg_idx", _),
+                              [ E_aux (E_id (Id_aux (Id id, _)), _) ] ),
+                          _ ) ->
+                        f id
+                    | E_aux
+                        ( E_app
+                            ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                              _
+                              :: [
+                                   E_aux
+                                     ( E_app
+                                         (Id_aux (Id "bitvector_concat", _), xs),
+                                       _ );
+                                 ] ),
+                          _ ) ->
+                        let id =
+                          Option.get
+                          @@ List.find_map
+                               (function
+                                 | E_aux (E_id (Id_aux (Id id, _)), _) ->
+                                     Some id
+                                 | _ -> None)
+                               xs
+                        in
+                        f id
                     | _ -> None)
                   args
               in
@@ -212,13 +355,60 @@ module Collect_out_info = struct
               ( Id_aux (Id "read_vreg", _),
                 [ _; _; _; E_aux (E_id (Id_aux (Id rs, _)), _) ] ) ->
               in_register_assmt rs
+          | E_app
+              ( Id_aux (Id ("get_scalar_fp" | "get_scalar"), _),
+                [ E_aux (E_id (Id_aux (Id rs, _)), _); _ ] ) ->
+              in_register_assmt rs
           | E_let
               ( LB_aux
                   ( LB_val
                       ( P_aux (P_id (Id_aux (Id alias, _)), _),
-                        E_aux (E_app (Id_aux (_, _), [ arg ]), _) ),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (_, _),
+                                [ E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
+                            _ ) ),
+                    _ ),
+                _ )
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux
+                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                                [ _; E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
+                            _ ) ),
                     _ ),
                 _ ) ->
+              add_alias alias arg
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux
+                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                                [
+                                  _;
+                                  E_aux
+                                    ( E_app
+                                        (Id_aux (Id "bitvector_concat", _), xs),
+                                      _ );
+                                ] ),
+                            _ ) ),
+                    _ ),
+                _ ) ->
+              let arg =
+                Option.get
+                @@ List.find_map
+                     (function
+                       | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id
+                       | _ -> None)
+                     xs
+              in
               add_alias alias arg
           | _ -> ());
           default_iterator.exp_aux self e);
@@ -317,15 +507,6 @@ let classify_def key args body =
                 | _ -> None) ))
 
 let dump_execute jfile =
-  let ast =
-    let j = In_channel.with_open_text jfile Yojson.Safe.from_channel in
-    match Myast.def_of_yojson Myast.tannot_of_yojson j with
-    | Result.Error err ->
-        Format.eprintf "Error: %s\n%!" err;
-        exit 1
-    | Ok ast -> ast
-  in
-
   let collected : (string, collected_info) Hashtbl.t = Hashtbl.create 100 in
   let weird_stuff : (string, unit) Hashtbl.t = Hashtbl.create 100 in
   let out_info : (string, string list) Hashtbl.t = Hashtbl.create 100 in
@@ -333,26 +514,25 @@ let dump_execute jfile =
   let open Myast in
   let on_rtype key pargs body =
     let _ : Libsail.Type_check.tannot exp = body in
-    (* printfn "%s %d key = %S" __FUNCTION__ __LINE__ key; *)
-    let args_w_typ =
-      match pargs with
-      | [ P_aux (P_tuple ps, _) ] ->
-          List.filter_map
-            (function
-              | P_aux (P_id (Id_aux (Id id, _)), (_, tannot)) -> (
-                  match Obj.magic tannot with
-                  | Some { env; typ; _ }, _ -> (
-                      match typ with
-                      | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
-                      | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
-                          Some (id, typ_id)
-                      | _ -> None)
-                  | _ -> None)
-              | _ -> None)
-            ps
-      | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ (id, "qwe") ]
-      | _ -> []
-    in
+    (* let args_w_typ =
+         match pargs with
+         | [ P_aux (P_tuple ps, _) ] ->
+             List.filter_map
+               (function
+                 | P_aux (P_id (Id_aux (Id id, _)), (_, tannot)) -> (
+                     match Obj.magic tannot with
+                     | Some { env; typ; _ }, _ -> (
+                         match typ with
+                         | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
+                         | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                             Some (id, typ_id)
+                         | _ -> None)
+                     | _ -> None)
+                 | _ -> None)
+               ps
+         | [ P_aux (P_id (Id_aux (Id id, _)), _) ] -> [ (id, "qwe") ]
+         | _ -> []
+       in *)
     let args =
       match pargs with
       | [ P_aux (P_tuple ps, _) ] ->
@@ -365,19 +545,41 @@ let dump_execute jfile =
     in
 
     (* let () =
-      match classify_def key args_w_typ body with
-      | IK_straight s -> Format.printf "IK_straight %s\n" s
-      | IK_singledef (key, op) -> Format.printf "IK_singledef %s - %s\n" key op
-      | IK_multidef (key, xs) ->
-          log "IK_multidef %S: %a" key
-            Format.(
-              pp_print_list
-                ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-                pp_print_string)
-            xs
-    in *)
+         match classify_def key args_w_typ body with
+         | IK_straight s -> Format.printf "IK_straight %s\n" s
+         | IK_singledef (key, op) -> Format.printf "IK_singledef %s - %s\n" key op
+         | IK_multidef (key, xs) ->
+             (* log "IK_multidef %S: %a" key
+                Format.(
+                  pp_print_list
+                    ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
+                    pp_print_string)
+                xs *)
+             ()
+       in *)
     let out_args, in_args =
-      let in_args = ref [] in
+      let in_args =
+        match
+          List.find_all
+            (fun s ->
+              String.starts_with ~prefix:"imm" s
+              || String.starts_with ~prefix:"uimm" s
+              || String.starts_with ~prefix:"simm" s
+              || String.starts_with ~prefix:"bs" s
+              || String.starts_with ~prefix:"shamt" s
+              || String.starts_with ~prefix:"rnum" s
+              || String.starts_with ~prefix:"rm" s
+              || String.starts_with ~prefix:"constantidx" s
+              || String.starts_with ~prefix:"vm" s
+              || String.starts_with ~prefix:"pred" s
+              || String.starts_with ~prefix:"succ" s)
+            args
+        with
+        | [] -> ref []
+        | xs when not @@ String.equal "VMVRTYPE" key -> ref xs
+        | _ -> ref []
+      in
+      (* let in_args = ref [] in *)
       let out_args = ref [] in
       let aliases = Hashtbl.create 100 in
       let iterator =
@@ -387,12 +589,10 @@ let dump_execute jfile =
           (fun s ->
             if not (List.mem s !out_args) then out_args := s :: !out_args)
           (fun s -> if not (List.mem s !in_args) then in_args := s :: !in_args)
-          (fun alias -> function
-            | E_aux (E_id (Id_aux (Id arg, _)), _) ->
-                if List.mem arg args then Hashtbl.add aliases alias arg
-                else if Hashtbl.mem aliases arg then
-                  Hashtbl.replace aliases alias arg
-            | _ -> ())
+          (fun alias arg ->
+            if List.mem arg args then Hashtbl.add aliases alias arg
+            else if Hashtbl.mem aliases arg then
+              Hashtbl.replace aliases alias arg)
           (Hashtbl.find_opt aliases)
       in
       iterator.exp iterator body;
@@ -404,18 +604,15 @@ let dump_execute jfile =
         Format.printf "count: %d\n" (Hashtbl.length aliases);
         Hashtbl.iter (fun k v -> Format.printf "%s -> %s\n" k v) aliases);
 
-      ( List.map
-          (fun arg ->
-            match Hashtbl.find_opt aliases arg with
-            | Some alias -> alias
-            | None -> arg)
-          !out_args,
+      let f a =
         List.map
           (fun arg ->
             match Hashtbl.find_opt aliases arg with
             | Some alias -> alias
             | None -> arg)
-          !in_args )
+          !a
+      in
+      (f out_args, f in_args)
     in
 
     Hashtbl.add in_info key in_args;
@@ -476,46 +673,46 @@ let dump_execute jfile =
     in
     ()
   in
-
-  Out_channel.with_open_text "06159dump.txt" (fun ch ->
-      let ppf = Format.formatter_of_out_channel ch in
-      Format.pp_set_max_indent ppf 1000;
-
-      match ast with
-      | DEF_aux (DEF_fundef (FD_aux (FD_function (_, _, body), _)), _) ->
-          printfn "body length = %d\n@," (List.length body);
-          ListLabels.iter body ~f:(function
-            | FCL_aux (FCL_funcl (Id_aux (Id _, _), fdecl), _) -> (
-                match fdecl with
-                | Pat_aux
-                    ( Pat_exp
-                        ( P_aux ((P_app (Id_aux (Id name, _), pargs) as aux), _),
-                          exp ),
-                      _ ) -> (
-                    match (name, pargs) with
-                    (* | ( "ZICOND_RTYPE",
-                        [
-                          P_aux
-                            ( P_tuple
-                                [
-                                  P_aux (P_id _, _);
-                                  P_aux (P_id _, _);
-                                  P_aux (P_id _, _);
-                                  P_aux (P_id (Id_aux (Id id, _)), _);
-                                ],
-                              _ );
-                        ] ) ->
-                        Hashtbl.add collected id (CI_hacky (name, 4)) *)
-                    | _ ->
-                        if is_name_for_tracing name then
-                          printfn "@[%s: %a@]@," name
-                            (pp_pat_aux Myast.pp_tannot)
-                            aux;
-                        on_rtype name pargs exp)
-                | _ -> assert false)
-            | _ -> assert false)
-      | _ -> assert false);
-
+  let () =
+    let json = In_channel.with_open_text jfile Yojson.Safe.from_channel in
+    match json with
+    | `List xs ->
+        List.iter
+          (fun j ->
+            match Myast.def_of_yojson Myast.tannot_of_yojson j with
+            | Result.Error err ->
+                Format.eprintf "Error: %s\n%!" err;
+                exit 1
+            | Ok ast -> (
+                match ast with
+                | DEF_aux (DEF_fundef (FD_aux (FD_function (_, _, body), _)), _)
+                  ->
+                    ListLabels.iter body ~f:(function
+                      | FCL_aux (FCL_funcl (Id_aux (Id "execute", _), fdecl), _)
+                        -> (
+                          match fdecl with
+                          | Pat_aux
+                              ( Pat_exp
+                                  ( P_aux
+                                      ( (P_app (Id_aux (Id name, _), pargs) as
+                                         aux),
+                                        _ ),
+                                    exp ),
+                                _ )
+                            when not (String.equal name "CSR") (* fix me *) -> (
+                              match (name, pargs) with
+                              | _ ->
+                                  if is_name_for_tracing name then
+                                    printfn "@[%s: %a@]@," name
+                                      (pp_pat_aux Myast.pp_tannot)
+                                      aux;
+                                  on_rtype name pargs exp)
+                          | _ -> ())
+                      | _ -> ())
+                | _ -> ()))
+          xs
+    | _ -> assert false
+  in
   let () =
     Collect_out_info.saturate_graph
       (fun op ~arg ->
@@ -525,7 +722,9 @@ let dump_execute jfile =
       (fun op ~arg ->
         match Hashtbl.find out_info op with
         | exception Not_found -> Hashtbl.add out_info op [ arg ]
-        | xs -> Hashtbl.replace out_info op (arg :: xs))
+        | xs when not (List.mem arg xs) ->
+            Hashtbl.replace out_info op (arg :: xs)
+        | _ -> ())
       (fun op ~arg ->
         match Hashtbl.find in_info op with
         | exception Not_found -> false
@@ -533,7 +732,8 @@ let dump_execute jfile =
       (fun op ~arg ->
         match Hashtbl.find in_info op with
         | exception Not_found -> Hashtbl.add in_info op [ arg ]
-        | xs -> Hashtbl.replace in_info op (arg :: xs))
+        | xs when not (List.mem arg xs) -> Hashtbl.replace in_info op (arg :: xs)
+        | _ -> ())
   in
   Collect_out_info.dump_graph ();
   assert (config.ocaml_ident <> "");

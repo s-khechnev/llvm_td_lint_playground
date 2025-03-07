@@ -12,7 +12,7 @@ let config =
   {
     instructions_file = "./json/allmnemonics.txt";
     instr_to_process = "";
-    riscv_td_file = "json/RISCV.instructions.key.asm.json";
+    riscv_td_file = "json/RISCV.instructions.json";
     sail_json = "work/tmp/06159.json";
     verbose = false;
   }
@@ -55,8 +55,8 @@ let save_unknown s =
 
 let report () =
   let open Format in
-  printf "Total instructions: %d\n" stats.total;
-  printf "from6159: %d\n" stats.from6159;
+  printf "LLVM instructions: %d\n" stats.total;
+  printf "Sail (executes): %d\n" stats.from6159;
   printf "First unknown:\n%s\n" (String.concat "\n" stats.first_unknown)
 
 let omitted_explicitly = [ ""; "ANNOTATION_LABEL" ]
@@ -149,17 +149,20 @@ let extract_operands_info key =
   in
   if config.verbose then (
     Format.printf "key: %s\n" key;
-    Format.printf "@[Regs: %s@]\n%!" (String.concat " " (Array.to_list regs));
-    Format.printf "@[In operands: %s@]\n%!" (String.concat " " in_operands);
-    Format.printf "@[Out operands: %s@]\n%!" (String.concat " " out_operands));
+    Format.printf "@[LLVM Regs: %s@]\n%!"
+      (String.concat " " (Array.to_list regs));
+    Format.printf "@[Sail Regs: %s@]\n%!"
+      (String.concat " " (Array.to_list @@ snd @@ Mnemonic_hashtbl.find key));
+    Format.printf "@[LLVM Ins: %s@]\n%!" (String.concat " " in_operands);
+    Format.printf "@[LLVM Outs: %s@]\n%!" (String.concat " " out_operands));
   let f a =
     List.map
       (fun oper ->
         match Array.find_index (String.equal oper) regs with
-        | Some a -> a
+        | Some i -> (oper, i)
         | None ->
             (* Format.printf "trash asm string: %s: %s\n" key oper; *)
-            -1)
+            (oper, -1))
       a
   in
   (f out_operands, f in_operands)
@@ -334,45 +337,70 @@ end
 let process_single iname =
   let on_found iname mangled_iname sail_name =
     stats.from6159 <- stats.from6159 + 1;
-    let llvm_outs, llvm_ins = extract_operands_info iname in
+    let rev2 (a, b) = (List.rev a, List.rev b) in
+    let llvm_outs, llvm_ins =
+      let f a = List.sort (fun (_, i1) (_, i2) -> compare i1 i2) a in
+      let outs, ins = extract_operands_info iname in
+      (f outs, f ins) |> rev2
+    in
     let sail_outs, sail_ins =
       let outs, ins =
         match From6159.lookup_exn sail_name with
         | From6159.CI_default _, info -> (info.out, info.inputs)
         | From6159.CI_hacky (_, _), info -> (info.out, info.inputs)
       in
+      if config.verbose then (
+        Format.printf "@[Sail Ins: %s@]\n%!" (String.concat " " ins);
+        Format.printf "@[Sail Outs: %s@]\n%!" (String.concat " " outs));
       let _, regs = Mnemonic_hashtbl.find mangled_iname in
       ( List.map
           (fun oper ->
             match Array.find_index (String.equal oper) regs with
-            | Some s -> s
+            | Some i -> (oper, i)
             | None ->
-                Format.printf "%s (sail): %s - implicit out\n" sail_name oper;
-                -1)
-          outs,
+                Format.printf "(sail %s): %s - implicit out\n" sail_name oper;
+                (oper, -1))
+          outs
+        |> List.sort (fun (_, i1) (_, i2) -> compare i1 i2),
         List.map
           (fun oper ->
             match Array.find_index (String.equal oper) regs with
-            | Some s -> s
+            | Some i -> (oper, i)
             | None ->
-                Format.printf "%s (sail): %s - implicit in\n" sail_name oper;
-                -1)
-          ins )
+                Format.printf "(sail %s): %s - implicit in\n" sail_name oper;
+                (oper, -1))
+          ins
+        |> List.sort (fun (_, i1) (_, i2) -> compare i1 i2) )
+      |> rev2
     in
-    (* Format.printf "@[%s: llvm_outs: %s@]\n%!" iname
-         (String.concat " " (List.map string_of_int llvm_outs));
-       Format.printf "@[%s: sail_outs: %s@]\n%!" iname
-         (String.concat " " (List.map string_of_int sail_outs)); *)
-    try
-      List.iter2
-        (fun llvm_reg sail_reg ->
-          if llvm_reg <> sail_reg then
-            Format.printf "different outs: %s\n" iname)
-        llvm_outs sail_outs
-    with
+    (try
+       List.iter2
+         (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
+           if llvm_i <> sail_i then Format.printf "different outs: %s\n" iname)
+         llvm_outs sail_outs
+     with
     | Invalid_argument _ ->
         Format.printf "Different outs regs number: %s\n" iname
-    | _ -> ()
+    | _ -> ());
+    (try
+       List.iter2
+         (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
+           if llvm_i <> sail_i then
+             Format.printf "different ins %s: llvm - %s, sail -%s\n" iname
+               llvm_reg sail_reg)
+         llvm_ins sail_ins
+     with
+    | Invalid_argument _ ->
+        Format.printf "Different ins regs number: %s\n" iname
+    | _ -> ());
+    if config.verbose then (
+      let f lst =
+        List.map (fun (oper, i) -> Format.sprintf "(%d, %s)" i oper) lst
+      in
+      Format.printf "log: llvm_outs: %s\n%!" (String.concat " " (f llvm_outs));
+      Format.printf "log: sail_outs: %s\n%!" (String.concat " " (f sail_outs));
+      Format.printf "log: llvm_ins: %s\n%!" (String.concat " " (f llvm_ins));
+      Format.printf "log: sail_ins: %s\n\n%!" (String.concat " " (f sail_ins)))
   in
 
   let () =
@@ -383,7 +411,7 @@ let process_single iname =
       else iname
     in
     try
-      let sail_name, regs = Mnemonic_hashtbl.find mangled in
+      let sail_name, _ = Mnemonic_hashtbl.find mangled in
       if From6159.mem sail_name then on_found iname mangled sail_name
       else save_unknown iname
     with Not_found -> save_unknown iname
