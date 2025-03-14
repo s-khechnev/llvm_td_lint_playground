@@ -27,13 +27,8 @@
   (progn
    (with-stdout-to
     %{targets}
-    (run sh -c "jq -f %{script}  %{riscv} | jq ."))
+    (run sh -c "jq -f %{script} %{riscv} | jq ."))
    (run ls -lh %{targets}))))
-
-(executable
- (name dissect)
- (modules dissect)
- (libraries yojson))
 
 (rule
  (targets allmnemonics.txt)
@@ -41,4 +36,6 @@
  (mode
   (promote (until-clean)))
  (action
-  (run ./dissect.exe %{deps} -o allmnemonics.txt -get-keys)))
+  (with-stdout-to
+   %{targets}
+   (run sh -c "jq -r 'keys[]' %{deps}"))))
