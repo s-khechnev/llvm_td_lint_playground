@@ -59,5 +59,5 @@ let () =
       printf "@[ans@]@ ";
       printf "@]@ ";
       Format.pp_print_cut ppf ();
-      printf "@[let find = Hashtbl.find ans@]@\n";
+      printf "@[let find = Hashtbl.find_opt ans@]@\n";
       printf "@[let mem = Hashtbl.mem ans@]@\n%!")

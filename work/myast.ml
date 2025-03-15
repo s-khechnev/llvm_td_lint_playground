@@ -141,8 +141,9 @@ let pp_num = Nat_big_num.pp_num
 let num_to_yojson : num -> Yojson.Safe.t =
  fun n -> `String (Format.asprintf "%a" Nat_big_num.pp_num n)
 
-let num_of_yojson : Yojson.Safe.t -> (num, _) Result.t =
- fun _ -> Result.Ok (Nat_big_num.of_int 42)
+let num_of_yojson : Yojson.Safe.t -> (num, _) Result.t = function
+  | `String s -> Result.Ok (Nat_big_num.of_string s)
+  | _ -> assert false
 
 type nexp_aux = Ast.nexp_aux =
   (* numeric expression, of kind Int *)

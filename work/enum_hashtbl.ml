@@ -116,5 +116,5 @@ let ans =
   Hashtbl.add ans "Privilege" ["Machine"; "Supervisor"; "User"];
   ans
    
-let find = Hashtbl.find ans
+let find = Hashtbl.find_opt ans
 let mem = Hashtbl.mem ans

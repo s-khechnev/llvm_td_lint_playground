@@ -428,6 +428,80 @@ module Collect_out_info = struct
     end) in
     Out_channel.with_open_text config.dot_file (fun ch -> Dot.output_graph ch g)
 
+  (* let process_func fid =
+       let visited = Hashtbl.create 10 in
+       let rec helper fid =
+         let it =
+           {
+             default_iterator with
+             exp_aux =
+               (fun self e ->
+                 (match e with
+                 | E_app (Id_aux (Id id, Range ({ pos_fname = path; _ }, _)), _)
+                   when String.starts_with ~prefix:"../sail-riscv/" path
+                        && (not @@ Hashtbl.mem visited id) ->
+                     print_endline id;
+                     Hashtbl.add visited id ();
+
+                     G.add_vertex g1 fid;
+                     G.add_vertex g1 id;
+                     G.add_edge_e g1 (id, Edge.default, fid);
+
+                     helper id
+                 | _ -> ());
+                 default_iterator.exp_aux self e);
+           }
+         in
+         match Hashtbl.find_opt funcs fid with
+         | Some (args, body) -> it.exp it body
+         | None -> ()
+       in
+       helper fid
+
+     let init_graph cur_v body =
+       let rec helper ?fid cur_v =
+         let visited = Hashtbl.create 10 in
+         let it =
+           {
+             default_iterator with
+             exp_aux =
+               (fun self e ->
+                 (match e with
+                 | E_app (Id_aux (Id id, Range ({ pos_fname = path; _ }, _)), args)
+                   when String.starts_with ~prefix:"../sail-riscv/" path
+                        && (not @@ Hashtbl.mem visited id) -> (
+                     Format.printf "qwe %s\n" id;
+                     match Hashtbl.find_opt funcs id with
+                     | Some (dest_args, _) ->
+                         let src_args =
+                           List.map
+                             (function
+                               | E_aux (E_id (Id_aux (Id arg_id, _)), _) -> arg_id
+                               | _ -> "trash")
+                             args
+                         in
+                         let args = List.combine src_args dest_args in
+                         G.add_vertex g1 cur_v;
+                         G.add_vertex g1 id;
+                         G.add_edge_e g1 (id, args, cur_v);
+
+                         Hashtbl.add visited id ();
+
+                         helper id ~fid:id
+                     | None -> ())
+                 | _ -> ());
+                 default_iterator.exp_aux self e);
+           }
+         in
+         match fid with
+         | Some fid -> (
+             match Hashtbl.find_opt funcs fid with
+             | Some (_, body) -> it.exp it body
+             | None -> ())
+         | None -> it.exp it body
+       in
+       helper cur_v *)
+
   let saturate_graph is_out extend_out is_in extend_in =
     let on_edge : V.t * Edge.t * V.t -> _ =
      fun (v_from, spec_args, vdest) ->
@@ -482,29 +556,29 @@ type implementation_kind =
           So called hacky definition
        *)
 
-let classify_def key args body =
-  let open Myast in
-  let has_constructor_arg =
-    List.find_map
-      (fun (a, b) ->
-        match Enum_hashtbl.find b with
-        | xs -> if List.mem a xs then Some a else None
-        | exception Not_found -> None)
-      args
-  in
-  match has_constructor_arg with
-  | Some s -> IK_singledef (key, s)
-  | None -> (
-      match has_right_match body with
-      | None -> IK_straight key
-      | Some args ->
-          IK_multidef
-            ( key,
-              ListLabels.filter_map args ~f:(function
-                | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _)
-                  ->
-                    Some name
-                | _ -> None) ))
+(* let classify_def key args body =
+   let open Myast in
+   let has_constructor_arg =
+     List.find_map
+       (fun (a, b) ->
+         match Enum_hashtbl.find b with
+         | xs -> if List.mem a xs then Some a else None
+         | exception Not_found -> None)
+       args
+   in
+   match has_constructor_arg with
+   | Some s -> IK_singledef (key, s)
+   | None -> (
+       match has_right_match body with
+       | None -> IK_straight key
+       | Some args ->
+           IK_multidef
+             ( key,
+               ListLabels.filter_map args ~f:(function
+                 | Pat_aux (Pat_exp (P_aux (P_id (Id_aux (Id name, _)), _), _), _)
+                   ->
+                     Some name
+                 | _ -> None) )) *)
 
 let dump_execute jfile =
   let collected : (string, collected_info) Hashtbl.t = Hashtbl.create 100 in

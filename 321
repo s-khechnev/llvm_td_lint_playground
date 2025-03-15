@@ -1,0 +1,366 @@
+REPORT
+F_UN_RM_TYPE_S____FCVT_S_W - ins: rd rs1
+WXTYPE - ins: rs1 v0 vd vs2
+RTYPE - ins: rd rs1 rs2
+RIVVTYPE - ins: v0 vd vs1 vs2
+C_ZEXT_W - ins: rsd v0
+wF_bits - ins: i
+C_AND - ins: rs2 rsd
+AES32DSI - ins: rd rs1 rs2
+SHA512SIG1H - ins: rd rs1 rs2
+VXSG - ins: rs1 v0 vd vs2
+VXCMPTYPE - ins: rs1 v0 vd vs2
+RISCV_JAL - ins: rd
+C_LHU - ins: rd rs1
+rF_D - ins: i
+F_BIN_TYPE_S____FSGNJN_S - ins: rd rs1 rs2
+process_vsxseg - ins: rs1 v0 vs2 vs3
+F_UN_RM_TYPE_D____FCVT_L_D - ins: rd rs1
+SHIFTIWOP - ins: rd rs1
+SHA512SIG1 - ins: rd rs1
+F_UN_RM_TYPE_H____FCVT_D_H - ins: rd rs1
+NITYPE - ins: v0 vd vs2
+F_UN_RM_TYPE_S____FSQRT_S - ins: rd rs1
+VVMTYPE - ins: v0 vd vs1 vs2
+RISCV_FLI_D - ins: rd
+RISCV_FROUND_D - ins: rd rs1
+VSETIVLI - ins: rd
+process_vlsegff - ins: rs1 v0 vd
+RISCV_ORCB - ins: rd rs1
+process_vlsseg - ins: rs1 rs2 v0 vd
+NXSTYPE - ins: rs1 v0 vd vs2
+F_UN_RM_TYPE_S____FCVT_S_L - ins: rd rs1
+VXMCTYPE - ins: rs1 vd vs2
+F_BIN_TYPE_S____FEQ_S - ins: rd rs1 rs2
+ZICOND_RTYPE____RISCV_CZERO_EQZ - ins: rd rs1 rs2
+F_UN_RM_TYPE_H____FCVT_H_WU - ins: rd rs1
+F_UN_RM_TYPE_D____FCVT_D_W - ins: rd rs1
+AES32ESMI - ins: rd rs1 rs2
+C_LW - ins: rd rs
+C_LWSP - ins: rd sp
+C_ADDI16SP - ins: sp
+F_UN_RM_TYPE_D____FCVT_D_WU - ins: rd rs1
+F_UN_RM_TYPE_D____FCVT_D_L - ins: rd rs1
+rF_H - ins: i
+RISCV_FMINM_D - ins: rd rs1 rs2
+VLRETYPE - ins: rs1
+RISCV_FMVH_X_D - ins: rd rs1
+RISCV_SLLIUW - ins: rd rs1
+RISCV_FMINM_S - ins: rd rs1 rs2
+ZBA_RTYPEUW - ins: rd rs1 rs2
+F_MADD_TYPE_S - ins: rd rs1 rs2 rs3
+C_LDSP - ins: rd sp
+F_UN_RM_TYPE_H____FCVT_H_D - ins: rd rs1
+FWFTYPE - ins: rs1 v0 vd vs2
+ZBB_RTYPE - ins: rd rs1 rs2
+NXTYPE - ins: rs1 v0 vd vs2
+C_ADDIW - ins: rsd
+RISCV_CTZW - ins: rd rs1
+ITYPE - ins: rd rs1
+F_BIN_TYPE_D____FMIN_D - ins: rd rs1 rs2
+VID_V - ins: v0 vd
+C_FLWSP - ins: rd sp
+F_UN_RM_TYPE_D____FCVT_LU_D - ins: rd rs1
+C_FSDSP - ins: rs2 sp
+rX_bits - ins: i
+process_vsre - ins: rs1
+SHA512SIG0 - ins: rd rs1
+C_FLDSP - ins: rd sp
+RISCV_FCVTMOD_W_D - ins: rd rs1
+VVMSTYPE - ins: v0 vd vs1 vs2
+F_UN_RM_TYPE_D____FCVT_D_LU - ins: rd rs1
+VEXT2TYPE - ins: v0 vd vs2
+process_rfvv_single - ins: v0 vd vs1 vs2
+C_ZEXT_H - ins: rsd
+SHA512SIG1L - ins: rd rs1 rs2
+SHA256SIG0 - ins: rd rs1
+F_BIN_TYPE_S____FMAX_S - ins: rd rs1 rs2
+read_vreg_seg - ins: vrid
+VICMPTYPE - ins: v0 vd vs2
+C_SWSP - ins: rs2 sp
+RISCV_FLTQ_D - ins: rd rs1 rs2
+DIV - ins: rd rs1 rs2
+MVVMATYPE - ins: v0 vd vs1 vs2
+VLOXSEGTYPE - ins: rs1 v0 vd vs2
+MUL - ins: rd rs1 rs2
+F_BIN_TYPE_H____FLE_H - ins: rd rs1 rs2
+VMSOF_M - ins: v0 vd vs2
+RISCV_FLEQ_D - ins: rd rs1 rs2
+VXTYPE - ins: rs1 v0 vd vs2
+ext_data_get_addr - ins: base
+RISCV_CLMULR - ins: rd rs1 rs2
+F_UN_RM_TYPE_H____FCVT_W_H - ins: rd rs1
+RISCV_FLI_H - ins: rd
+C_SEXT_B - ins: rsd
+VLUXSEGTYPE - ins: rs1 v0 vd vs2
+SHA512SUM1R - ins: rd rs1 rs2
+FVFTYPE - ins: rs1 v0 vd vs2
+F_BIN_TYPE_H____FSGNJN_H - ins: rd rs1 rs2
+F_BIN_TYPE_S____FLE_S - ins: rd rs1 rs2
+rF_S - ins: i
+F_BIN_TYPE_D____FSGNJX_D - ins: rd rs1 rs2
+process_rfvv_widen - ins: v0 vd vs1 vs2
+FVVTYPE - ins: v0 vd vs1 vs2
+RISCV_CPOPW - ins: rd rs1
+F_UN_RM_TYPE_H____FCVT_WU_H - ins: rd rs1
+F_UN_RM_TYPE_D____FCVT_D_S - ins: rd rs1
+VSUXSEGTYPE - ins: rs1 v0 vs2 vs3
+F_BIN_TYPE_S____FMIN_S - ins: rd rs1 rs2
+VIMSTYPE - ins: v0 vd vs2
+MASKTYPEV - ins: v0 vd vs1 vs2
+process_fload16 - ins: rd
+ADDIW - ins: rd rs1
+process_vssseg - ins: rs1 rs2 v0 vs3
+C_SH - ins: rs1 rs2
+FWVVTYPE - ins: v0 vd vs1 vs2
+VMTYPE - ins: rs1 vd_or_vs3
+C_JAL - ins: ra
+F_BIN_TYPE_D____FLT_D - ins: rd rs1 rs2
+SFENCE_VMA - ins: rs1 rs2
+read_vmask - ins: vrid
+F_UN_RM_TYPE_D____FCVT_WU_D - ins: rd rs1
+F_UN_RM_TYPE_D____FCVT_W_D - ins: rd rs1
+C_SLLI - ins: rsd
+VXMTYPE - ins: rs1 v0 vd vs2
+ZICOND_RTYPE____RISCV_CZERO_NEZ - ins: rd rs1 rs2
+VFMVSF - ins: rs1 v0 vd
+C_OR - ins: rs2 rsd
+FWVFMATYPE - ins: rs1 v0 vd vs2
+SHIFTIOP - ins: rd rs1
+DIVW - ins: rd rs1 rs2
+C_ZEXT_B - ins: rsd
+LOADRES - ins: rd rs1
+C_J - ins: zreg
+F_UN_TYPE_H____FCLASS_H - ins: rd rs1
+C_BEQZ - ins: rs zreg
+rF_or_X_S - ins: i
+VFMV - ins: rs1 v0 vd
+WMVXTYPE - ins: rs1 v0 vd vs2
+C_SW - ins: rs1 rs2
+F_UN_RM_TYPE_S____FCVT_S_WU - ins: rd rs1
+VFUNARY0 - ins: v0 vd vs2
+process_vlseg - ins: rs1 v0 vd
+C_NOT - ins: r
+ZBB_EXTOP - ins: rd rs1
+FVFMATYPE - ins: rs1 v0 vd vs2
+SHA256SUM0 - ins: rd rs1
+F_UN_RM_TYPE_S____FCVT_W_S - ins: rd rs1
+RISCV_FMINM_H - ins: rd rs1 rs2
+F_UN_RM_TYPE_H____FCVT_H_L - ins: rd rs1
+FWVVMATYPE - ins: v0 vd vs1 vs2
+AES64KS1I - ins: rd rs1
+RISCV_CLZW - ins: rd rs1
+REM - ins: rd rs1 rs2
+AES64ESM - ins: rd rs1 rs2
+VFWUNARY0 - ins: v0 vd vs2
+MOVETYPEV - ins: v0 vd vs1
+F_BIN_TYPE_H____FLT_H - ins: rd rs1 rs2
+ZBA_RTYPE - ins: rd rs1 rs2
+C_SRLI - ins: rsd
+F_UN_RM_TYPE_H____FCVT_LU_H - ins: rd rs1
+WVVTYPE - ins: v0 vd vs1 vs2
+F_BIN_TYPE_H____FSGNJX_H - ins: rd rs1 rs2
+CSR - ins: rd rs1
+C_SRAI - ins: rsd
+C_LBU - ins: rd rs1
+RTYPEW - ins: rd rs1 rs2
+WMVVTYPE - ins: v0 vd vs1 vs2
+MULW - ins: rd rs1 rs2
+VVCMPTYPE - ins: v0 vd vs1 vs2
+RISCV_BREV8 - ins: rd rs1
+AES32DSMI - ins: rd rs1 rs2
+C_FSD - ins: rs1 rs2
+process_vsseg - ins: rs1 v0 vs3
+F_BIN_TYPE_D____FSGNJ_D - ins: rd rs1 rs2
+F_UN_TYPE_D____FMV_X_D - ins: rd rs1
+MVXTYPE - ins: rs1 v0 vd vs2
+F_BIN_TYPE_H____FSGNJ_H - ins: rd rs1 rs2
+RISCV_REV8 - ins: rd rs1
+AES64DS - ins: rd rs1 rs2
+VMSBF_M - ins: v0 vd vs2
+VFMERGE - ins: rs1 v0 vd vs2
+F_BIN_TYPE_H____FMAX_H - ins: rd rs1 rs2
+RISCV_XPERM4 - ins: rd rs1 rs2
+RISCV_RORI - ins: rd rs1
+RISCV_JALR - ins: rd rs1
+VMSIF_M - ins: v0 vd vs2
+process_fload32 - ins: rd
+VLSSEGTYPE - ins: rs1 rs2 v0 vd
+F_UN_RM_TYPE_H____FCVT_H_W - ins: rd rs1
+RISCV_FLTQ_S - ins: rd rs1 rs2
+F_UN_TYPE_S____FMV_W_X - ins: rd rs1
+write_vreg - ins: vrid
+C_FSWSP - ins: rs2 sp
+F_BIN_TYPE_H____FMIN_H - ins: rd rs1 rs2
+VMVXS - ins: rd vs2
+wF_H - ins: i
+C_FLD - ins: rd rs
+read_vmask_carry - ins: vrid
+MVXMATYPE - ins: rs1 v0 vd vs2
+MASKTYPEX - ins: rs1 v0 vd vs2
+RISCV_FROUNDNX_D - ins: rd rs1
+F_UN_RM_TYPE_S____FCVT_LU_S - ins: rd rs1
+C_SD - ins: rs1 rs2
+RISCV_FMAXM_D - ins: rd rs1 rs2
+ZBKB_PACKW - ins: rd rs1 rs2
+F_BIN_TYPE_D____FLE_D - ins: rd rs1 rs2
+FVVMTYPE - ins: v0 vd vs1 vs2
+VMVSX - ins: rs1 v0 vd
+C_MUL - ins: rd rs
+SM3P1 - ins: rd rs1
+RISCV_CLMUL - ins: rd rs1 rs2
+RISCV_FLEQ_S - ins: rd rs1 rs2
+WVXTYPE - ins: rs1 v0 vd vs2
+RISCV_FMAXM_S - ins: rd rs1 rs2
+VSOXSEGTYPE - ins: rs1 v0 vs2 vs3
+MMTYPE - ins: vd vs1 vs2
+rF_or_X_D - ins: i
+NVTYPE - ins: v0 vd vs1 vs2
+AES64KS2 - ins: rd rs1 rs2
+F_UN_RM_TYPE_H____FCVT_L_H - ins: rd rs1
+F_UN_RM_TYPE_H____FCVT_H_LU - ins: rd rs1
+F_UN_RM_TYPE_H____FCVT_H_S - ins: rd rs1
+F_UN_TYPE_H____FMV_X_H - ins: rd rs1
+F_MADD_TYPE_H - ins: rd rs1 rs2 rs3
+write_vmask - ins: vrid
+RISCV_FROUNDNX_H - ins: rd rs1
+MOVETYPEI - ins: v0 vd
+RISCV_FLTQ_H - ins: rd rs1 rs2
+SHA512SIG0L - ins: rd rs1 rs2
+rF_or_X_H - ins: i
+SM3P0 - ins: rd rs1
+SM4ED - ins: rd rs1 rs2
+AES64IM - ins: rd rs1
+VFMVFS - ins: rd vs2
+RISCV_CTZ - ins: rd rs1
+F_BIN_RM_TYPE_D - ins: rd rs1 rs2
+SHA512SUM1 - ins: rd rs1
+process_vm - ins: rs1 vd_or_vs3
+RISCV_CPOP - ins: rd rs1
+FWVTYPE - ins: v0 vd vs1 vs2
+SM4KS - ins: rd rs1 rs2
+RISCV_RORIW - ins: rd rs1
+process_vlre - ins: rs1
+C_LD - ins: rd rs
+RISCV_XPERM8 - ins: rd rs1 rs2
+STORE - ins: rs1 rs2
+F_BIN_TYPE_D____FMAX_D - ins: rd rs1 rs2
+VSSEGTYPE - ins: rs1 v0 vs3
+wF_or_X_D - ins: i
+F_UN_RM_TYPE_D____FSQRT_D - ins: rd rs1
+STORE_FP - ins: rs1 rs2
+C_JALR - ins: ra rs1
+ZBB_RTYPEW - ins: rd rs1 rs2
+C_SB - ins: rs1 rs2
+RISCV_FLI_S - ins: rd
+F_UN_RM_TYPE_S____FCVT_WU_S - ins: rd rs1
+RFVVTYPE - ins: v0 vd vs1 vs2
+SHA512SIG0H - ins: rd rs1 rs2
+AMO - ins: rd rs1 rs2
+LOAD_FP - ins: rd rs1
+FVVMATYPE - ins: v0 vd vs1 vs2
+C_LUI - ins: rd
+F_BIN_TYPE_S____FSGNJ_S - ins: rd rs1 rs2
+F_MADD_TYPE_D - ins: rd rs1 rs2 rs3
+F_UN_RM_TYPE_S____FCVT_S_LU - ins: rd rs1
+VLSEGTYPE - ins: rs1 v0 vd
+F_BIN_TYPE_H____FEQ_H - ins: rd rs1 rs2
+C_ADDI4SPN - ins: rd sp
+wF_or_X_H - ins: i
+F_UN_TYPE_H____FMV_H_X - ins: rd rs1
+VVTYPE - ins: v0 vd vs1 vs2
+RISCV_FLEQ_H - ins: rd rs1 rs2
+C_FLW - ins: rd rs
+AES64ES - ins: rd rs1 rs2
+wF_or_X_S - ins: i
+C_LH - ins: rd rs1
+VFIRST_M - ins: rd v0 vs2
+C_ADDI - ins: rsd
+VSSSEGTYPE - ins: rs1 rs2 v0 vs3
+BTYPE - ins: rs1 rs2
+LOAD - ins: rd rs1
+F_BIN_TYPE_S____FSGNJX_S - ins: rd rs1 rs2
+VIOTA_M - ins: v0 vd vs2
+VXMSTYPE - ins: rs1 v0 vd vs2
+RISCV_CLZ - ins: rd rs1
+UTYPE - ins: rd
+RISCV_CLMULH - ins: rd rs1 rs2
+F_BIN_RM_TYPE_H - ins: rd rs1 rs2
+VSETVLI - ins: rd rs1
+F_UN_RM_TYPE_D____FCVT_S_D - ins: rd rs1
+VITYPE - ins: v0 vd vs2
+STORECON - ins: rd rs1 rs2
+VMVRTYPE - ins: v0 vd vs2
+ZBKB_RTYPE - ins: rd rs1 rs2
+F_UN_TYPE_S____FMV_X_W - ins: rd rs1
+VISG - ins: v0 vd vs2
+process_fload64 - ins: rd
+C_ADD - ins: rs2 rsd
+F_UN_TYPE_D____FMV_D_X - ins: rd rs1
+MASKTYPEI - ins: v0 vd vs2
+F_UN_TYPE_S____FCLASS_S - ins: rd rs1
+SHA256SUM1 - ins: rd rs1
+write_single_element - ins: vrid
+VIMCTYPE - ins: vd vs2
+FVFMTYPE - ins: rs1 v0 vd vs2
+VLSEGFFTYPE - ins: rs1 v0 vd
+C_ANDI - ins: rsd
+WVTYPE - ins: v0 vd vs1 vs2
+C_SDSP - ins: rs2 sp
+C_SUBW - ins: rs2 rsd
+VEXT4TYPE - ins: v0 vd vs2
+VSETVL - ins: rd rs1 rs2
+MVVCOMPRESS - ins: vd vs1 vs2
+read_vreg - ins: vrid
+wX_bits - ins: i
+RISCV_FROUND_H - ins: rd rs1
+read_single_element - ins: vrid
+NVSTYPE - ins: v0 vd vs1 vs2
+process_vlxseg - ins: rs1 v0 vd vs2
+RISCV_FROUND_S - ins: rd rs1
+NISTYPE - ins: v0 vd vs2
+F_UN_RM_TYPE_H____FSQRT_H - ins: rd rs1
+VEXT8TYPE - ins: v0 vd vs2
+C_MV - ins: rd rs2 zreg
+VIMTYPE - ins: v0 vd vs2
+wF_D - ins: i
+AES32ESI - ins: rd rs1 rs2
+SHA512SUM0 - ins: rd rs1
+SHA512SUM0R - ins: rd rs1 rs2
+REMW - ins: rd rs1 rs2
+C_SEXT_H - ins: rsd
+C_FSW - ins: rs1 rs2
+get_scalar_fp - ins: rs1
+ZBS_RTYPE - ins: rd rs1 rs2
+C_SUB - ins: rs2 rsd
+RISCV_FROUNDNX_S - ins: rd rs1
+C_JR - ins: rs1 zreg
+MVVTYPE - ins: v0 vd vs1 vs2
+F_UN_RM_TYPE_S____FCVT_L_S - ins: rd rs1
+RISCV_FMAXM_H - ins: rd rs1 rs2
+ZBS_IOP - ins: rd rs1
+C_XOR - ins: rs2 rsd
+F_BIN_TYPE_D____FSGNJN_D - ins: rd rs1 rs2
+F_UN_TYPE_D____FCLASS_D - ins: rd rs1
+VVMCTYPE - ins: vd vs1 vs2
+F_BIN_RM_TYPE_S - ins: rd rs1 rs2
+SINVAL_VMA - ins: rs1 rs2
+F_BIN_TYPE_S____FLT_S - ins: rd rs1 rs2
+MOVETYPEX - ins: rs1 v0 vd
+F_UN_RM_TYPE_H____FCVT_S_H - ins: rd rs1
+C_BNEZ - ins: rs zreg
+RMVVTYPE - ins: v0 vd vs1 vs2
+VFNUNARY0 - ins: v0 vd vs2
+VFUNARY1 - ins: v0 vd vs2
+FWVFTYPE - ins: rs1 v0 vd vs2
+VSRETYPE - ins: rs1
+AES64DSM - ins: rd rs1 rs2
+get_scalar - ins: rs1
+C_LI - ins: rd zreg
+RISCV_FMVP_D_X - ins: rd rs1 rs2
+wF_S - ins: i
+rF_bits - ins: i
+C_ADDW - ins: rs2 rsd
+VCPOP_M - ins: rd v0 vs2
+F_BIN_TYPE_D____FEQ_D - ins: rd rs1 rs2
+SHA256SIG1 - ins: rd rs1

@@ -3,3 +3,6 @@
 /from6159.ml
 /graph.png
 /graph.dot
+*.dot
+*.svg
+out.ml

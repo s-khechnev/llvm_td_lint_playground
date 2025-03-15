@@ -65,6 +65,9 @@ module E = struct
         self.exp self b;
         self.exp self c;
         self.exp self d
+    | E_struct_update (e, fs) ->
+        self.exp self e;
+        List.iter (self.fexp self) fs
     | e ->
         let repr = Format.asprintf "%a" (pp_exp_aux pp_tannot) e in
         let repr =
