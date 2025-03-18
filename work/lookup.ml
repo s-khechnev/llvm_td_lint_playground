@@ -147,12 +147,13 @@ let extract_operands_info key =
         | _ -> [||])
     | _ -> assert false
   in
+
   if config.verbose then (
     Format.printf "key: %s\n" key;
     Format.printf "@[LLVM Regs: %s@]\n%!"
       (String.concat " " (Array.to_list regs));
     Format.printf "@[Sail Regs: %s@]\n%!"
-      (String.concat " " (Array.to_list @@ snd @@ Mnemonic_hashtbl.find key));
+      (String.concat " " (snd @@ Mnemonics.find_exn key));
     Format.printf "@[LLVM Ins: %s@]\n%!" (String.concat " " in_operands);
     Format.printf "@[LLVM Outs: %s@]\n%!" (String.concat " " out_operands));
   let f a =
@@ -352,10 +353,10 @@ let process_single iname =
       if config.verbose then (
         Format.printf "@[Sail Ins: %s@]\n%!" (String.concat " " ins);
         Format.printf "@[Sail Outs: %s@]\n%!" (String.concat " " outs));
-      let _, regs = Mnemonic_hashtbl.find mangled_iname in
+      let _, regs = Mnemonics.find_exn mangled_iname in
       ( List.map
           (fun oper ->
-            match Array.find_index (String.equal oper) regs with
+            match List.find_index (String.equal oper) regs with
             | Some i -> (oper, i)
             | None ->
                 Format.printf "(sail %s): %s - implicit out\n" sail_name oper;
@@ -364,7 +365,7 @@ let process_single iname =
         |> List.sort (fun (_, i1) (_, i2) -> compare i1 i2),
         List.map
           (fun oper ->
-            match Array.find_index (String.equal oper) regs with
+            match List.find_index (String.equal oper) regs with
             | Some i -> (oper, i)
             | None ->
                 Format.printf "(sail %s): %s - implicit in\n" sail_name oper;
@@ -411,7 +412,7 @@ let process_single iname =
       else iname
     in
     try
-      let sail_name, _ = Mnemonic_hashtbl.find mangled in
+      let sail_name, _ = Mnemonics.find_exn mangled in
       if From6159.mem sail_name then on_found iname mangled sail_name
       else save_unknown iname
     with Not_found -> save_unknown iname
