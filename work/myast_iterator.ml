@@ -68,6 +68,15 @@ module E = struct
     | E_struct_update (e, fs) ->
         self.exp self e;
         List.iter (self.fexp self) fs
+    | E_cons (a, b) ->
+        self.exp self a;
+        self.exp self b
+    | E_loop (_, m, a, b) ->
+        (match m with
+        | Measure_aux (Measure_some s, _) -> self.exp self s
+        | _ -> ());
+        self.exp self a;
+        self.exp self b
     | e ->
         let repr = Format.asprintf "%a" (pp_exp_aux pp_tannot) e in
         let repr =

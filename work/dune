@@ -29,6 +29,10 @@
  (libraries sail_ast_tools))
 
 (library
+ (name instruction)
+ (modules instruction))
+
+(library
  (name analysis)
  (wrapped false)
  (modules analyzer)
@@ -83,3 +87,38 @@
   (promote (until-clean)))
  (action
   (run ./enums.exe)))
+
+(executable
+ (name dump)
+ (modules dump from6159 from6159_helper mnemonics)
+ (libraries yojson analysis myast_iterator ocamlgraph))
+
+(rule
+ (targets out.ml graph1.dot)
+ (mode (promote))
+ (deps
+  (:json ./riscv.sail.json)
+  ./dump.exe)
+ (action
+  (run ./dump.exe -ocaml-code out.ml -ocaml-ident out -dump-execute %{json})))
+
+(rule
+ (targets graph1.svg)
+ (mode (promote))
+ (deps graph1.dot)
+ (action
+  (run
+   dot
+   -Tsvg
+   %{deps}
+   -o
+   %{targets}
+   ; neato
+   ; -Nlen=1.8
+   ; -Gmode=hier
+   ; -Goverlap=false
+   ; -Tpng
+   ; %{deps}
+   ; -o
+   ; %{targets}
+   )))
