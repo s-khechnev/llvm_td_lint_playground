@@ -3,12 +3,38 @@
   (flags
    (:standard -warn-error -unused-var-strict -warn-error -unused-var))))
 
+(library
+ (name instruction)
+ (modules instruction))
+
+(rule
+ (target mnemonics.ml)
+ (deps
+  instruction.ml
+  assembly.exe
+  (:json riscv.sail.json))
+ (mode (promote))
+ (action
+  (run
+   ./assembly.exe
+   -ocaml-ident
+   mnemonics
+   -ocaml-code
+   mnemonics.ml
+   -dump-assembly
+   %{json})))
+
+(library
+ (name mnemonics)
+ (modules mnemonics)
+ (libraries instruction))
+
 (include dune.marshal)
 
 (executable
  (name assembly)
  (modules assembly)
- (libraries libsail yojson analysis myast_iterator))
+ (libraries libsail yojson analysis myast_iterator instruction))
 
 (executable
  (name enums)
@@ -34,10 +60,6 @@
  (libraries ocamlgraph sail_ast_tools myast_iterator))
 
 (library
- (name instruction)
- (modules instruction))
-
-(library
  (name analysis)
  (wrapped false)
  (modules analyzer)
@@ -54,9 +76,9 @@
 
 (executable
  (name lookup)
- (modules lookup from6159 from6159_helper mnemonics enum_hashtbl)
+ (modules lookup from6159 from6159_helper enum_hashtbl)
  (preprocessor_deps ../json/allmnemonics.txt)
- (libraries yojson analysis myast_iterator stdune)
+ (libraries yojson analysis myast_iterator stdune mnemonics)
  (preprocess
   (pps ppx_deriving_yojson)))
 
@@ -69,23 +91,6 @@
   (copy tmp/from6159.ml %{target})))
 
 (rule
- (target mnemonics.ml)
- (deps
-  assembly.exe
-  (:json riscv.sail.json))
- (mode
-  (promote (until-clean)))
- (action
-  (run
-   ./assembly.exe
-   -ocaml-ident
-   mnemonics
-   -ocaml-code
-   mnemonics.ml
-   -dump-assembly
-   %{json})))
-
-(rule
  (target enum_hashtbl.ml)
  (deps enums.ml riscv.sail.json)
  (mode
@@ -95,8 +100,8 @@
 
 (executable
  (name dump)
- (modules dump from6159 from6159_helper mnemonics)
- (libraries yojson analysis myast_iterator ocamlgraph call_graph))
+ (modules dump from6159 from6159_helper)
+ (libraries yojson analysis myast_iterator ocamlgraph call_graph mnemonics))
 
 (rule
  (targets out.ml graph1.dot)

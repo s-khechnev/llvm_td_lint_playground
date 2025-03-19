@@ -38,9 +38,8 @@ let sail_json =
 let funcs :
     (string, string list * Libsail.Type_check.tannot Libsail.Ast.exp) Hashtbl.t
     =
-  Hashtbl.create 10000
+  Hashtbl.create 2000
 
-let executes = Hashtbl.create 10000
 let is_name_for_tracing = function "" -> true | _ -> false
 
 module Collect_out_info = struct
@@ -136,7 +135,6 @@ end
 
 let dump_execute () =
   let open Myast in
-  let execute_ids = Queue.create () in
   let () =
     List.iter
       (function
@@ -187,13 +185,11 @@ let dump_execute () =
                           args
                       in
                       match enum_arg with
-                      | Some s -> Format.sprintf "%s____%s" id s
+                      | Some s -> Format.sprintf "%s %s" id s
                       | None -> id
                     in
 
-                    Hashtbl.add funcs id (args, body);
-                    Hashtbl.add executes id ();
-                    Queue.add (id, args, body) execute_ids
+                    Hashtbl.add funcs id (args, body)
                 | FCL_aux
                     ( FCL_funcl
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
@@ -210,18 +206,19 @@ let dump_execute () =
   let g = Call_graph.generate funcs in
 
   let () =
+    let cur_aliases = Hashtbl.create 10 in
     Hashtbl.iter
       (fun name (args, body) ->
-        let aliases = Hashtbl.create 10 in
+        Hashtbl.clear cur_aliases;
         Collect_out_info.collect_aliases body (fun alias arg ->
-            if List.mem arg args then Hashtbl.add aliases alias arg
-            else if Hashtbl.mem aliases arg then
-              Hashtbl.replace aliases alias arg);
+            if List.mem arg args then Hashtbl.add cur_aliases alias arg
+            else if Hashtbl.mem cur_aliases arg then
+              Hashtbl.replace cur_aliases alias arg);
 
         (* printfn "Aliases for %s" name;
            Hashtbl.iter (printfn "%s -> %s") aliases; *)
         Hashtbl.add Collect_out_info.aliases name
-          (List.of_seq (Hashtbl.to_seq aliases)))
+          (List.of_seq (Hashtbl.to_seq cur_aliases)))
       funcs
   in
 
@@ -231,104 +228,77 @@ let dump_execute () =
     Call_graph.propogate_operands ~g ~aliases:Collect_out_info.aliases
       (List.to_seq [ ("wX", [ "r" ]); ("wF", [ "r" ]); ("wV", [ "r" ]) ])
   in
-
   let ins =
     Call_graph.propogate_operands ~g ~aliases:Collect_out_info.aliases
       (List.to_seq [ ("rX", [ "r" ]); ("rF", [ "r" ]); ("rV", [ "r" ]) ])
   in
 
-  Queue.iter
-    (fun (id, args, _) ->
-      let in_args =
-        match
-          List.find_all
-            (fun id ->
-              String.ends_with ~suffix:"imm" id
-              || List.mem id
-                   [
-                     "nzi";
-                     "bs";
-                     "shamt";
-                     "rnum";
-                     "rm";
-                     "constantidx";
-                     "vm";
-                     "pred";
-                     "succ";
-                   ])
-            args
-        with
-        | xs when not (String.equal "VMVRTYPE" id) -> xs
-        | _ -> []
-      in
-      match Hashtbl.find_opt ins id with
-      | Some dst_ins -> Hashtbl.replace ins id (dst_ins @ in_args)
-      | None -> Hashtbl.add ins id in_args)
-    execute_ids;
-
-  Hashtbl.iter
-    (fun exec _ ->
-      (* print_endline exec; *)
-      (match Hashtbl.find_opt ins exec with
-      | Some opers_g -> (
-          try
-            let from61 = From6159.lookup_exn exec in
-            let _, ins =
-              match from61 with
-              | From6159.CI_default _, info -> (info.out, info.inputs)
-              | From6159.CI_hacky (_, _), info -> (info.out, info.inputs)
-            in
-            if not @@ List.for_all (fun oper -> List.mem oper opers_g) ins then (
-              printfn "Diff ins for: %s" exec;
-
-              printfn "from6159: %s" (String.concat " " ins);
-              printfn "G: %s" (String.concat " " opers_g))
-          with Not_found ->
-            if not @@ String.starts_with exec ~prefix:"F_" then
-              printfn "Not found from6159 %s" exec)
-      | _ -> ());
-      match Hashtbl.find_opt outs exec with
-      | Some opers_g -> (
-          try
-            let from61 = From6159.lookup_exn exec in
-            let outs, _ =
-              match from61 with
-              | From6159.CI_default _, info -> (info.out, info.inputs)
-              | From6159.CI_hacky (_, _), info -> (info.out, info.inputs)
-            in
-            if not @@ List.for_all (fun oper -> List.mem oper opers_g) outs then (
-              printfn "Diff outs for: %s" exec;
-
-              printfn "from6159: %s" (String.concat " " outs);
-              printfn "G: %s" (String.concat " " opers_g))
-          with Not_found ->
-            if not @@ String.starts_with exec ~prefix:"F_" then
-              printfn "Not found from6159 %s" exec)
-      | _ -> ())
-    executes;
-
-  Out_channel.with_open_text "out.ml" (fun ch ->
+  Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
       let printf fmt = Format.fprintf ppf fmt in
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[include From6159_helper@]@ ";
+      printf "@[include Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
       printf "@[let %s =@]@," config.ocaml_ident;
       printf "@[let ans = Hash_info.create 1000 in@]@ ";
 
-      outs
-      |> Hashtbl.iter (fun key v ->
-             let out_str ppf out =
-               Format.pp_print_list
-                 ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-                 (fun ppf -> Format.fprintf ppf "%S")
-                 ppf out
+      let lst_str ppf out =
+        Format.pp_print_list
+          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
+          (fun ppf -> Format.fprintf ppf "%S")
+          ppf out
+      in
+
+      Mnemonics.mnemonics
+      |> Hashtbl.iter (fun mnemonic (sail_name, opers) ->
+             let open Instruction in
+             let sail_id =
+               match sail_name with
+               | IK_straight s -> s
+               | IK_singledef (a, b) -> Format.sprintf "%s %s" a b
              in
-             printf "@[def ans  %S {out=[%a]};@]@," key out_str v);
+             let ins =
+               let imm_ins =
+                 match
+                   List.find_all
+                     (fun id ->
+                       String.ends_with ~suffix:"imm" id
+                       || List.mem id
+                            [
+                              "nzi";
+                              "bs";
+                              "shamt";
+                              "rnum";
+                              "rm";
+                              "constantidx";
+                              "vm";
+                              "pred";
+                              "succ";
+                            ])
+                     opers
+                 with
+                 | xs when not (String.equal "VMVRTYPE" sail_id) -> xs
+                 | _ -> []
+               in
+               let in_regs =
+                 match Hashtbl.find_opt ins sail_id with
+                 | Some ins -> ins
+                 | None -> []
+               in
+               in_regs @ imm_ins
+             in
+             let outs =
+               match Hashtbl.find_opt outs sail_id with
+               | Some outs -> outs
+               | None -> []
+             in
+             printf
+               "@[Hashtbl.add ans { mnemonic:\"%s\"; ins:[%a]; outs:[%a] };@]@,"
+               mnemonic lst_str ins lst_str outs);
 
       printf "@[ans@]@ ";
       printf "@]@ ";
@@ -339,14 +309,10 @@ let dump_execute () =
 let () =
   Arg.parse
     [
-      ( "-dump-execute",
-        Arg.String
-          (fun s ->
-            config.sail_json <- s;
-            dump_execute ()),
-        "" );
+      ("-dump-execute", Arg.String (fun s -> config.sail_json <- s), "");
       ("-ocaml-code", Arg.String (fun s -> config.ocaml_code <- s), "");
       ("-ocaml-ident", Arg.String (fun s -> config.ocaml_ident <- s), "");
     ]
     (fun s -> failwithf "Bad argument: %S" s)
-    ""
+    "";
+  dump_execute ()

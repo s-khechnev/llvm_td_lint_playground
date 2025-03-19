@@ -413,8 +413,11 @@ let process_single iname =
     in
     try
       let sail_name, _ = Mnemonics.find_exn mangled in
-      if From6159.mem sail_name then on_found iname mangled sail_name
-      else save_unknown iname
+      match sail_name with
+      | IK_straight sail_name ->
+          if From6159.mem sail_name then on_found iname mangled sail_name
+          else save_unknown iname
+      | IK_singledef _ -> ()
     with Not_found -> save_unknown iname
   in
   ()

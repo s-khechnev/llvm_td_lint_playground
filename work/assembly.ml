@@ -51,7 +51,11 @@ let main () =
          asts
   in
 
-  let collected = Hashtbl.create 2000 in
+  let open Instruction in
+  let collected :
+      (string, Instruction.implementation_kind * string list) Hashtbl.t =
+    Hashtbl.create 2000
+  in
   List.iter
     (function
       | MCL_aux
@@ -71,22 +75,8 @@ let main () =
         when not
                (String.equal ident "FENCEI_RESERVED"
                || String.equal ident "FENCE_RESERVED") -> (
-          let ident =
-            let enum_arg =
-              List.find_map
-                (function
-                  | MP_aux (MP_id (Id_aux (Id id, _)), _) ->
-                      if Char.uppercase_ascii id.[0] = id.[0] then Some id
-                      else None
-                  | _ -> None)
-                args
-            in
-            match enum_arg with
-            | Some s -> Format.sprintf "%s____%s" ident s
-            | None -> ident
-          in
           match x with
-          | MP_string_append xs ->
+          | MP_string_append xs -> (
               (* each element from lst2 concatenates with all elements from lst1 *)
               let stupid_concat lst1 lst2 =
                 if List.is_empty lst1 then lst2
@@ -223,11 +213,30 @@ let main () =
                     | _ -> acc)
                   opers []
               in
-              List.iter
-                (fun s -> Hashtbl.add collected s (ident, operands))
-                mnemonics
+
+              let enum_arg =
+                List.find_map
+                  (function
+                    | MP_aux (MP_id (Id_aux (Id id, _)), _) ->
+                        if Char.uppercase_ascii id.[0] = id.[0] then Some id
+                        else None
+                    | _ -> None)
+                  args
+              in
+              match enum_arg with
+              | Some arg ->
+                  List.iter
+                    (fun mnemonic ->
+                      Hashtbl.add collected mnemonic
+                        (IK_singledef (ident, arg), operands))
+                    mnemonics
+              | None ->
+                  List.iter
+                    (fun s ->
+                      Hashtbl.add collected s (IK_straight ident, operands))
+                    mnemonics)
           | MP_lit (L_aux (L_string mnemonic, _)) ->
-              Hashtbl.add collected mnemonic (ident, [])
+              Hashtbl.add collected mnemonic (IK_straight ident, [])
           | _ -> assert false)
       | _ -> ())
     assemblies;
@@ -238,6 +247,7 @@ let main () =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
+      printf "@[open Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
@@ -252,11 +262,17 @@ let main () =
       in
 
       collected
-      |> Hashtbl.iter (fun key (v, opers) ->
-             printf "@[Hashtbl.add ans \"%s\" (\"%s\", [%a]);@]@," key v out_str
-               opers);
+      |> Hashtbl.iter (fun mnemonic (sail_exec, opers) ->
+             match sail_exec with
+             | IK_straight s ->
+                 printf "@[add_straight ans \"%s\" \"%s\" [%a];@]@," mnemonic s
+                   out_str opers
+             | IK_singledef (s, arg) ->
+                 printf "@[add_singledef ans \"%s\" \"%s\" \"%s\" [%a];@]@,"
+                   mnemonic s arg out_str opers);
       printf "@[ans@]@ ";
       printf "@]@ ";
+
       Format.pp_print_cut ppf ();
       printf "@[let find_opt = Hashtbl.find_opt %s@]@\n" config.ocaml_ident;
       printf "@[let find_exn = Hashtbl.find %s@]@\n" config.ocaml_ident;
