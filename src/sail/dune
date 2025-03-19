@@ -24,25 +24,15 @@
 (executable
  (name assembly)
  (modules assembly assembly_helper)
- (libraries libsail yojson myast_iterator checker.core))
+ (libraries libsail yojson sail_ast_tools checker.core))
 
 (library
  (name sail_ast_tools)
- (modules myast)
+ (modules myast myast_iterator)
  (wrapped false)
- (libraries libsail ppx_deriving_yojson.runtime)
+ (libraries libsail ppx_deriving_yojson.runtime checker.core)
  (preprocess
   (pps ppx_deriving_yojson ppx_deriving.show)))
-
-(library
- (name myast_iterator)
- (modules myast_iterator)
- (libraries sail_ast_tools checker.core))
-
-(library
- (name call_graph)
- (modules call_graph)
- (libraries ocamlgraph sail_ast_tools myast_iterator))
 
 (executable
  (name mysail)
@@ -52,8 +42,8 @@
 
 (executable
  (name dump)
- (modules dump assembly_helper mnemonics)
- (libraries yojson myast_iterator ocamlgraph call_graph checker.core))
+ (modules dump assembly_helper mnemonics call_graph)
+ (libraries yojson sail_ast_tools ocamlgraph checker.core))
 
 (rule
  (targets sail_info.ml graph.dot)
@@ -72,9 +62,9 @@
    %{json})))
 
 (rule
- (targets graph1.svg)
+ (targets graph.svg)
  (mode (promote))
- (deps graph1.dot)
+ (deps graph.dot)
  (action
   (run
    dot
