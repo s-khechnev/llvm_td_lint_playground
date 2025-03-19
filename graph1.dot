@@ -811,6 +811,7 @@ digraph G {
   handle_mem_exception;
   REM;
   RISCV_CLZW;
+  C_EBREAK;
   f_is_pos_subnorm_H;
   AES64ESM;
   f_is_pos_inf_H;
@@ -1417,8 +1418,6 @@ digraph G {
   creg2reg_idx -> C_AND;
   creg2reg_idx -> C_AND;
   creg2reg_idx -> C_ANDI;
-  creg2reg_idx -> C_BEQZ;
-  creg2reg_idx -> C_BNEZ;
   creg2reg_idx -> C_FLD;
   creg2reg_idx -> C_FLD;
   creg2reg_idx -> C_FLW;
@@ -2001,8 +2000,6 @@ digraph G {
   zero_extend -> C_FSDSP;
   zero_extend -> C_FSW;
   zero_extend -> C_FSWSP;
-  zero_extend -> C_JALR;
-  zero_extend -> C_JR;
   zero_extend -> C_LBU;
   zero_extend -> C_LD;
   zero_extend -> C_LDSP;
@@ -3071,12 +3068,6 @@ digraph G {
   sign_extend -> BTYPE;
   sign_extend -> C_ADDI;
   sign_extend -> C_ADDI16SP;
-  sign_extend -> C_ADDIW;
-  sign_extend -> C_ANDI;
-  sign_extend -> C_BEQZ;
-  sign_extend -> C_BNEZ;
-  sign_extend -> C_J;
-  sign_extend -> C_JAL;
   sign_extend -> C_LI;
   sign_extend -> C_LUI;
   sign_extend -> DIVW;
@@ -3169,6 +3160,7 @@ digraph G {
   f_is_pos_subnorm_S -> F_UN_TYPE_S____FCLASS_S;
   f_is_pos_subnorm_S -> f_is_pos_subnorm;
   lift_uip -> legalize_uip;
+  EBREAK -> C_EBREAK;
   set_stvec -> writeCSR;
   count_leadingzeros -> recip7;
   count_leadingzeros -> rsqrt7;

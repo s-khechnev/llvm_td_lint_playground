@@ -29,6 +29,11 @@
  (libraries sail_ast_tools))
 
 (library
+ (name call_graph)
+ (modules call_graph)
+ (libraries ocamlgraph sail_ast_tools myast_iterator))
+
+(library
  (name instruction)
  (modules instruction))
 
@@ -91,7 +96,7 @@
 (executable
  (name dump)
  (modules dump from6159 from6159_helper mnemonics)
- (libraries yojson analysis myast_iterator ocamlgraph))
+ (libraries yojson analysis myast_iterator ocamlgraph call_graph))
 
 (rule
  (targets out.ml graph1.dot)
