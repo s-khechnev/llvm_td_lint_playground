@@ -1,0 +1,67 @@
+; (env
+;  (dev
+;   (flags
+;    (:standard -warn-error -unused-var))))
+
+(rule
+ (targets ./RISCV.td.json)
+ (deps llvm19/RISCV.tar.xz)
+ (action
+  (run tar -xvf %{deps})))
+
+(rule
+ (target filter_llvm.jq.online)
+ (deps filter_llvm.jq)
+ (action
+  (pipe-stdout
+   (with-stdin-from
+    %{deps}
+    (run sed "/^#/d"))
+   (with-stdout-to
+    %{target}
+    (run tr "'\\n'" " ")))))
+
+(rule
+ (target ./RISCV.instructions.json)
+ (deps
+  (:riscv ./RISCV.td.json)
+  (:script filter_llvm.jq.online))
+ (mode
+  (promote (until-clean)))
+ (action
+  (progn
+   (with-stdout-to
+    %{target}
+    (run sh -c "jq -f %{script} %{riscv} | jq .")))))
+
+(rule
+ (target allmnemonics.txt)
+ (deps RISCV.instructions.json)
+ (mode
+  (promote (until-clean)))
+ (action
+  (with-stdout-to
+   %{target}
+   (run sh -c "jq -r 'keys[]' %{deps}"))))
+
+(executable
+ (name dump)
+ (modules dump)
+ (libraries checker.core yojson str))
+
+(rule
+ (target llvm_info.ml)
+ (deps
+  (:json RISCV.instructions.json)
+  ./dump.exe)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run
+   ./dump.exe
+   -ocaml-code
+   %{target}
+   -ocaml-ident
+   llvm_info
+   -dump-llvm
+   %{json})))

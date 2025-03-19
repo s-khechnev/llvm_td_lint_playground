@@ -1,0 +1,93 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -unused-var))))
+
+(rule
+ (target mnemonics.ml)
+ (deps
+  assembly.exe
+  (:json riscv.sail.json))
+ (mode (promote))
+ (action
+  (run
+   ./assembly.exe
+   -ocaml-ident
+   mnemonics
+   -ocaml-code
+   %{target}
+   -dump-assembly
+   %{json})))
+
+(include dune.marshal)
+
+(executable
+ (name assembly)
+ (modules assembly)
+ (libraries libsail yojson myast_iterator checker.core))
+
+(library
+ (name sail_ast_tools)
+ (modules myast)
+ (wrapped false)
+ (libraries libsail ppx_deriving_yojson.runtime)
+ (preprocess
+  (pps ppx_deriving_yojson ppx_deriving.show)))
+
+(library
+ (name myast_iterator)
+ (modules myast_iterator)
+ (libraries sail_ast_tools))
+
+(library
+ (name call_graph)
+ (modules call_graph)
+ (libraries ocamlgraph sail_ast_tools myast_iterator))
+
+(executable
+ (name mysail)
+ (modules mysail)
+ (link_flags -linkall)
+ (libraries libsail linenoise dynlink sail_ast_tools))
+
+(executable
+ (name dump)
+ (modules dump mnemonics)
+ (libraries yojson myast_iterator ocamlgraph call_graph checker.core))
+
+(rule
+ (targets sail_info.ml graph1.dot)
+ (mode (promote))
+ (deps
+  (:json ./riscv.sail.json)
+  ./dump.exe)
+ (action
+  (run
+   ./dump.exe
+   -ocaml-code
+   sail_info.ml
+   -ocaml-ident
+   sail_info
+   -dump-execute
+   %{json})))
+
+(rule
+ (targets graph1.svg)
+ (mode (promote))
+ (deps graph1.dot)
+ (action
+  (run
+   dot
+   -Tsvg
+   %{deps}
+   -o
+   %{targets}
+   ; neato
+   ; -Nlen=1.8
+   ; -Gmode=hier
+   ; -Goverlap=false
+   ; -Tpng
+   ; %{deps}
+   ; -o
+   ; %{targets}
+   )))

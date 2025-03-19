@@ -195,7 +195,7 @@ let dump_execute () =
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
                           Pat_aux (Pat_exp (P_aux (paux, _), body), _) ),
                       _ )
-                  when String.starts_with path ~prefix:"../sail-riscv" ->
+                  when String.starts_with path ~prefix:"../../sail-riscv" ->
                     Hashtbl.add funcs id (extract_args paux, body)
                 | _ -> ())
               funcls
@@ -239,12 +239,12 @@ let dump_execute () =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[include Instruction@]@ ";
+      printf "@[open Core.Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
       printf "@[let %s =@]@," config.ocaml_ident;
-      printf "@[let ans = Hash_info.create 1000 in@]@ ";
+      printf "@[let ans = Hashtbl.create 1000 in@]@ ";
 
       let lst_str ppf out =
         Format.pp_print_list
@@ -255,7 +255,7 @@ let dump_execute () =
 
       Mnemonics.mnemonics
       |> Hashtbl.iter (fun mnemonic (sail_name, opers) ->
-             let open Instruction in
+             let open Core.Instruction in
              let sail_id =
                match sail_name with
                | IK_straight s -> s
@@ -297,14 +297,16 @@ let dump_execute () =
                | None -> []
              in
              printf
-               "@[Hashtbl.add ans { mnemonic:\"%s\"; ins:[%a]; outs:[%a] };@]@,"
-               mnemonic lst_str ins lst_str outs);
+               "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; \
+                ins=[%a]; outs=[%a] };@]@,"
+               mnemonic mnemonic lst_str opers lst_str ins lst_str outs);
 
       printf "@[ans@]@ ";
       printf "@]@ ";
       Format.pp_print_cut ppf ();
-      printf "@[let lookup_exn = Hash_info.find %s @]@," config.ocaml_ident;
-      printf "@[let mem = Hash_info.mem %s @]@," config.ocaml_ident)
+      printf "@[let find = Hashtbl.find %s @]@," config.ocaml_ident;
+      printf "@[let find_opt = Hashtbl.find_opt %s @]@," config.ocaml_ident;
+      printf "@[let mem = Hashtbl.mem %s @]@," config.ocaml_ident)
 
 let () =
   Arg.parse

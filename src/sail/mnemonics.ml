@@ -1,5 +1,5 @@
 (* This file was auto generated *)
-open Instruction
+open Core.Instruction
 
 let mnemonics =
   let ans = Hashtbl.create 2000 in
@@ -650,7 +650,6 @@ let mnemonics =
   add_straight ans "c.srai.hint.a0" "C_SRAI_HINT" [];
   add_straight ans "c.jalr" "C_JALR" ["rs1"];
   add_straight ans "c.flw" "C_FLW" ["rdc"; "rsc"; "uimm"];
-  add_straight ans "czero.eqz" "ZICOND_RTYPE" ["rd"; "rs1"; "rs2"];
   add_straight ans "vsra.vx" "VXTYPE" ["vd"; "vs2"; "rs1"; "vm"];
   add_straight ans "lbu.aq.rl" "LOAD" ["rd"; "imm"; "rs1"];
   add_straight ans "sha256sum1" "SHA256SUM1" ["rd"; "rs1"];
@@ -811,6 +810,8 @@ let mnemonics =
   add_straight ans "amoadd.w.aq.rl" "AMO" ["rd"; "rs2"; "rs1"];
   add_straight ans "vlseg3re16.v" "VLRETYPE" ["vd"; "rs1"];
   add_straight ans "c.srli.hint.s1" "C_SRLI_HINT" [];
+  add_singledef ans "ZICOND_RTYPE" "ZICOND_RTYPE" "RISCV_CZERO_NEZ" ["rd"; "rs1"; "rs2"];
+  add_singledef ans "ZICOND_RTYPE" "ZICOND_RTYPE" "RISCV_CZERO_EQZ" ["rd"; "rs1"; "rs2"];
   add_straight ans "xperm4" "RISCV_XPERM4" ["rd"; "rs1"; "rs2"];
   add_straight ans "vsseg4e16.v" "VSSEGTYPE" ["vs3"; "rs1"; "vm"];
   add_straight ans "vssseg8e32.v" "VSSSEGTYPE" ["vs3"; "rs1"; "rs2"; "vm"];
@@ -984,7 +985,6 @@ let mnemonics =
   add_straight ans "amoand.d.rl" "AMO" ["rd"; "rs2"; "rs1"];
   add_straight ans "vfwnmacc.vf" "FWVFMATYPE" ["vd"; "rs1"; "vs2"; "vm"];
   add_straight ans "vwsubu.wv" "WVTYPE" ["vd"; "vs2"; "vs1"; "vm"];
-  add_straight ans "czero.nez" "ZICOND_RTYPE" ["rd"; "rs1"; "rs2"];
   add_straight ans "vmul.vx" "MVXTYPE" ["vd"; "vs2"; "rs1"; "vm"];
   add_straight ans "lr.d.aq" "LOADRES" ["rd"; "rs1"];
   add_straight ans "vmfle.vv" "FVVMTYPE" ["vd"; "vs2"; "vs1"; "vm"];

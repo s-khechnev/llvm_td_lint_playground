@@ -2,4 +2,4 @@
 *.json
 *.dot
 *.svg
-out.ml
+sail_info.ml

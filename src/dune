@@ -1,0 +1,40 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -unused-var -warn-error -unused-var-strict))))
+
+(library
+ (name core)
+ (public_name checker.core)
+ (modules instruction utils))
+
+(executable
+ (name comparator)
+ (modules comparator llvm_info sail_info)
+ (libraries core))
+
+(rule
+ (target llvm_info.ml)
+ (deps ./llvm/llvm_info.ml)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run cp %{deps} %{target})))
+
+(rule
+ (target sail_info.ml)
+ (deps ./sail/sail_info.ml)
+ (mode
+  (promote (until-clean)))
+ (action
+  (run cp %{deps} %{target})))
+
+(rule
+ (target report)
+ (deps ./comparator.exe)
+ (mode
+  (promote (until-clean)))
+ (action
+  (with-stdout-to
+   %{target}
+   (run ./comparator.exe ))))

@@ -51,7 +51,7 @@ let main () =
          asts
   in
 
-  let open Instruction in
+  let open Core in
   let collected :
       (string, Instruction.implementation_kind * string list) Hashtbl.t =
     Hashtbl.create 2000
@@ -231,10 +231,16 @@ let main () =
                         (IK_singledef (ident, arg), operands))
                     mnemonics
               | None ->
-                  List.iter
-                    (fun s ->
-                      Hashtbl.add collected s (IK_straight ident, operands))
-                    mnemonics)
+                  if String.equal ident "ZICOND_RTYPE" then (
+                    Hashtbl.add collected "ZICOND_RTYPE"
+                      (IK_singledef (ident, "RISCV_CZERO_EQZ"), operands);
+                    Hashtbl.add collected "ZICOND_RTYPE"
+                      (IK_singledef (ident, "RISCV_CZERO_NEZ"), operands))
+                  else
+                    List.iter
+                      (fun s ->
+                        Hashtbl.add collected s (IK_straight ident, operands))
+                      mnemonics)
           | MP_lit (L_aux (L_string mnemonic, _)) ->
               Hashtbl.add collected mnemonic (IK_straight ident, [])
           | _ -> assert false)
@@ -247,7 +253,7 @@ let main () =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[open Instruction@]@ ";
+      printf "@[open Core.Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
@@ -264,7 +270,7 @@ let main () =
       collected
       |> Hashtbl.iter (fun mnemonic (sail_exec, opers) ->
              match sail_exec with
-             | IK_straight s ->
+             | Instruction.IK_straight s ->
                  printf "@[add_straight ans \"%s\" \"%s\" [%a];@]@," mnemonic s
                    out_str opers
              | IK_singledef (s, arg) ->
