@@ -1,10 +1,7 @@
 open Core
 
-let report () = ()
-let process_single _ = ()
-let printfn ppf = Format.kasprintf print_endline ppf
-
 let () =
+  let open Utils in
   Llvm_info.llvm_info |> Hashtbl.to_seq |> List.of_seq
   |> List.sort (fun (m1, _) (m2, _) -> compare m1 m2)
   |> List.iter (fun (iname, (llvm_instr : Core.Instruction.t)) ->

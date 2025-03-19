@@ -1,13 +1,6 @@
-[@@@ocaml.warnerror "-unused-extension"]
-
-let failwithf fmt = Format.kasprintf failwith fmt
-let sprintf fmt = Printf.sprintf fmt
-
-let log fmt =
-  if true then Format.kasprintf print_endline fmt
-  else Format.ikfprintf (fun _ -> ()) Format.std_formatter fmt
-
-let loge fmt = Format.kasprintf (Printf.eprintf "%s\n%!") fmt
+open Core.Utils
+open Myast_iterator
+open Myast
 
 type cfg = {
   mutable sail_json : string;
@@ -17,9 +10,9 @@ type cfg = {
 }
 
 let config =
-  { sail_json = ""; ocaml_code = ""; ocaml_ident = ""; dot_file = "graph1.dot" }
+  { sail_json = ""; ocaml_code = ""; ocaml_ident = ""; dot_file = "graph.dot" }
 
-let printfn ppf = Format.kasprintf print_endline ppf
+let is_name_for_tracing = function "" -> true | _ -> false
 
 let sail_json =
   lazy
@@ -29,112 +22,98 @@ let sail_json =
     | `List xs ->
         List.map
           (fun j ->
-            match Myast.def_of_yojson Myast.tannot_of_yojson j with
+            match def_of_yojson tannot_of_yojson j with
             | Result.Ok def -> def
             | _ -> assert false)
           xs
     | _ -> assert false)
 
-let funcs :
-    (string, string list * Libsail.Type_check.tannot Libsail.Ast.exp) Hashtbl.t
-    =
+let funcs : (string, string list * Libsail.Type_check.tannot exp) Hashtbl.t =
   Hashtbl.create 2000
 
-let is_name_for_tracing = function "" -> true | _ -> false
+let aliases : (string, (string * string) list) Hashtbl.t = Hashtbl.create 500
 
-module Collect_out_info = struct
-  open Myast_iterator
-  open Myast
-
-  let aliases : (string, (string * string) list) Hashtbl.t = Hashtbl.create 500
-
-  let collect_aliases body add_alias =
-    let it =
-      {
-        default_iterator with
-        exp_aux =
-          (fun self e ->
-            (match e with
-            | E_let
-                ( LB_aux
-                    ( LB_val
-                        ( P_aux (P_id (Id_aux (Id alias, _)), _),
-                          E_aux
-                            ( E_app
-                                ( Id_aux (Id "creg2reg_idx", _),
-                                  [ E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
-                              _ ) ),
-                      _ ),
-                  _ )
-            | E_let
-                ( LB_aux
-                    ( LB_val
-                        ( P_aux
-                            ( P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)),
-                              _ ),
-                          E_aux
-                            ( E_app
-                                ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
-                                  [ _; E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
-                              _ ) ),
-                      _ ),
-                  _ ) ->
-                add_alias alias arg
-            | E_let
-                ( LB_aux
-                    ( LB_val
-                        ( P_aux
-                            ( P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)),
-                              _ ),
-                          E_aux
-                            ( E_app
-                                ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
-                                  [
-                                    _;
-                                    E_aux
-                                      ( E_app
-                                          (Id_aux (Id "bitvector_concat", _), xs),
-                                        _ );
-                                  ] ),
-                              _ ) ),
-                      _ ),
-                  _ ) ->
-                let arg =
-                  Option.get
-                  @@ List.find_map
-                       (function
-                         | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id
-                         | _ -> None)
-                       xs
-                in
-                add_alias alias arg
-            | E_let
-                ( LB_aux
-                    ( LB_val
-                        ( P_aux
-                            ( P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)),
-                              _ ),
-                          E_aux
-                            ( E_app
-                                ( Id_aux (Id "add_bits", _),
-                                  [
-                                    E_aux (E_id (Id_aux (Id arg, _)), _);
-                                    E_aux
-                                      (E_app (Id_aux (Id "to_bits", _), _), _);
-                                  ] ),
-                              _ ) ),
-                      _ ),
-                  _ ) ->
-                add_alias alias arg
-            | _ -> ());
-            default_iterator.exp_aux self e);
-      }
-    in
-    it.exp it body
-end
+let collect_aliases body add_alias =
+  let it =
+    {
+      default_iterator with
+      exp_aux =
+        (fun self e ->
+          (match e with
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux (P_id (Id_aux (Id alias, _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id "creg2reg_idx", _),
+                                [ E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
+                            _ ) ),
+                    _ ),
+                _ )
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux
+                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                                [ _; E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
+                            _ ) ),
+                    _ ),
+                _ ) ->
+              add_alias alias arg
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux
+                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                                [
+                                  _;
+                                  E_aux
+                                    ( E_app
+                                        (Id_aux (Id "bitvector_concat", _), xs),
+                                      _ );
+                                ] ),
+                            _ ) ),
+                    _ ),
+                _ ) ->
+              let arg =
+                Option.get
+                @@ List.find_map
+                     (function
+                       | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id
+                       | _ -> None)
+                     xs
+              in
+              add_alias alias arg
+          | E_let
+              ( LB_aux
+                  ( LB_val
+                      ( P_aux
+                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
+                        E_aux
+                          ( E_app
+                              ( Id_aux (Id "add_bits", _),
+                                [
+                                  E_aux (E_id (Id_aux (Id arg, _)), _);
+                                  E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
+                                ] ),
+                            _ ) ),
+                    _ ),
+                _ ) ->
+              add_alias alias arg
+          | _ -> ());
+          default_iterator.exp_aux self e);
+    }
+  in
+  it.exp it body
 
 let dump_execute () =
-  let open Myast in
   let () =
     List.iter
       (function
@@ -149,7 +128,7 @@ let dump_execute () =
                 | P_var (P_aux (paux, _), _) -> helper paux
                 | P_typ (_, P_aux (paux, _)) -> helper paux
                 | _ ->
-                    Format.printf "%a" (Myast.pp_pat_aux Myast.pp_tannot) paux;
+                    Format.printf "%a" (pp_pat_aux pp_tannot) paux;
                     failwithf "Arg's extraction not implemented\n"
               in
               match paux with
@@ -173,7 +152,7 @@ let dump_execute () =
                               _ ) ),
                       _ ) ->
                     if is_name_for_tracing id then
-                      printfn "@[%s: %a@]@," id (pp_exp Myast.pp_tannot) body;
+                      printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body;
 
                     let args = extract_args parg in
                     let id =
@@ -210,26 +189,27 @@ let dump_execute () =
     Hashtbl.iter
       (fun name (args, body) ->
         Hashtbl.clear cur_aliases;
-        Collect_out_info.collect_aliases body (fun alias arg ->
+        collect_aliases body (fun alias arg ->
             if List.mem arg args then Hashtbl.add cur_aliases alias arg
             else if Hashtbl.mem cur_aliases arg then
               Hashtbl.replace cur_aliases alias arg);
 
-        (* printfn "Aliases for %s" name;
-           Hashtbl.iter (printfn "%s -> %s") aliases; *)
-        Hashtbl.add Collect_out_info.aliases name
-          (List.of_seq (Hashtbl.to_seq cur_aliases)))
+        Hashtbl.add aliases name (List.of_seq (Hashtbl.to_seq cur_aliases));
+
+        if debug then (
+          printfn "Aliases for %s" name;
+          Hashtbl.iter (printfn "%s -> %s") cur_aliases))
       funcs
   in
 
   Call_graph.dump g config.dot_file;
 
   let outs =
-    Call_graph.propogate_operands ~g ~aliases:Collect_out_info.aliases
+    Call_graph.propogate_operands ~g ~aliases
       (List.to_seq [ ("wX", [ "r" ]); ("wF", [ "r" ]); ("wV", [ "r" ]) ])
   in
   let ins =
-    Call_graph.propogate_operands ~g ~aliases:Collect_out_info.aliases
+    Call_graph.propogate_operands ~g ~aliases
       (List.to_seq [ ("rX", [ "r" ]); ("rF", [ "r" ]); ("rV", [ "r" ]) ])
   in
 
@@ -253,9 +233,9 @@ let dump_execute () =
           ppf out
       in
 
+      let open Assembly_helper in
       Mnemonics.mnemonics
       |> Hashtbl.iter (fun mnemonic (sail_name, opers) ->
-             let open Core.Instruction in
              let sail_id =
                match sail_name with
                | IK_straight s -> s

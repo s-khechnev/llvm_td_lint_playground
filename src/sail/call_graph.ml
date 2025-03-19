@@ -1,3 +1,5 @@
+open Core.Utils
+
 module V = struct
   type t = string
 
@@ -62,14 +64,7 @@ let generate funcs_tbl =
             when String.equal f_id "add_bits" ->
               id
           | _ -> "")
-      | _ ->
-          (* Format.printf "%a\n"
-               (Myast.pp_exp Myast.pp_tannot)
-               src;
-             Format.printf
-               "Arg's extraction not implemented for %s %s\n"
-               cur_v id; *)
-          ""
+      | _ -> ""
     in
     let f src_args dst_id =
       match Hashtbl.find_opt funcs_tbl dst_id with
@@ -132,7 +127,7 @@ let propogate_operands ~g ~aliases info =
   let on_edge : V.t * Edge.t * V.t -> unit =
    fun (v_src, args, v_dst) ->
     match Hashtbl.find_opt result v_src with
-    | Some src_opers -> (
+    | Some src_opers ->
         let check_aliases func_id xs =
           match Hashtbl.find_opt aliases func_id with
           | Some aliases ->
@@ -152,19 +147,20 @@ let propogate_operands ~g ~aliases info =
                  else None)
           |> check_aliases v_dst
         in
-        match Hashtbl.find_opt result v_dst with
+        (match Hashtbl.find_opt result v_dst with
         | Some dst_opers ->
             Hashtbl.replace result v_dst
               (List.sort_uniq compare (mapped @ dst_opers))
-        | None -> Hashtbl.add result v_dst mapped
-        (* Format.printf "%s - " v_src;
-           List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
-           Format.printf "- %s\n" v_dst;
-           Format.printf "%s QWE: %s\n" v_src (String.concat " " qwe);
-           Format.printf "%s OPERS: %s\n" v_src (String.concat " " ins);
-           Format.printf "mapped: %s\n" (String.concat " " mapped);
-           Format.printf "%s OPERS: %s\n\n" v_dst
-             (String.concat " " (Hashtbl.find result v_dst)) *))
+        | None -> Hashtbl.add result v_dst mapped);
+
+        if debug then (
+          Format.printf "%s - " v_src;
+          List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
+          Format.printf "- %s\n" v_dst;
+          Format.printf "%s opers: %s\n" v_src (String.concat " " src_opers);
+          Format.printf "mapped: %s\n" (String.concat " " mapped);
+          Format.printf "%s opers: %s\n\n" v_dst
+            (String.concat " " (Hashtbl.find result v_dst)))
     | None -> ()
   in
   let () = Seq.iter (fun (start_v, _) -> dfs g ~start_v ~on_edge) info in

@@ -23,7 +23,7 @@
 
 (executable
  (name assembly)
- (modules assembly)
+ (modules assembly assembly_helper)
  (libraries libsail yojson myast_iterator checker.core))
 
 (library
@@ -37,7 +37,7 @@
 (library
  (name myast_iterator)
  (modules myast_iterator)
- (libraries sail_ast_tools))
+ (libraries sail_ast_tools checker.core))
 
 (library
  (name call_graph)
@@ -52,11 +52,11 @@
 
 (executable
  (name dump)
- (modules dump mnemonics)
+ (modules dump assembly_helper mnemonics)
  (libraries yojson myast_iterator ocamlgraph call_graph checker.core))
 
 (rule
- (targets sail_info.ml graph1.dot)
+ (targets sail_info.ml graph.dot)
  (mode (promote))
  (deps
   (:json ./riscv.sail.json)

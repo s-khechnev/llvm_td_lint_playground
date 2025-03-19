@@ -1,3 +1,5 @@
+open Core
+
 type cfg = {
   mutable input : string;
   mutable ocaml_code : string;
@@ -8,6 +10,7 @@ let config = { input = ""; ocaml_code = ""; ocaml_ident = "" }
 
 let main () =
   let open Myast in
+  let open Assembly_helper in
   let asts =
     let json =
       In_channel.with_open_text config.input Yojson.Safe.from_channel
@@ -51,9 +54,7 @@ let main () =
          asts
   in
 
-  let open Core in
-  let collected :
-      (string, Instruction.implementation_kind * string list) Hashtbl.t =
+  let collected : (string, implementation_kind * string list) Hashtbl.t =
     Hashtbl.create 2000
   in
   List.iter
@@ -253,7 +254,7 @@ let main () =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[open Core.Instruction@]@ ";
+      printf "@[open Assembly_helper@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
@@ -270,7 +271,7 @@ let main () =
       collected
       |> Hashtbl.iter (fun mnemonic (sail_exec, opers) ->
              match sail_exec with
-             | Instruction.IK_straight s ->
+             | IK_straight s ->
                  printf "@[add_straight ans \"%s\" \"%s\" [%a];@]@," mnemonic s
                    out_str opers
              | IK_singledef (s, arg) ->
@@ -291,7 +292,7 @@ let () =
       ("-ocaml-code", Arg.String (fun s -> config.ocaml_code <- s), "");
       ("-ocaml-ident", Arg.String (fun s -> config.ocaml_ident <- s), "");
     ]
-    (fun _ -> failwith "Bad argument: %S")
+    (fun s -> Utils.failwithf "Bad argument: %S" s)
     "";
   assert (config.input <> "");
   assert (config.ocaml_ident <> "");

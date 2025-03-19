@@ -1,5 +1,3 @@
-let failwithf fmt = Format.kasprintf failwith fmt
-
 open Libsail
 
 type position = Lexing.position

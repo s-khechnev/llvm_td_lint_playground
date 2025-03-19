@@ -83,7 +83,7 @@ module E = struct
           if String.length repr > 20 then String.sub repr 0 20 else repr
         in
         Format.eprintf "@[%s@]@ " repr;
-        failwithf "Not implemented %s %d" __FILE__ __LINE__
+        Core.Utils.failwithf "Not implemented %s %d" __FILE__ __LINE__
 
   let iter_lexp self = function
     | LE_id _ -> ()

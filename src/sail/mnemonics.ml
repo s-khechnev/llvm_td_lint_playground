@@ -1,5 +1,5 @@
 (* This file was auto generated *)
-open Core.Instruction
+open Assembly_helper
 
 let mnemonics =
   let ans = Hashtbl.create 2000 in
