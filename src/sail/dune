@@ -1,7 +1,7 @@
 (env
  (dev
   (flags
-   (:standard -warn-error -unused-var))))
+   (:standard -warn-error -unused-var -warn-error -unused-var-strict))))
 
 (rule
  (target mnemonics.ml)

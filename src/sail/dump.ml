@@ -32,6 +32,7 @@ let funcs : (string, string list * Libsail.Type_check.tannot exp) Hashtbl.t =
   Hashtbl.create 2000
 
 let aliases : (string, (string * string) list) Hashtbl.t = Hashtbl.create 500
+let executes : (string, unit) Hashtbl.t = Hashtbl.create 500
 
 let collect_aliases body add_alias =
   let it =
@@ -113,6 +114,32 @@ let collect_aliases body add_alias =
   in
   it.exp it body
 
+exception ReachTranslateAddr
+
+let get_may_loads g =
+  let result = Hashtbl.create 50 in
+  let stop_flag = ref false in
+  let on_edge (_, _, v_dst) =
+    if String.equal v_dst "translateAddr" then stop_flag := true;
+
+    if !stop_flag then ()
+    else if Hashtbl.mem executes v_dst then Hashtbl.add result v_dst ()
+  in
+  Call_graph.dfs g ~start_v:"read_ram" ~on_edge;
+  result
+
+let get_may_stores g =
+  let result = Hashtbl.create 50 in
+  let stop_flag = ref false in
+  let on_edge (_, _, v_dst) =
+    if String.equal v_dst "translateAddr" then stop_flag := true;
+
+    if !stop_flag then ()
+    else if Hashtbl.mem executes v_dst then Hashtbl.add result v_dst ()
+  in
+  Call_graph.dfs g ~start_v:"write_ram" ~on_edge;
+  result
+
 let dump_execute () =
   let () =
     List.iter
@@ -168,7 +195,8 @@ let dump_execute () =
                       | None -> id
                     in
 
-                    Hashtbl.add funcs id (args, body)
+                    Hashtbl.add funcs id (args, body);
+                    Hashtbl.add executes id ()
                 | FCL_aux
                     ( FCL_funcl
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
@@ -213,6 +241,9 @@ let dump_execute () =
       (List.to_seq [ ("rX", [ "r" ]); ("rF", [ "r" ]); ("rV", [ "r" ]) ])
   in
 
+  let mayLoads = get_may_loads g in
+  let mayStores = get_may_stores g in
+
   Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
       let printf fmt = Format.fprintf ppf fmt in
@@ -225,13 +256,6 @@ let dump_execute () =
       printf "@[<v 2>";
       printf "@[let %s =@]@," config.ocaml_ident;
       printf "@[let ans = Hashtbl.create 1000 in@]@ ";
-
-      let lst_str ppf out =
-        Format.pp_print_list
-          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-          (fun ppf -> Format.fprintf ppf "%S")
-          ppf out
-      in
 
       let open Assembly_helper in
       Mnemonics.mnemonics
@@ -276,10 +300,11 @@ let dump_execute () =
                | Some outs -> outs
                | None -> []
              in
-             printf
-               "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; \
-                ins=[%a]; outs=[%a] };@]@,"
-               mnemonic mnemonic lst_str opers lst_str ins lst_str outs);
+             let mayLoad = Hashtbl.mem mayLoads sail_id in
+             let mayStore = Hashtbl.mem mayStores sail_id in
+             Core.Utils.printf_add_instr ppf
+               ({ mnemonic; operands = opers; ins; outs; mayLoad; mayStore }
+                 : Core.Instruction.t));
 
       printf "@[ans@]@ ";
       printf "@]@ ";
