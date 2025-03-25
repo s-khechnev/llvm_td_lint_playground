@@ -13,8 +13,7 @@ let () =
                   | None ->
                       printfn ppf iname oper;
                       (oper, -1))
-           |> List.sort (fun (_, i1) (_, i2) -> compare i1 i2)
-           |> List.rev
+           |> List.sort (fun (_, i1) (_, i2) -> compare i2 i1)
          in
          let {
            mnemonic = llvm_mnemonic;

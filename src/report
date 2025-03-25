@@ -3318,7 +3318,7 @@ llvm mret: rs2 - implicit in
 mret: Different number of inputs
 llvm outs: 
 sail outs: 
-llvm ins: (-1, rs2) (-1, rs1)
+llvm ins: (-1, rs1) (-1, rs2)
 sail ins: 
 
 Report: mul
@@ -3645,7 +3645,7 @@ llvm sfence.inval.ir: rs2 - implicit in
 sfence.inval.ir: Different number of inputs
 llvm outs: 
 sail outs: 
-llvm ins: (-1, rs2) (-1, rs1)
+llvm ins: (-1, rs1) (-1, rs2)
 sail ins: 
 
 Report: sfence.vma
@@ -3664,7 +3664,7 @@ llvm sfence.w.inval: rs2 - implicit in
 sfence.w.inval: Different number of inputs
 llvm outs: 
 sail outs: 
-llvm ins: (-1, rs2) (-1, rs1)
+llvm ins: (-1, rs1) (-1, rs2)
 sail ins: 
 
 Report: sh
@@ -4005,7 +4005,7 @@ llvm sret: rs2 - implicit in
 sret: Different number of inputs
 llvm outs: 
 sail outs: 
-llvm ins: (-1, rs2) (-1, rs1)
+llvm ins: (-1, rs1) (-1, rs2)
 sail ins: 
 
 Report: srl
@@ -9700,7 +9700,7 @@ llvm wfi: rs2 - implicit in
 wfi: Different number of inputs
 llvm outs: 
 sail outs: 
-llvm ins: (-1, rs2) (-1, rs1)
+llvm ins: (-1, rs1) (-1, rs2)
 sail ins: 
 
 Report: xnor
