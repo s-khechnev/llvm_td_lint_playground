@@ -81,16 +81,15 @@ let collect_aliases body add_alias =
                                 ] ),
                             _ ) ),
                     _ ),
-                _ ) ->
-              let arg =
-                Option.get
-                @@ List.find_map
-                     (function
-                       | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id
-                       | _ -> None)
-                     xs
-              in
-              add_alias alias arg
+                _ ) -> (
+              match
+                List.find_map
+                  (function
+                    | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
+                  xs
+              with
+              | Some arg -> add_alias alias arg
+              | None -> ())
           | E_let
               ( LB_aux
                   ( LB_val
@@ -112,6 +111,72 @@ let collect_aliases body add_alias =
     }
   in
   it.exp it body
+
+let specialize_by_op body =
+  let specialize_for_case pat_id =
+    let open Libsail.Rewriter in
+    let rewriters =
+      {
+        rewriters_base with
+        rewrite_exp =
+          (fun self e ->
+            match e with
+            | E_aux (E_match (E_aux (E_id (Id_aux (Id "op", _)), _), pexps), _)
+              -> (
+                match
+                  List.find_map
+                    (function
+                      | Pat_aux
+                          ( Pat_exp
+                              (P_aux (P_id (Id_aux (Id id, _)), _), pat_body),
+                            _ )
+                        when String.equal pat_id id ->
+                          Some pat_body
+                      | _ -> None)
+                    pexps
+                with
+                | Some exp -> exp
+                | None ->
+                    Option.get
+                    @@ List.find_map
+                         (function
+                           | Pat_aux (Pat_exp (P_aux (P_wild, _), pat_body), _)
+                             ->
+                               Some pat_body
+                           | _ -> None)
+                         pexps)
+            | _ -> rewriters_base.rewrite_exp self e);
+      }
+    in
+    rewriters.rewrite_exp rewriters body
+  in
+  let exception Match_op_found of string list in
+  let has_match =
+    {
+      default_iterator with
+      exp_aux =
+        (fun self e ->
+          match e with
+          | E_match (E_aux (E_id (Id_aux (Id "op", _)), _), xs) ->
+              let cases =
+                List.filter_map
+                  (function
+                    | Pat_aux
+                        (Pat_exp (P_aux (P_id (Id_aux (Id id_str, _)), _), _), _)
+                      ->
+                        Some id_str
+                    | _ -> None)
+                  xs
+              in
+              raise (Match_op_found cases)
+          | _ -> default_iterator.exp_aux self e);
+    }
+  in
+  try
+    has_match.exp has_match body;
+    None
+  with Match_op_found case_ids ->
+    Some (List.map (fun id -> (id, specialize_for_case id)) case_ids)
 
 let dump_execute () =
   let () =
@@ -151,24 +216,42 @@ let dump_execute () =
                                   body ),
                               _ ) ),
                       _ ) ->
-                    if is_name_for_tracing id then
-                      printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body;
-
+                    (* if is_name_for_tracing id then
+                       printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body; *)
                     let args = extract_args parg in
-                    let id =
-                      let enum_arg =
-                        List.find_map
-                          (fun s ->
-                            if Char.uppercase_ascii s.[0] = s.[0] then Some s
-                            else None)
-                          args
-                      in
-                      match enum_arg with
-                      | Some s -> Format.sprintf "%s %s" id s
-                      | None -> id
-                    in
 
-                    Hashtbl.add funcs id (args, body)
+                    if List.mem "op" args then (
+                      let specs = specialize_by_op body in
+
+                      if is_name_for_tracing id then
+                        List.iter
+                          (fun (id, body) ->
+                            printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body)
+                          (Option.get specs);
+
+                      match specs with
+                      | Some xs ->
+                          List.iter
+                            (fun (enum_id, body) ->
+                              let id = Format.sprintf "%s %s" id enum_id in
+                              Hashtbl.add funcs id (args, body))
+                            xs
+                      | None -> ())
+                    else
+                      let id =
+                        let enum_arg =
+                          List.find_map
+                            (fun s ->
+                              if Char.uppercase_ascii s.[0] = s.[0] then Some s
+                              else None)
+                            args
+                        in
+                        match enum_arg with
+                        | Some s -> Format.sprintf "%s %s" id s
+                        | None -> id
+                      in
+
+                      Hashtbl.add funcs id (args, body)
                 | FCL_aux
                     ( FCL_funcl
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
