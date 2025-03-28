@@ -112,8 +112,8 @@ let collect_aliases body add_alias =
   in
   it.exp it body
 
-let specialize_by_op body =
-  let specialize_for_case pat_id =
+let specialize_match_by_id target_id body =
+  let specialize_case pat_id =
     let open Libsail.Rewriter in
     let rewriters =
       {
@@ -121,8 +121,8 @@ let specialize_by_op body =
         rewrite_exp =
           (fun self e ->
             match e with
-            | E_aux (E_match (E_aux (E_id (Id_aux (Id "op", _)), _), pexps), _)
-              -> (
+            | E_aux (E_match (E_aux (E_id (Id_aux (Id id, _)), _), pexps), _)
+              when String.equal id target_id -> (
                 match
                   List.find_map
                     (function
@@ -157,7 +157,8 @@ let specialize_by_op body =
       exp_aux =
         (fun self e ->
           match e with
-          | E_match (E_aux (E_id (Id_aux (Id "op", _)), _), xs) ->
+          | E_match (E_aux (E_id (Id_aux (Id id, _)), _), xs)
+            when String.equal target_id id ->
               let cases =
                 List.filter_map
                   (function
@@ -176,14 +177,20 @@ let specialize_by_op body =
     has_match.exp has_match body;
     None
   with Match_op_found case_ids ->
-    Some (List.map (fun id -> (id, specialize_for_case id)) case_ids)
+    Some (List.map (fun id -> (id, specialize_case id)) case_ids)
 
 let dump_execute () =
+  let executes = Hashtbl.create 500 in
   let () =
     List.iter
       (function
         | DEF_aux (DEF_fundef (FD_aux (FD_function (_, _, funcls), _)), _) ->
-            let extract_args paux =
+            let extract_args_with_typs pargs =
+              let extract_typ (tannot : Libsail.Type_check.tannot) =
+                match Obj.magic tannot with
+                | Some { env; typ; _ }, _ -> typ
+                | _ -> assert false
+              in
               let rec helper = function
                 | P_id (Id_aux (Id id, _)) -> id
                 | P_wild -> "_"
@@ -193,72 +200,124 @@ let dump_execute () =
                 | P_var (P_aux (paux, _), _) -> helper paux
                 | P_typ (_, P_aux (paux, _)) -> helper paux
                 | _ ->
-                    Format.printf "%a" (pp_pat_aux pp_tannot) paux;
+                    Format.printf "%a" (pp_pat pp_tannot) pargs;
                     failwithf "Arg's extraction not implemented\n"
               in
-              match paux with
-              | P_tuple args ->
-                  List.map (function P_aux (paux, _) -> helper paux) args
-              | p -> [ helper p ]
-            in
 
+              match pargs with
+              | P_aux (P_tuple args, _) ->
+                  List.map
+                    (function
+                      | P_aux (paux, (_, tannot)) ->
+                          (helper paux, extract_typ tannot))
+                    args
+              | P_aux (P_var (P_aux (paux, _), _), (_, tannot)) ->
+                  [ (helper paux, extract_typ tannot) ]
+              | P_aux (P_typ (typ, P_aux (paux, _)), _) ->
+                  [ (helper paux, typ) ]
+              | P_aux (p, (_, tannot)) -> [ (helper p, extract_typ tannot) ]
+            in
+            let extract_args pargs =
+              let args_with_typs = extract_args_with_typs pargs in
+              let args = List.map fst args_with_typs in
+              ( args,
+                fun arg ->
+                  Option.get
+                  @@ List.find_map
+                       (fun (s, typ) ->
+                         if String.equal arg s then Some typ else None)
+                       args_with_typs )
+            in
             List.iter
               (function
                 | FCL_aux
-                    ( FCL_funcl
-                        ( Id_aux (Id "execute", _),
-                          Pat_aux
-                            ( Pat_exp
-                                ( P_aux
-                                    ( P_app
-                                        (Id_aux (Id id, _), [ P_aux (parg, _) ]),
-                                      _ ),
-                                  body ),
-                              _ ) ),
+                    ( (FCL_funcl
+                         ( Id_aux (Id "execute", _),
+                           Pat_aux
+                             ( Pat_exp
+                                 ( P_aux (P_app (Id_aux (Id id, _), [ parg ]), _),
+                                   body ),
+                               _ ) ) as exec),
                       _ ) ->
-                    (* if is_name_for_tracing id then
-                       printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body; *)
-                    let args = extract_args parg in
+                    if is_name_for_tracing id then
+                      printfn "@[%s: %a@]@," id (pp_funcl_aux pp_tannot) exec;
 
-                    if List.mem "op" args then (
-                      let specs = specialize_by_op body in
+                    let args, get_typ = extract_args parg in
 
-                      if is_name_for_tracing id then
-                        List.iter
-                          (fun (id, body) ->
-                            printfn "@[%s: %a@]@," id (pp_exp pp_tannot) body)
-                          (Option.get specs);
+                    (match
+                       (* need to specialize? e.g (ITYPE (imm, rs1, rd, op)) *)
+                       List.find_opt
+                         (fun arg ->
+                           match get_typ arg with
+                           | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
+                           | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                               if Enums.mem typ_id then
+                                 printfn "%s %s" id typ_id;
+                               Enums.mem typ_id
+                           | _ -> assert false)
+                         args
+                     with
+                    | Some spec_id -> (
+                        let specs = specialize_match_by_id spec_id body in
 
-                      match specs with
-                      | Some xs ->
+                        if is_name_for_tracing id then
                           List.iter
-                            (fun (enum_id, body) ->
-                              let id = Format.sprintf "%s %s" id enum_id in
-                              Hashtbl.add funcs id (args, body))
-                            xs
-                      | None -> ())
-                    else
-                      let id =
-                        let enum_arg =
-                          List.find_map
-                            (fun s ->
-                              if Char.uppercase_ascii s.[0] = s.[0] then Some s
-                              else None)
-                            args
-                        in
-                        match enum_arg with
-                        | Some s -> Format.sprintf "%s %s" id s
-                        | None -> id
-                      in
+                            (fun (id, body) ->
+                              printfn "@[Spec %s: %a@]@," id (pp_exp pp_tannot)
+                                body)
+                            (Option.get specs);
 
-                      Hashtbl.add funcs id (args, body)
+                        match specs with
+                        | Some xs ->
+                            List.iter
+                              (fun (enum_id, body) ->
+                                let id = Format.sprintf "%s %s" id enum_id in
+                                Hashtbl.add funcs id (args, body))
+                              xs
+                        | None -> ())
+                    | None ->
+                        let id =
+                          let enum_arg =
+                            List.find_map
+                              (fun s ->
+                                if Char.uppercase_ascii s.[0] = s.[0] then
+                                  Some s
+                                else None)
+                              args
+                          in
+                          match enum_arg with
+                          | Some s -> Format.sprintf "%s %s" id s
+                          | None -> id
+                        in
+
+                        Hashtbl.add funcs id (args, body));
+
+                    let args = extract_args_with_typs parg in
+                    Hashtbl.add executes id (args, body)
                 | FCL_aux
-                    ( FCL_funcl
-                        ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
-                          Pat_aux (Pat_exp (P_aux (paux, _), body), _) ),
+                    ( (FCL_funcl
+                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
+                           Pat_aux (Pat_exp (parg, body), _) ) as funcl),
                       _ )
                   when String.starts_with path ~prefix:"../../sail-riscv" ->
-                    Hashtbl.add funcs id (extract_args paux, body)
+                    if is_name_for_tracing id then
+                      printfn "@[%s: %a@]@," id (pp_funcl_aux pp_tannot) funcl;
+
+                    let args, get_typ = extract_args parg in
+
+                    let _ =
+                      List.find_opt
+                        (fun arg ->
+                          match get_typ arg with
+                          | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
+                          | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) ->
+                              if Enums.mem typ_id then printfn "%s %s" id typ_id;
+                              Enums.mem typ_id
+                          | _ -> assert false)
+                        args
+                    in
+
+                    Hashtbl.add funcs id (args, body)
                 | _ -> ())
               funcls
         | _ -> ())

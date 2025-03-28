@@ -42,8 +42,29 @@
 
 (executable
  (name dump)
- (modules dump assembly_helper mnemonics call_graph)
+ (modules dump assembly_helper mnemonics enums call_graph)
  (libraries yojson sail_ast_tools ocamlgraph checker.core))
+
+(executable
+ (name enum)
+ (modules enum)
+ (libraries sail_ast_tools))
+
+(rule
+ (targets enums.ml)
+ (mode (promote))
+ (deps
+  (:json ./riscv.sail.json)
+  ./enum.exe)
+ (action
+  (run
+   ./enum.exe
+   -ocaml-code
+   enums.ml
+   -ocaml-ident
+   enums
+   -dump-enums
+   %{json})))
 
 (rule
  (targets sail_info.ml graph.dot)
