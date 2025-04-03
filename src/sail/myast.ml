@@ -616,14 +616,244 @@ type 'a def_aux = 'a Ast.def_aux =
 and 'a def = 'a Ast.def = DEF_aux of 'a def_aux * def_annot
 [@@deriving yojson, show { with_path = false }]
 
+type mut = Ast_util.mut = Immutable | Mutable
+[@@deriving yojson, show { with_path = false }]
+
 let to_null_yojson _ = `Null
 let dummy_pp fmt _ = Format.fprintf fmt "???"
 
+open Ast_util
+
+let env_of_yojson = function
+  | `Assoc assocs ->
+      let env = Type_env.empty in
+      let locals_of_yojson env = function
+        | `List xs ->
+            List.fold_left
+              (fun acc -> function
+                | `List [ id; mut; typ ] ->
+                    let id = id_of_yojson id |> Result.get_ok in
+                    let mut = mut_of_yojson mut |> Result.get_ok in
+                    let typ = typ_of_yojson typ |> Result.get_ok in
+                    Type_env.add_local id (mut, typ) acc
+                | _ -> acc)
+              env xs
+        | _ -> assert false
+      in
+      let typ_vars_of_yojson env = function
+        | `List xs ->
+            List.fold_left
+              (fun acc -> function
+                | `List [ kid; kaux ] ->
+                    let kid = kid_of_yojson kid |> Result.get_ok in
+                    let kaux = kind_aux_of_yojson kaux |> Result.get_ok in
+                    let loc = kid_loc kid in
+                    Type_env.add_typ_var loc (mk_kopt ~loc kaux kid) acc
+                | _ -> acc)
+              env xs
+        | _ -> assert false
+      in
+      let global_of_yojson env = function
+        | `Assoc assocs ->
+            let synonyms_of_yojson env = function
+              | `List xs ->
+                  List.fold_left
+                    (fun acc -> function
+                      | `List [ id; typq; typa ] ->
+                          let id = id_of_yojson id |> Result.get_ok in
+                          let typq = typquant_of_yojson typq |> Result.get_ok in
+                          let typa = typ_arg_of_yojson typa |> Result.get_ok in
+                          Type_env.add_typ_synonym id typq typa acc
+                      | _ -> acc)
+                    env xs
+              | _ -> assert false
+            in
+            let unions_of_yojson env = function
+              | `List xs ->
+                  List.fold_left
+                    (fun acc -> function
+                      | `List [ id; typq; `List xs ] ->
+                          let id = id_of_yojson id |> Result.get_ok in
+                          let typq = typquant_of_yojson typq |> Result.get_ok in
+                          let typ_unions =
+                            List.map
+                              (fun t -> type_union_of_yojson t |> Result.get_ok)
+                              xs
+                          in
+                          Type_env.add_variant id (typq, typ_unions) acc
+                      | _ -> acc)
+                    env xs
+              | _ -> assert false
+            in
+            let records_of_yojson env = function
+              | `List xs ->
+                  List.fold_left
+                    (fun acc -> function
+                      | `List [ id; typq; `List xs ] ->
+                          let id = id_of_yojson id |> Result.get_ok in
+                          let typq = typquant_of_yojson typq |> Result.get_ok in
+                          let xs =
+                            List.map
+                              (function
+                                | `List [ typ; id ] ->
+                                    let typ =
+                                      typ_of_yojson typ |> Result.get_ok
+                                    in
+                                    let id = id_of_yojson id |> Result.get_ok in
+                                    (typ, id)
+                                | _ -> assert false)
+                              xs
+                          in
+                          Type_env.add_record id typq xs acc
+                      | _ -> acc)
+                    env xs
+              | _ -> assert false
+            in
+            let enums_of_yojson env = function
+              | `List xs ->
+                  List.fold_left
+                    (fun acc -> function
+                      | `List [ id; `List vs ] ->
+                          let id = id_of_yojson id |> Result.get_ok in
+                          let vs =
+                            List.map
+                              (fun id -> id_of_yojson id |> Result.get_ok)
+                              vs
+                          in
+                          Type_env.add_enum id vs acc
+                      | _ -> acc)
+                    env xs
+              | _ -> assert false
+            in
+            let val_specs_of_yojson env = function
+              | `List xs ->
+                  List.fold_left
+                    (fun acc -> function
+                      | `List [ id; typq; typ ] ->
+                          let id = id_of_yojson id |> Result.get_ok in
+                          let typq = typquant_of_yojson typq |> Result.get_ok in
+                          let typ = typ_of_yojson typ |> Result.get_ok in
+                          Type_env.add_val_spec id (typq, typ) acc
+                      | _ -> acc)
+                    env xs
+              | _ -> assert false
+            in
+            let env = List.assoc "synonyms" assocs |> synonyms_of_yojson env in
+            let env = List.assoc "unions" assocs |> unions_of_yojson env in
+            let env = List.assoc "records" assocs |> records_of_yojson env in
+            let env = List.assoc "enums" assocs |> enums_of_yojson env in
+            let env =
+              List.assoc "val_specs" assocs |> val_specs_of_yojson env
+            in
+            env
+        | _ -> assert false
+      in
+      let env = Type_env.set_prover (Some (fun _ _ -> true)) env in
+      let env = List.assoc "global" assocs |> global_of_yojson env in
+      let env = List.assoc "typ_vars" assocs |> typ_vars_of_yojson env in
+      let env = List.assoc "locals" assocs |> locals_of_yojson env in
+
+      Result.Ok env
+  | _ -> assert false
+
+let env_to_yojson env =
+  let locals_to_yojson env =
+    let locals = Type_env.get_locals env |> Ast_util.Bindings.to_list in
+    `List
+      (List.map
+         (fun (id, (mut, typ)) ->
+           `List [ id_to_yojson id; mut_to_yojson mut; typ_to_yojson typ ])
+         locals)
+  in
+  let typ_vars_to_yojson env =
+    let vars = Type_env.get_typ_vars env |> Ast_util.KBindings.to_list in
+    `List
+      (List.map
+         (fun (kid, kaux) ->
+           `List [ kid_to_yojson kid; kind_aux_to_yojson kaux ])
+         vars)
+  in
+  let global_to_yojson env =
+    let synonyms_to_yojson env =
+      let syns = Type_env.get_typ_synonyms env |> Ast_util.Bindings.to_list in
+      `List
+        (List.map
+           (fun (id, (typq, typa)) ->
+             `List
+               [
+                 id_to_yojson id;
+                 typquant_to_yojson typq;
+                 typ_arg_to_yojson typa;
+               ])
+           syns)
+    in
+    let unions_to_yojson (env : Type_env.t) =
+      let unions = Type_env.get_variants env |> Ast_util.Bindings.to_list in
+      `List
+        (List.map
+           (fun (id, (typq, typ_unions)) ->
+             `List
+               [
+                 id_to_yojson id;
+                 typquant_to_yojson typq;
+                 `List (List.map type_union_to_yojson typ_unions);
+               ])
+           unions)
+    in
+    let records_to_yojson env =
+      let records = Type_env.get_records env |> Ast_util.Bindings.to_list in
+      `List
+        (List.map
+           (fun (id, (typq, xs)) ->
+             `List
+               [
+                 id_to_yojson id;
+                 typquant_to_yojson typq;
+                 `List
+                   (List.map
+                      (fun (typ, id) ->
+                        `List [ typ_to_yojson typ; id_to_yojson id ])
+                      xs);
+               ])
+           records)
+    in
+    let enums_to_yojson env =
+      let enums = Type_env.get_enums env |> Ast_util.Bindings.to_list in
+      `List
+        (List.map
+           (fun (id, vals) ->
+             let vals = Ast_util.IdSet.to_list vals in
+             `List [ id_to_yojson id; `List (List.map id_to_yojson vals) ])
+           enums)
+    in
+    let val_specs_to_yojson env =
+      let specs = Type_env.get_val_specs env |> Ast_util.Bindings.to_list in
+      `List
+        (List.map
+           (fun (id, (typq, typ)) ->
+             `List
+               [ id_to_yojson id; typquant_to_yojson typq; typ_to_yojson typ ])
+           specs)
+    in
+    `Assoc
+      [
+        ("synonyms", synonyms_to_yojson env);
+        ("unions", unions_to_yojson env);
+        ("records", records_to_yojson env);
+        ("enums", enums_to_yojson env);
+        ("val_specs", val_specs_to_yojson env);
+      ]
+  in
+  `Assoc
+    [
+      ("typ_vars", typ_vars_to_yojson env);
+      ("global", global_to_yojson env);
+      ("locals", locals_to_yojson env);
+    ]
+
 type tannot' = {
   env : Type_env.t;
-      [@to_yojson to_null_yojson]
-      [@of_yojson fun _ -> Result.Ok Type_env.empty]
-      [@printer dummy_pp]
+      [@to_yojson env_to_yojson] [@of_yojson env_of_yojson] [@printer dummy_pp]
   typ : typ;
   monadic : Ast_util.effect;
       [@to_yojson to_null_yojson]
@@ -664,6 +894,15 @@ let save filename ast =
 
   let _ : Type_check.tannot Ast_defs.ast = ast in
 
-  Out_channel.with_open_bin filename (fun ch ->
+  (* Out_channel.with_open_bin filename (fun ch ->
       let j = `List (List.map (def_to_yojson tannot_to_yojson) ast.defs) in
-      Yojson.Safe.pretty_to_channel ch j)
+      Yojson.Safe.pretty_to_channel ch j) *)
+  Out_channel.with_open_bin filename (fun ch ->
+      (* let j = `List (List.map (def_to_yojson tannot_to_yojson) ast.defs) in
+         Yojson.Safe.to_channel ch j *)
+      List.iteri
+        (fun i def ->
+          Format.printf "i: %d\n" i;
+          let j = def_to_yojson tannot_to_yojson def in
+          Yojson.Safe.to_channel ch j)
+        ast.defs)

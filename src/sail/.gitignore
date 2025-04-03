@@ -3,3 +3,4 @@
 *.dot
 *.svg
 sail_info.ml
+z3_problems
