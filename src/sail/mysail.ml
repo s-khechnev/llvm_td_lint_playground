@@ -92,7 +92,6 @@ let rec fix_options = function
   | [] -> []
 
 let load_plugin opts plugin =
-  Printf.printf "%s %s\n" __FUNCTION__ plugin;
   try
     Dynlink.loadfile_private plugin;
     opts := Arg.align (!opts @ fix_options (Target.extract_options ()))
@@ -328,8 +327,10 @@ let rec options =
       ("--help", Arg.Unit (fun () -> help !options), "");
     ]
 
+let my_rewrites = [ ("realize_mappings", []) ]
+
 let register_default_target () =
-  Target.register ~name:"default" (fun _ _ _ _ _ _ -> ())
+  Target.register ~name:"default" ~rewrites:my_rewrites (fun _ _ _ _ _ _ -> ())
 
 module Manifest = struct
   let _dir =
@@ -345,15 +346,8 @@ module Manifest = struct
 end
 
 let run_sail (config : Yojson.Basic.t option) tgt =
-  (* Printf.printf "%s %d\n" __FILE__ __LINE__; *)
   Target.run_pre_parse_hook tgt ();
   let ast, env, effect_info =
-    (* Printf.printf "%s %d\n" __FILE__ __LINE__;
-       Printf.printf "opt-file-args = %s\n%!"
-         (String.concat " " !opt_file_arguments);
-
-       Printf.printf "tgt.name = %s\n%!" (Target.name tgt); *)
-    Printf.printf "Manifest.dir = %S\n%!" Manifest.dir;
     Frontend.load_files ~target:tgt Manifest.dir !options Type_check.initial_env
       !opt_file_arguments
   in
@@ -492,7 +486,6 @@ let main () =
   | None -> (
       match get_plugin_dir () with
       | dir :: _ ->
-          Printf.printf "plugin dir = %s\n" dir;
           List.iter
             (fun plugin ->
               let path = Filename.concat dir plugin in
@@ -527,18 +520,18 @@ let main () =
 
   if !opt_memo_z3 then Constraint.load_digests ();
 
-  let ast, _env, _effect_info =
+  let ast, env, effect_info =
     match Target.get_the_target () with
     | Some target when not !opt_just_check -> run_sail config target
     | _ -> run_sail config default_target
   in
-  print_endline "got AST";
-  let _ = Myast.save "riscv.sail.json" ast in
 
   if !opt_memo_z3 then Constraint.save_digests ();
-  ()
 
-let () =
+  let () = Myast.save "pp_ast" ast in
+  (ast, env, effect_info)
+
+let process () =
   try
     try main ()
     with Failure s -> raise (Reporting.err_general Parse_ast.Unknown s)

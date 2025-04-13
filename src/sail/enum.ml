@@ -15,7 +15,7 @@ let dump_enums () =
       In_channel.with_open_text config.input Yojson.Safe.from_channel
     in
     match json with
-    | `List xs ->
+    (* | `List xs ->
         List.filter_map
           (fun j ->
             match Myast.def_of_yojson Myast.tannot_of_yojson j with
@@ -23,7 +23,7 @@ let dump_enums () =
                 Format.eprintf "Error: %s\n%!" err;
                 exit 1
             | Ok ast -> Some ast)
-          xs
+          xs *)
     | _ -> assert false
   in
 

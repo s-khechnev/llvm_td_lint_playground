@@ -1,12 +1,15 @@
-open Core.Utils
+(* open Core.Utils *)
+open Spec
+open Func
+open Myast
 
 module V = struct
-  type t = string
+  type t = Func.t
 
   let make = Fun.id
-  let compare = Stdlib.compare
-  let equal = Stdlib.( = )
-  let hash = Stdlib.Hashtbl.hash
+  let compare = Func.compare
+  let equal = Func.equal
+  let hash = Func.hash
 end
 
 module Edge = struct
@@ -25,7 +28,18 @@ let dump g outfile =
   let module Dot = Graph.Graphviz.Dot (struct
     include G
 
-    let vertex_name = Fun.id
+    let vertex_name = function
+      | F_usual id -> id
+      | F_specialized (id, speced) ->
+          let spec_str =
+            speced
+            |> List.map (fun (i, e) ->
+                   Format.sprintf "(%s:%s)" (string_of_int i)
+                     (Libsail.Ast_util.string_of_exp e))
+            |> String.concat " "
+          in
+          Format.sprintf "<%s %s>" id spec_str
+
     let get_subgraph _ = None
     let vertex_attributes _ = []
     let graph_attributes _ = []
@@ -35,285 +49,23 @@ let dump g outfile =
   end) in
   Out_channel.with_open_text outfile (fun ch -> Dot.output_graph ch g)
 
-open Myast
-open Specialize
-
-let generate1
-    (funcs_tbl :
-      ( string,
-        (string * Myast.typ) list * Libsail.Type_check.tannot Myast.exp )
-      Hashtbl.t) =
-  let g = G.create () in
-  let tabl :
-      ( func,
-        (string * Myast.typ) list * Libsail.Type_check.tannot Myast.exp )
-      Hashtbl.t =
-    Hashtbl.create 10
-  in
-  let () =
-    Hashtbl.iter
-      (fun id (args, body) ->
-        let args_to_spec =
-          (* need to specialize? e.g (ITYPE (imm, rs1, rd, op)) *)
-          List.filter_map
-            (fun (arg, typ) ->
-              match typ with
-              | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
-              | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _)
-                when Char.uppercase_ascii arg.[0] != arg.[0] -> (
-                  match Enums.find_opt typ_id with
-                  | Some vals -> Some (arg, typ, vals)
-                  | None -> None)
-              | _ -> None)
-            args
-        in
-        if List.is_empty args_to_spec then
-          Hashtbl.add tabl (F_usual id) (args, body)
-        else
-          (* let args_to_spec = List.map fst args_to_spec in
-             let specialize_by_args args_to_spec =
-               let rec specialize acc remaining_args current_body =
-                 match remaining_args with
-                 | [] -> [ (acc, current_body) ]
-                 | arg :: rest_args -> (
-                     match specialize_match_by_id arg current_body with
-                     | None -> specialize acc rest_args current_body
-                     | Some cases ->
-                         List.concat_map
-                           (fun (case_id, specialized_body) ->
-                             specialize ((arg, case_id) :: acc) rest_args
-                               specialized_body)
-                           cases)
-               in
-               specialize [] args_to_spec body
-             in
-             let _ = specialize_by_args args_to_spec in *)
-          let arg_to_spec, typ, vals_to_spec = List.hd args_to_spec in
-          let specs =
-            specialize_match_by_id arg_to_spec typ vals_to_spec body
-          in
-          List.iter
-            (fun (spec_val, body) ->
-              Hashtbl.add tabl
-                (F_specialized (id, [ (1, spec_val) ]))
-                (args, body))
-            specs)
-      funcs_tbl
-  in
-
-  (* Hashtbl.iter
-     (fun k _ ->
-       match k with
-       | F_regular id -> printfn "Regular %s\n" id
-       | F_specialized (id, args) ->
-           printfn "Specialized %s" id;
-           List.iter (fun (arg, value) -> printfn "%s -> %s" arg value) args;
-           printfn "")
-     tabl; *)
-  let g = G.create () in
-  let rec helper (src_id : func) =
-    let open Myast in
-    let open Myast_iterator in
-    let extract_arg = function
-      | E_aux (E_id (Id_aux (Id id, _)), _) -> id
-      | E_aux (E_lit (L_aux (L_unit, _)), _) -> "()"
-      | E_aux (E_lit (L_aux (L_num n, _)), _) -> Z.to_string n
-      | E_aux (E_lit (L_aux (L_true, _)), _) -> "L_true"
-      | E_aux (E_lit (L_aux (L_false, _)), _) -> "L_false"
-      | E_aux (E_lit (L_aux (L_bin bn, _)), _) -> "0b" ^ bn
-      | E_aux (E_lit (L_aux (L_string s, _)), _) -> s
-      | E_aux (E_app (Id_aux (Id f_id, _), args), _) ->
-          "123123123123"
-          (* helper f_id;
-             match args with
-             | [ x ] -> extract_arg x
-             (* write_single_element(... vd + to_bits(...), ...) *)
-             | [
-                 E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-                 E_aux (E_id (Id_aux (Id id, _)), _);
-               ]
-             | [
-                 E_aux (E_id (Id_aux (Id id, _)), _);
-                 E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-               ]
-               when String.equal f_id "add_bits" ->
-                 id
-             | _ -> "" *)
-      | _ -> ""
+let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
+  let open Libsail in
+  let open Ast_util in
+  let open Myast_iterator in
+  let g = G.create () ~size:1500 in
+  let rec helper src_func =
+    let src_id = Func.get_id src_func in
+    let classify_func_call id args =
+      let speced =
+        List.mapi (fun i e -> (i, e)) args
+        |> List.filter (fun (_, e) -> Constant_fold.is_constant e)
+      in
+      if List.is_empty speced then F_usual id else F_specialized (id, speced)
     in
-    let extract_typ (tannot : Libsail.Type_check.tannot) =
-      match Obj.magic tannot with
-      | Some { env; typ; _ }, _ -> typ
-      | _ -> assert false
-    in
-    let extract_arg_with_typ = function
-      | E_aux (E_id (Id_aux (Id id, _)), (_, tannot)) -> (id, extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_unit, _)), (_, tannot)) ->
-          ("()", extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_num n, _)), (_, tannot)) ->
-          (Z.to_string n, extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_true, _)), (_, tannot)) ->
-          ("L_true", extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_false, _)), (_, tannot)) ->
-          ("L_false", extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_bin bn, _)), (_, tannot)) ->
-          ("0b" ^ bn, extract_typ tannot)
-      | E_aux (E_lit (L_aux (L_string s, _)), (_, tannot)) ->
-          (s, extract_typ tannot)
-      | E_aux (E_app (Id_aux (Id f_id, _), args), (_, tannot)) ->
-          ("123123123123", extract_typ tannot)
-          (* helper f_id;
-             match args with
-             | [ x ] -> extract_arg x
-             (* write_single_element(... vd + to_bits(...), ...) *)
-             | [
-                 E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-                 E_aux (E_id (Id_aux (Id id, _)), _);
-               ]
-             | [
-                 E_aux (E_id (Id_aux (Id id, _)), _);
-                 E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-               ]
-               when String.equal f_id "add_bits" ->
-                 id
-             | _ -> "" *)
-      | _ -> ("", Libsail.Ast_util.unknown_typ)
-    in
-    let f src_args dst_id =
-      match Hashtbl.find_opt funcs_tbl dst_id with
-      | Some (dst_args, _) ->
-          let src_args1 = List.map extract_arg src_args in
-          let args =
-            List.map2 (fun dst src -> (fst dst, src)) dst_args src_args1
-          in
-
-          let src_id =
-            match src_id with F_usual id -> id | F_specialized (id, _) -> id
-          in
-
-          G.add_vertex g src_id;
-          G.add_vertex g dst_id;
-          G.add_edge_e g (dst_id, args, src_id);
-
-          let src_args = List.map extract_arg_with_typ src_args in
-          let speced_arg =
-            (* need to specialize? e.g (ITYPE (imm, rs1, rd, op)) *)
-            List.filter_map
-              (fun (arg, typ) ->
-                match typ with
-                | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
-                | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _)
-                  when Char.uppercase_ascii arg.[0] != arg.[0] -> (
-                    match Enums.find_opt typ_id with
-                    | Some vals -> Some arg
-                    | None -> None)
-                | _ -> None)
-              src_args
-          in
-          if List.is_empty speced_arg then helper (F_usual dst_id)
-          else
-            let speced = List.hd speced_arg in
-            helper
-              (F_specialized
-                 ( dst_id,
-                   [
-                     ( (* List.find (fun (a, b) -> String.equal speced b) args
-                          |> fst *)
-                       1,
-                       speced );
-                   ] ))
-      | None -> ()
-    in
-    let it =
-      {
-        default_iterator with
-        exp_aux =
-          (fun self e ->
-            match e with
-            | E_app
-                ( Id_aux (Id "execute", _),
-                  [
-                    E_aux
-                      ( E_app
-                          ( Id_aux (Id dst_id, _),
-                            [ E_aux (E_tuple src_args, _) ] ),
-                        _ );
-                  ] ) ->
-                f src_args dst_id
-            | E_app (Id_aux (Id dst_id, _), src_args)
-            (* when not @@ String.equal dst_id src_id *) ->
-                let qwe =
-                  match src_id with
-                  | F_usual id -> id
-                  | F_specialized (id, _) -> id
-                in
-                if not @@ String.equal dst_id qwe then (
-                  f src_args dst_id;
-                  default_iterator.exp_aux self e)
-            | _ -> default_iterator.exp_aux self e);
-      }
-    in
-    match Hashtbl.find_opt tabl src_id with
-    | Some (_, body) ->
-        it.exp it body
-        (* let args_to_spec =
-             (* need to specialize? e.g (ITYPE (imm, rs1, rd, op)) *)
-             List.filter_map
-               (fun (arg, typ) ->
-                 match typ with
-                 | Typ_aux (Typ_app (Id_aux (Id typ_id, _), _), _)
-                 | Typ_aux (Typ_id (Id_aux (Id typ_id, _)), _) -> (
-                     match Enums.find_opt typ_id with
-                     | Some vals -> Some (arg, typ, vals)
-                     | None -> None)
-                 | _ -> assert false)
-               args
-           in
-           if List.is_empty args_to_spec then it.exp it body
-           else
-             (* let args_to_spec = List.map fst args_to_spec in
-                let specialize_by_args args_to_spec =
-                  let rec specialize acc remaining_args current_body =
-                    match remaining_args with
-                    | [] -> [ (acc, current_body) ]
-                    | arg :: rest_args -> (
-                        match specialize_match_by_id arg current_body with
-                        | None -> specialize acc rest_args current_body
-                        | Some cases ->
-                            List.concat_map
-                              (fun (case_id, specialized_body) ->
-                                specialize ((arg, case_id) :: acc) rest_args
-                                  specialized_body)
-                              cases)
-                  in
-                  specialize [] args_to_spec body
-                in
-                let _ = specialize_by_args args_to_spec in *)
-             let arg_to_spec, typ, vals_to_spec = List.hd args_to_spec in
-             let specs =
-               specialize_match_by_id arg_to_spec typ vals_to_spec body
-             in
-             List.iter (fun (spec_val, body) -> it.exp it body) specs *)
-    | None -> ()
-  in
-  let () = Hashtbl.iter (fun id _ -> helper id) tabl in
-  g
-
-let generate funcs_tbl =
-  let g = G.create () in
-  let rec helper src_id =
-    let open Myast in
-    let open Myast_iterator in
     let rec extract_arg = function
-      | E_aux (E_id (Id_aux (Id id, _)), _) -> id
-      | E_aux (E_lit (L_aux (L_unit, _)), _) -> "()"
-      | E_aux (E_lit (L_aux (L_num n, _)), _) -> Z.to_string n
-      | E_aux (E_lit (L_aux (L_true, _)), _) -> "L_true"
-      | E_aux (E_lit (L_aux (L_false, _)), _) -> "L_false"
-      | E_aux (E_lit (L_aux (L_bin bn, _)), _) -> "0b" ^ bn
-      | E_aux (E_lit (L_aux (L_string s, _)), _) -> s
       | E_aux (E_app (Id_aux (Id f_id, _), args), _) -> (
-          helper f_id;
+          helper (classify_func_call f_id args);
           match args with
           | [ x ] -> extract_arg x
           (* write_single_element(... vd + to_bits(...), ...) *)
@@ -328,21 +80,52 @@ let generate funcs_tbl =
             when String.equal f_id "add_bits" ->
               id
           | _ -> "")
-      | _ -> ""
+      | e -> string_of_exp e
     in
-    let f src_args dst_id =
-      match Hashtbl.find_opt funcs_tbl dst_id with
+    let process src_args dst_func =
+      match FuncTable.find_opt funcs dst_func with
       | Some (dst_args, _) ->
-          let args =
+          let args2 =
             List.map2 (fun dst src -> (dst, extract_arg src)) dst_args src_args
           in
-
-          G.add_vertex g src_id;
-          G.add_vertex g dst_id;
-          G.add_edge_e g (dst_id, args, src_id);
-
-          helper dst_id
-      | None -> ()
+          G.add_edge_e g (dst_func, args2, src_func);
+          helper dst_func
+      | None -> (
+          match FuncTable.find_opt funcs (F_usual (Func.get_id dst_func)) with
+          | Some (dst_args, body) ->
+              let () =
+                let speced_body, _ =
+                  let substs =
+                    let speced_args =
+                      match dst_func with
+                      | F_specialized (_, speced) ->
+                          (* printfn "%s %s" dst_id
+                             (String.concat " "
+                                (List.map
+                                   (fun (a, b) ->
+                                     string_of_int a ^ " : " ^ string_of_exp b)
+                                   speced)); *)
+                          List.map
+                            (fun (i, e) -> (List.nth dst_args i |> mk_id, e))
+                            speced
+                      | _ -> assert false
+                    in
+                    Bindings.of_list speced_args
+                  in
+                  let ref_vars = Constant_propagation.referenced_vars body in
+                  Myconstant_propagation.const_prop "" ast ref_vars
+                    (substs, KBindings.empty) Bindings.empty body
+                in
+                FuncTable.add funcs dst_func (dst_args, speced_body)
+              in
+              let args2 =
+                List.map2
+                  (fun dst src -> (dst, extract_arg src))
+                  dst_args src_args
+              in
+              G.add_edge_e g (dst_func, args2, src_func);
+              helper dst_func
+          | None -> ())
     in
     let it =
       {
@@ -359,19 +142,27 @@ let generate funcs_tbl =
                             [ E_aux (E_tuple src_args, _) ] ),
                         _ );
                   ] ) ->
-                f src_args dst_id
-            | E_app (Id_aux (Id dst_id, _), src_args)
-              when not @@ String.equal dst_id src_id ->
-                f src_args dst_id;
+                process src_args (classify_func_call dst_id src_args)
+            | E_app (Id_aux (Id dst_id, _), src_args) when dst_id <> src_id ->
+                process src_args (classify_func_call dst_id src_args);
                 default_iterator.exp_aux self e
             | _ -> default_iterator.exp_aux self e);
       }
     in
-    match Hashtbl.find_opt funcs_tbl src_id with
+    match FuncTable.find_opt funcs src_func with
     | Some (_, body) -> it.exp it body
     | None -> ()
   in
-  let () = Hashtbl.iter (fun id _ -> helper id) funcs_tbl in
+  let () = FuncTable.iter (fun k _ -> helper k) funcs in
+  (* let () =
+       let on_edge : V.t * Edge.t * V.t -> unit =
+        fun (v_src, args, v_dst) ->
+         Format.printf "%s - " v_src;
+         List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
+         Format.printf "- %s\n" v_dst
+       in
+       G.iter_edges_e on_edge g
+     in *)
   g
 
 let rec dfs g ~start_v ~on_edge =
@@ -391,7 +182,7 @@ let propogate_operands ~g ~aliases info =
   let on_edge : V.t * Edge.t * V.t -> unit =
    fun (v_src, args, v_dst) ->
     match Hashtbl.find_opt result v_src with
-    | Some src_opers ->
+    | Some src_opers -> (
         let check_aliases func_id xs =
           match Hashtbl.find_opt aliases func_id with
           | Some aliases ->
@@ -411,20 +202,17 @@ let propogate_operands ~g ~aliases info =
                  else None)
           |> check_aliases v_dst
         in
-        (match Hashtbl.find_opt result v_dst with
-        | Some dst_opers ->
-            Hashtbl.replace result v_dst
-              (List.sort_uniq compare (mapped @ dst_opers))
-        | None -> Hashtbl.add result v_dst mapped);
-
-        if debug then (
-          Format.printf "%s - " v_src;
-          List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
-          Format.printf "- %s\n" v_dst;
-          Format.printf "%s opers: %s\n" v_src (String.concat " " src_opers);
-          Format.printf "mapped: %s\n" (String.concat " " mapped);
-          Format.printf "%s opers: %s\n\n" v_dst
-            (String.concat " " (Hashtbl.find result v_dst)))
+        match Hashtbl.find_opt result v_dst with
+        | Some dst_opers -> Hashtbl.replace result v_dst (mapped @ dst_opers)
+        | None -> Hashtbl.add result v_dst mapped
+        (* if debug then (
+           Format.printf "%s - " v_src;
+           List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
+           Format.printf "- %s\n" v_dst;
+           Format.printf "%s opers: %s\n" v_src (String.concat " " src_opers);
+           Format.printf "mapped: %s\n" (String.concat " " mapped);
+           Format.printf "%s opers: %s\n\n" v_dst
+             (String.concat " " (Hashtbl.find result v_dst))) *))
     | None -> ()
   in
   let () = Seq.iter (fun (start_v, _) -> dfs g ~start_v ~on_edge) info in

@@ -24,15 +24,15 @@
 (executable
  (name assembly)
  (modules assembly assembly_helper)
- (libraries libsail yojson sail_ast_tools checker.core))
+ (libraries libsail sail_ast_tools checker.core))
 
 (library
  (name sail_ast_tools)
  (modules myast myast_iterator)
  (wrapped false)
- (libraries libsail ppx_deriving_yojson.runtime checker.core)
+ (libraries libsail checker.core)
  (preprocess
-  (pps ppx_deriving_yojson ppx_deriving.show)))
+  (pps ppx_deriving.show)))
 
 (executable
  (name mysail)
@@ -42,8 +42,16 @@
 
 (executable
  (name dump)
- (modules dump specialize assembly_helper mnemonics enums call_graph)
- (libraries yojson sail_ast_tools ocamlgraph checker.core))
+ (modules
+  dump
+  spec
+  assembly_helper
+  mnemonics
+  enums
+  call_graph
+  mysail
+  myconstant_propagation)
+ (libraries dynlink sail_ast_tools ocamlgraph checker.core))
 
 (executable
  (name enum)
