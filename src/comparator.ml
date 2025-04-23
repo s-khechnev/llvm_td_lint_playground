@@ -1,10 +1,10 @@
-open Core
+open Checker_core
+open Utils
 
 let () =
-  let open Utils in
   Llvm_info.llvm_info |> Hashtbl.to_seq |> List.of_seq
   |> List.sort (fun (m1, _) (m2, _) -> compare m1 m2)
-  |> List.iter (fun (iname, (llvm_instr : Core.Instruction.t)) ->
+  |> List.iter (fun (iname, (llvm_instr : Instruction.t)) ->
          let f opers xs ppf =
            xs
            |> List.map (fun oper ->
@@ -20,7 +20,7 @@ let () =
            operands = llvm_opers;
            ins = llvm_ins;
            outs = llvm_outs;
-         } : Core.Instruction.t =
+         } : Instruction.t =
            llvm_instr
          in
          let llvm_mnemonic =
@@ -37,7 +37,7 @@ let () =
                operands = sail_opers;
                ins = sail_ins;
                outs = sail_outs;
-             } : Core.Instruction.t =
+             } : Instruction.t =
                sail_instr
              in
 

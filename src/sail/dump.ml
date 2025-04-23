@@ -1,4 +1,4 @@
-open Core.Utils
+open Checker_core.Utils
 
 type cfg = {
   mutable ocaml_code : string;
@@ -237,7 +237,7 @@ let dump_execute (ast : 'a Ast_defs.ast) =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[open Core.Instruction@]@ ";
+      printf "@[open Checker_core.Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";

@@ -1,3 +1,13 @@
+(library
+ (name checker_core)
+ (public_name checker.core)
+ (modules instruction utils))
+
+(executable
+ (name comparator)
+ (modules comparator llvm_info sail_info)
+ (libraries checker_core))
+
 (rule
  (target llvm_info.ml)
  (deps ./llvm/llvm_info.ml)
@@ -22,13 +32,3 @@
   (with-stdout-to
    %{target}
    (run ./comparator.exe))))
-
-(executable
- (name comparator)
- (modules comparator llvm_info sail_info)
- (libraries core))
-
-(library
- (name core)
- (public_name checker.core)
- (modules instruction utils))

@@ -28,17 +28,16 @@
 
 (rule
  (targets z3_problems pp_ast.txt)
- (mode
-  (promote (until-clean)))
  (deps init.exe sail_files.txt)
+ (mode (promote))
  (action
   (run ./init.exe -memo_z3 %{read-lines:sail_files.txt})))
 
 (rule
  (targets sail_info.ml graph.dot)
+ (deps dump.exe z3_problems sail_files.txt)
  (mode
   (promote (until-clean)))
- (deps dump.exe z3_problems sail_files.txt)
  (action
   (run
    ./dump.exe
@@ -52,8 +51,8 @@
 
 (rule
  (targets graph.svg)
+ (deps graph.dot)
  (mode
   (promote (until-clean)))
- (deps graph.dot)
  (action
   (run dot -Tsvg %{deps} -o %{targets})))

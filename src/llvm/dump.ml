@@ -1,4 +1,5 @@
-open Core
+open Checker_core
+open Utils
 
 type config = {
   mutable riscv_td_json : string;
@@ -37,7 +38,7 @@ let extract_operands_info (j : (string * Yojson.Safe.t) list) =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
          | `List [ `Assoc [ _; _; _ ]; `String s ] ->
-             Utils.chop_suffix s ~suffix:"_wb"
+             chop_suffix s ~suffix:"_wb"
          | other ->
              Format.printf "Unsupported case: %a\n"
                (Yojson.Safe.pretty_print ~std:false)
@@ -56,7 +57,7 @@ let dump_llvm () =
 
       printf "@[<v>";
       printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[open Core.Instruction@]@ ";
+      printf "@[open Checker_core.Instruction@]@ ";
       printf "@]@ ";
 
       printf "@[<v 2>";
