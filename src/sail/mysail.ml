@@ -327,10 +327,8 @@ let rec options =
       ("--help", Arg.Unit (fun () -> help !options), "");
     ]
 
-let my_rewrites = [ ("realize_mappings", []) ]
-
 let register_default_target () =
-  Target.register ~name:"default" ~rewrites:my_rewrites (fun _ _ _ _ _ _ -> ())
+  Target.register ~name:"default" (fun _ _ _ _ _ _ -> ())
 
 module Manifest = struct
   let _dir =
@@ -480,7 +478,7 @@ let parse_config_file file =
       (Printf.sprintf "Failed to parse configuration file: %s" message);
     None
 
-let main () =
+let main' args =
   (match Sys.getenv_opt "SAIL_NO_PLUGINS" with
   | Some _ -> ()
   | None -> (
@@ -496,7 +494,7 @@ let main () =
 
   options := Arg.align !options;
 
-  Arg.parse_dynamic options
+  Arg.parse_argv ~current:(ref 0) args !options
     (fun s -> opt_file_arguments := !opt_file_arguments @ [ s ])
     usage_msg;
 
@@ -526,16 +524,15 @@ let main () =
     | _ -> run_sail config default_target
   in
 
-  if !opt_memo_z3 then Constraint.save_digests ();
+  (if !opt_memo_z3 then try Constraint.save_digests () with _ -> ());
 
-  let () = Myast.save "pp_ast" ast in
   (ast, env, effect_info)
 
-let process () =
+let main args =
   try
-    try main ()
+    try main' args
     with Failure s -> raise (Reporting.err_general Parse_ast.Unknown s)
   with Reporting.Fatal_error e ->
     Reporting.print_error e;
-    if !opt_memo_z3 then Constraint.save_digests () else ();
+    if !opt_memo_z3 then try Constraint.save_digests () with _ -> () else ();
     exit 1

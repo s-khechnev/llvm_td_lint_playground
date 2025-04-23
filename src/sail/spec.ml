@@ -6,20 +6,25 @@ open Type_check
 module Func = struct
   type t =
     | F_usual of string
-    | F_specialized of string * (int * Libsail.Type_check.tannot exp) list
+    | F_specialized of string * (int * tannot exp) list
 
   let get_id = function F_usual id -> id | F_specialized (id, _) -> id
 
+  let to_string = function
+    | F_usual id -> id
+    | F_specialized (id, xs) ->
+        Format.(
+          sprintf "%s (%s)" id
+            (String.concat " "
+               (List.map
+                  (fun (a, b) ->
+                    sprintf "%s:%s" (string_of_int a) (string_of_exp b))
+                  xs)))
+
   let equal x y =
-    let equal_id id1 id2 =
-      match (id1, id2) with
-      | Id_aux (Id x, _), Id_aux (Id y, _) -> String.equal x y
-      | Id_aux (Operator x, _), Id_aux (Operator y, _) -> String.equal x y
-      | _ -> false
-    in
     let rec equal_exp e1 e2 =
       match (unaux_exp e1, unaux_exp e2) with
-      | E_id id1, E_id id2 -> equal_id id1 id2
+      | E_id id1, E_id id2 -> Id.compare id1 id2 = 0
       | E_lit (L_aux (L_string s1, _)), E_lit (L_aux (L_string s2, _))
       | E_lit (L_aux (L_hex s1, _)), E_lit (L_aux (L_hex s2, _))
       | E_lit (L_aux (L_bin s1, _)), E_lit (L_aux (L_bin s2, _)) ->
@@ -42,7 +47,7 @@ module Func = struct
       | E_struct xs1, E_struct xs2 ->
           List.equal
             (fun (FE_aux (FE_fexp (id1, e1), _)) (FE_aux (FE_fexp (id2, e2), _)) ->
-              equal_id id1 id2 && equal_exp e1 e2)
+              Id.compare id1 id2 = 0 && equal_exp e1 e2)
             xs1 xs2
       | _ -> String.equal (string_of_exp e1) (string_of_exp e2)
     in
@@ -64,10 +69,16 @@ module Func = struct
     | F_usual s -> Hashtbl.hash s
     | F_specialized (s, speced) -> Hashtbl.hash (s, hash_speced speced)
 
-  let compare x y = String.compare (get_id x) (get_id y)
+  let compare x y = if equal x y then 0 else -1
 end
 
 module FuncTable = Hashtbl.Make (Func)
+
+let rec product = function
+  | [] -> [ [] ]
+  | (i, id, xs) :: t ->
+      let rest = product t in
+      List.concat_map (fun x -> List.map (fun r -> (i, id, x) :: r) rest) xs
 
 let get_speced_args pargsi =
   List.filter_map
@@ -93,10 +104,10 @@ let get_speced_args pargsi =
 let get_args_to_spec pargsi =
   List.filter_map
     (fun (i, p) ->
-      let rec need_spec (P_aux (p, _) as pat) =
+      let rec f (P_aux (p, _) as pat) =
         match p with
-        | P_var (p, _) -> need_spec p
-        | P_typ (_, p) -> need_spec p
+        | P_var (p, _) -> f p
+        | P_typ (_, p) -> f p
         | P_id id
           when match Env.lookup_id id (env_of_pat pat) with
                | Enum _ -> false
@@ -104,17 +115,17 @@ let get_args_to_spec pargsi =
             match typ_of_pat pat with
             | Typ_aux (Typ_id t, _) | Typ_aux (Typ_app (t, _), _) -> (
                 if string_of_id t = "bool" || string_of_id t = "atom_bool" then
-                  let f l =
+                  let mk_be l =
                     E_aux
                       ( E_lit (mk_lit l),
                         (Unknown, Type_check.mk_tannot (env_of_pat pat) bool_typ)
                       )
                   in
-                  Some (i, id, [ f L_false; f L_true ])
+                  Some (i, id, [ mk_be L_false; mk_be L_true ])
                 else
                   try
-                    let ids = Env.get_enum t (env_of_pat pat) in
-                    let values =
+                    let enum_values =
+                      let ids = Env.get_enum t (env_of_pat pat) in
                       List.map
                         (fun enum_id ->
                           E_aux
@@ -124,10 +135,10 @@ let get_args_to_spec pargsi =
                                   (mk_typ (Typ_id t)) ) ))
                         ids
                     in
-                    Some (i, id, values)
+                    Some (i, id, enum_values)
                   with _ -> None)
             | _ -> None)
         | _ -> None
       in
-      need_spec p)
+      f p)
     pargsi

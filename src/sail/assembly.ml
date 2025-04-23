@@ -1,45 +1,45 @@
-open Core
+open Libsail
+open Myast
+open Spec
+open Type_check
+open Ast_util
 
-type cfg = {
-  mutable input : string;
-  mutable ocaml_code : string;
-  mutable ocaml_ident : string;
-}
-
-let config = { input = ""; ocaml_code = ""; ocaml_ident = "" }
-
-let main () =
-  let open Myast in
-  let open Assembly_helper in
-  let asts =
-    let json =
-      In_channel.with_open_text config.input Yojson.Safe.from_channel
-    in
-    match json with
-    (* | `List xs ->
-        List.filter_map
-          (fun j ->
-            match Myast.def_of_yojson Myast.tannot_of_yojson j with
-            | Result.Error err ->
-                Format.eprintf "Error: %s\n%!" err;
-                exit 1
-            | Ok ast -> Some ast)
-          xs *)
-    | _ -> assert false
-  in
-
-  let mappings : (string, Libsail.Type_check.tannot mapcl list) Hashtbl.t =
+(* analyze assembly clauses and returns mnemonics and operands of instructions *)
+let get_info (ast : 'a Ast_defs.ast) =
+  let defs = ast.defs in
+  let mappings : (string, typ * Type_check.tannot mapcl list) Hashtbl.t =
     Hashtbl.create 100
   in
-  List.iter
-    (function
-      | DEF_aux
-          ( DEF_mapdef (MD_aux (MD_mapping (Id_aux (Id ident, _), _, maps), _)),
-            _ ) ->
-          Hashtbl.add mappings ident maps
-      | _ -> ())
-    asts;
-
+  let () =
+    List.iter
+      (function
+        | DEF_aux
+            ( DEF_mapdef (MD_aux (MD_mapping (Id_aux (Id ident, _), t, maps), _)),
+              _ ) ->
+            let typ =
+              match t with
+              | Typ_annot_opt_aux (Typ_annot_opt_some (_, typ), _) -> typ
+              | Typ_annot_opt_aux (Typ_annot_opt_none, _) ->
+                  defs
+                  |> List.find_map (function
+                       | DEF_aux
+                           ( DEF_val
+                               (VS_aux
+                                 ( VS_val_spec
+                                     ( TypSchm_aux (TypSchm_ts (_, typ), _),
+                                       Id_aux (Id val_spec_id, _),
+                                       _ ),
+                                   _ )),
+                             _ )
+                         when val_spec_id = ident ->
+                           Some typ
+                       | _ -> None)
+                  |> Option.get
+            in
+            Hashtbl.add mappings ident (typ, maps)
+        | _ -> ())
+      defs
+  in
   let assemblies =
     Option.get
     @@ List.find_map
@@ -51,19 +51,154 @@ let main () =
                  _ ) ->
                Some assemblies
            | _ -> None)
-         asts
+         defs
   in
-
-  let collected : (string, implementation_kind * string list) Hashtbl.t =
-    Hashtbl.create 2000
+  let collect_mnemonics substs =
+    let eval_mapping map_id arg =
+      match Hashtbl.find mappings map_id with
+      | Typ_aux (Typ_bidir (ltyp, _), _), maps ->
+          let arg_typ = typ_of arg in
+          maps
+          |> List.find_map (function
+               | MCL_aux (MCL_bidir (lhs, rhs), _) ->
+                   let mpat_eq_exp (MP_aux (p, _)) (E_aux (e, _)) =
+                     match (p, e) with
+                     | MP_id id1, E_id id2 -> Id.compare id1 id2 = 0
+                     | MP_lit (L_aux (L_false, _)), E_lit (L_aux (L_false, _))
+                     | MP_lit (L_aux (L_true, _)), E_lit (L_aux (L_true, _)) ->
+                         true
+                     | _ -> false
+                   in
+                   let eval_map_to_str (MPat_aux (pe1, _)) (MPat_aux (pe2, _)) =
+                     match (pe1, pe2) with
+                     | ( MPat_pat lhs,
+                         MPat_pat (MP_aux (MP_lit (L_aux (L_string str, _)), _))
+                       ) ->
+                         if mpat_eq_exp lhs arg then Some str else None
+                     | _ -> None
+                   in
+                   if Typ.compare ltyp arg_typ = 0 then eval_map_to_str lhs rhs
+                   else eval_map_to_str rhs lhs
+               | _ -> None)
+          |> Option.get
+      | _ -> assert false
+    in
+    function
+    | MP_string_append xs ->
+        (* each element from lst2 concatenates with all elements from lst1 *)
+        let my_concat lst1 lst2 =
+          if List.is_empty lst1 then lst2
+          else
+            List.concat_map (fun s1 -> List.map (fun s2 -> s1 ^ s2) lst2) lst1
+        in
+        let mnemonics, tail =
+          let exception ReachSpc of (string list * Type_check.tannot mpat list)
+          in
+          (* also returns tail after spc *)
+          let rec get_mnemonics accu = function
+            | [] -> (accu, [])
+            | a :: tl ->
+                get_mnemonics
+                  (match a with
+                  | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
+                      my_concat accu [ str ]
+                  | MP_aux
+                      ( MP_app
+                          (Id_aux (Id map_id, _), [ MP_aux (MP_id arg_id, _) ]),
+                        _ ) -> (
+                      match
+                        List.find_opt
+                          (fun (id, _) -> Id.compare arg_id id = 0)
+                          substs
+                      with
+                      | Some (_, arg_value) ->
+                          my_concat accu [ eval_mapping map_id arg_value ]
+                      | None ->
+                          let strs =
+                            let _, maps = Hashtbl.find mappings map_id in
+                            List.map
+                              (function
+                                | MCL_aux
+                                    ( MCL_bidir
+                                        ( _,
+                                          MPat_aux
+                                            ( MPat_pat
+                                                (MP_aux
+                                                  ( MP_lit
+                                                      (L_aux (L_string str, _)),
+                                                    _ )),
+                                              _ ) ),
+                                      _ ) ->
+                                    str
+                                | _ -> "")
+                              maps
+                          in
+                          my_concat accu strs)
+                  | MP_aux (MP_app (Id_aux (Id "spc", _), _), _) ->
+                      raise (ReachSpc (accu, tl))
+                  | _ -> assert false)
+                  tl
+          in
+          try get_mnemonics [] xs with ReachSpc result -> result
+        in
+        let operands =
+          List.fold_right
+            (fun x acc ->
+              match x with
+              | MP_aux
+                  ( MP_app
+                      ( Id_aux
+                          ( Id
+                              ( "reg_name" | "creg_name" | "vreg_name"
+                              | "freg_or_reg_name" | "freg_name"
+                              | "csr_name_map" | "fence_bits" ),
+                            _ ),
+                        [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ] ),
+                    _ ) ->
+                  reg_name :: acc
+              | MP_aux
+                  ( MP_app
+                      ( Id_aux (Id m_id, _),
+                        [ MP_aux (MP_id (Id_aux (Id imm, _)), _) ] ),
+                    _ )
+                when String.starts_with ~prefix:"hex_bits" m_id
+                     || String.equal "frm_mnemonic" m_id
+                     || String.equal "maybe_vmask" m_id ->
+                  imm :: acc
+              | MP_aux
+                  ( MP_app
+                      (Id_aux (Id f_id, _), [ MP_aux (MP_vector_concat xs, _) ]),
+                    _ )
+                when String.starts_with ~prefix:"hex_bits" f_id ->
+                  let imm =
+                    Option.get
+                    @@ List.find_map
+                         (function
+                           | MP_aux
+                               ( MP_typ
+                                   (MP_aux (MP_id (Id_aux (Id id, _)), _), _),
+                                 _ ) ->
+                               Some id
+                           | _ -> None)
+                         xs
+                  in
+                  imm :: acc
+              | MP_aux (MP_lit (L_aux (L_string "v0", _)), _) -> "v0" :: acc
+              | _ -> acc)
+            tail []
+        in
+        (mnemonics, operands)
+    | MP_lit (L_aux (L_string s, _)) -> ([ s ], [])
+    | _ -> assert false
   in
+  let collected = FuncTable.create 1000 in
   List.iter
     (function
       | MCL_aux
           ( MCL_bidir
               ( MPat_aux
                   (MPat_pat (MP_aux (MP_app (Id_aux (Id ident, _), args), _)), _),
-                MPat_aux (MPat_pat (MP_aux (x, _)), _) ),
+                MPat_aux (MPat_pat (MP_aux (body, _)), _) ),
             _ )
       | MCL_aux
           ( MCL_bidir
@@ -71,230 +206,29 @@ let main () =
                   ( MPat_when
                       (MP_aux (MP_app (Id_aux (Id ident, _), args), _), _),
                     _ ),
-                MPat_aux (MPat_when (MP_aux (x, _), _), _) ),
-            _ )
-        when not
-               (String.equal ident "FENCEI_RESERVED"
-               || String.equal ident "FENCE_RESERVED") -> (
-          match x with
-          | MP_string_append xs -> (
-              (* each element from lst2 concatenates with all elements from lst1 *)
-              let stupid_concat lst1 lst2 =
-                if List.is_empty lst1 then lst2
-                else
-                  List.concat_map
-                    (fun s1 -> List.map (fun s2 -> s1 ^ s2) lst2)
-                    lst1
-              in
-              let mnemonics, opers =
-                let exception
-                  ReachSpc of
-                    (string list * Libsail.Type_check.tannot mpat list)
-                in
-                (* also return tail after spc *)
-                let rec get_mnemonics accu = function
-                  | [] -> (accu, [])
-                  | a :: l ->
-                      get_mnemonics
-                        (match a with
-                        | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
-                            stupid_concat accu [ str ]
-                        | MP_aux
-                            ( MP_app
-                                ( Id_aux (Id map_id, _),
-                                  [ MP_aux (MP_id (Id_aux (Id arg, _)), _) ] ),
-                              _ )
-                          when Char.uppercase_ascii arg.[0] = arg.[0] ->
-                            let map = Hashtbl.find mappings map_id in
-                            let str =
-                              Option.get
-                              @@ List.find_map
-                                   (function
-                                     | MCL_aux
-                                         ( MCL_bidir
-                                             ( MPat_aux
-                                                 ( MPat_pat
-                                                     (MP_aux
-                                                       ( MP_id
-                                                           (Id_aux
-                                                             (Id enum_val_id, _)),
-                                                         _ )),
-                                                   _ ),
-                                               MPat_aux
-                                                 ( MPat_pat
-                                                     (MP_aux
-                                                       ( MP_lit
-                                                           (L_aux
-                                                             (L_string str, _)),
-                                                         _ )),
-                                                   _ ) ),
-                                           _ )
-                                       when String.equal enum_val_id arg ->
-                                         Some str
-                                     | _ -> None)
-                                   map
-                            in
-                            stupid_concat accu [ str ]
-                        | MP_aux (MP_app (Id_aux (Id id, _), _), _) ->
-                            if String.equal id "spc" then
-                              raise (ReachSpc (accu, l))
-                            else
-                              let map_strs =
-                                let maps = Hashtbl.find mappings id in
-                                List.map
-                                  (function
-                                    | MCL_aux
-                                        ( MCL_bidir
-                                            ( _,
-                                              MPat_aux
-                                                ( MPat_pat
-                                                    (MP_aux
-                                                      ( MP_lit
-                                                          (L_aux
-                                                            (L_string str, _)),
-                                                        _ )),
-                                                  _ ) ),
-                                          _ ) ->
-                                        str
-                                    | _ -> "")
-                                  maps
-                              in
-                              stupid_concat accu map_strs
-                        | _ -> assert false)
-                        l
-                in
-                try get_mnemonics [] xs with ReachSpc result -> result
-              in
-              let operands =
-                List.fold_right
-                  (fun x acc ->
-                    match x with
-                    | MP_aux
-                        ( MP_app
-                            ( Id_aux
-                                ( Id
-                                    ( "reg_name" | "creg_name" | "vreg_name"
-                                    | "freg_or_reg_name" | "freg_name"
-                                    | "csr_name_map" | "fence_bits" ),
-                                  _ ),
-                              [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ] ),
-                          _ ) ->
-                        reg_name :: acc
-                    | MP_aux
-                        ( MP_app
-                            ( Id_aux (Id m_id, _),
-                              [ MP_aux (MP_id (Id_aux (Id imm, _)), _) ] ),
-                          _ )
-                      when String.starts_with ~prefix:"hex_bits" m_id
-                           || String.equal "frm_mnemonic" m_id
-                           || String.equal "maybe_vmask" m_id ->
-                        imm :: acc
-                    | MP_aux
-                        ( MP_app
-                            ( Id_aux (Id f_id, _),
-                              [ MP_aux (MP_vector_concat xs, _) ] ),
-                          _ )
-                      when String.starts_with ~prefix:"hex_bits" f_id ->
-                        let imm =
-                          Option.get
-                          @@ List.find_map
-                               (function
-                                 | MP_aux
-                                     ( MP_typ
-                                         ( MP_aux (MP_id (Id_aux (Id id, _)), _),
-                                           _ ),
-                                       _ ) ->
-                                     Some id
-                                 | _ -> None)
-                               xs
-                        in
-                        imm :: acc
-                    | MP_aux (MP_lit (L_aux (L_string "v0", _)), _) ->
-                        "v0" :: acc
-                    | _ -> acc)
-                  opers []
-              in
-
-              let enum_arg =
-                List.find_map
-                  (function
-                    | MP_aux (MP_id (Id_aux (Id id, _)), _) ->
-                        if Char.uppercase_ascii id.[0] = id.[0] then Some id
-                        else None
-                    | _ -> None)
-                  args
-              in
-              match enum_arg with
-              | Some arg ->
-                  List.iter
-                    (fun mnemonic ->
-                      Hashtbl.add collected mnemonic
-                        (IK_singledef (ident, arg), operands))
-                    mnemonics
-              | None ->
-                  if String.equal ident "ZICOND_RTYPE" then (
-                    Hashtbl.add collected "ZICOND_RTYPE"
-                      (IK_singledef (ident, "RISCV_CZERO_EQZ"), operands);
-                    Hashtbl.add collected "ZICOND_RTYPE"
-                      (IK_singledef (ident, "RISCV_CZERO_NEZ"), operands))
-                  else
-                    List.iter
-                      (fun s ->
-                        Hashtbl.add collected s (IK_straight ident, operands))
-                      mnemonics)
-          | MP_lit (L_aux (L_string mnemonic, _)) ->
-              Hashtbl.add collected mnemonic (IK_straight ident, [])
-          | _ -> assert false)
+                MPat_aux (MPat_when (MP_aux (body, _), _), _) ),
+            _ ) -> (
+          let args = List.mapi (fun i a -> (i, Ast_util.pat_of_mpat a)) args in
+          match (get_speced_args args, get_args_to_spec args) with
+          | [], [] ->
+              let mnemonics = collect_mnemonics [] body in
+              FuncTable.add collected (F_usual ident) mnemonics
+          | speced, [] ->
+              let mnemonics = collect_mnemonics [] body in
+              FuncTable.add collected (F_specialized (ident, speced)) mnemonics
+          | speced, to_spec ->
+              product to_spec
+              |> List.iter (fun xs ->
+                     let substs = List.map (fun (_, id, e) -> (id, e)) xs in
+                     let mnemonics = collect_mnemonics substs body in
+                     FuncTable.add collected
+                       (F_specialized
+                          ( ident,
+                            List.merge
+                              (fun (i1, _) (i2, _) -> compare i1 i2)
+                              speced
+                              (List.map (fun (i, _, e) -> (i, e)) xs) ))
+                       mnemonics))
       | _ -> ())
     assemblies;
-
-  Out_channel.with_open_text config.ocaml_code (fun ch ->
-      let ppf = Format.formatter_of_out_channel ch in
-      let printf fmt = Format.fprintf ppf fmt in
-
-      printf "@[<v>";
-      printf "@[(* This file was auto generated *)@]@ ";
-      printf "@[open Assembly_helper@]@ ";
-      printf "@]@ ";
-
-      printf "@[<v 2>";
-      printf "@[let %s =@]@," config.ocaml_ident;
-      printf "@[let ans = Hashtbl.create 2000 in@]@ ";
-
-      let out_str ppf out =
-        Format.pp_print_list
-          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-          (fun ppf -> Format.fprintf ppf "%S")
-          ppf out
-      in
-
-      collected
-      |> Hashtbl.iter (fun mnemonic (sail_exec, opers) ->
-             match sail_exec with
-             | IK_straight s ->
-                 printf "@[add_straight ans \"%s\" \"%s\" [%a];@]@," mnemonic s
-                   out_str opers
-             | IK_singledef (s, arg) ->
-                 printf "@[add_singledef ans \"%s\" \"%s\" \"%s\" [%a];@]@,"
-                   mnemonic s arg out_str opers);
-      printf "@[ans@]@ ";
-      printf "@]@ ";
-
-      Format.pp_print_cut ppf ();
-      printf "@[let find_opt = Hashtbl.find_opt %s@]@\n" config.ocaml_ident;
-      printf "@[let find_exn = Hashtbl.find %s@]@\n" config.ocaml_ident;
-      printf "@[let mem = Hashtbl.mem %s @]@\n%!" config.ocaml_ident)
-
-let () =
-  Arg.parse
-    [
-      ("-dump-assembly", Arg.String (fun s -> config.input <- s), "");
-      ("-ocaml-code", Arg.String (fun s -> config.ocaml_code <- s), "");
-      ("-ocaml-ident", Arg.String (fun s -> config.ocaml_ident <- s), "");
-    ]
-    (fun s -> Utils.failwithf "Bad argument: %S" s)
-    "";
-  assert (config.input <> "");
-  assert (config.ocaml_ident <> "");
-  assert (config.ocaml_code <> "");
-  main ()
+  collected

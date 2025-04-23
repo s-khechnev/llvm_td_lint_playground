@@ -1,4 +1,4 @@
-(* open Core.Utils *)
+open Core.Utils
 open Spec
 open Func
 open Myast
@@ -55,7 +55,6 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
   let open Myast_iterator in
   let g = G.create () ~size:1500 in
   let rec helper src_func =
-    let src_id = Func.get_id src_func in
     let classify_func_call id args =
       let speced =
         List.mapi (fun i e -> (i, e)) args
@@ -64,25 +63,29 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
       if List.is_empty speced then F_usual id else F_specialized (id, speced)
     in
     let rec extract_arg = function
+      | E_aux
+          ( E_app
+              ( Id_aux (Id ("sign_extend" | "zero_extend"), _),
+                [ _; E_aux (E_id (Id_aux (Id id, _)), _) ] ),
+            _ ) ->
+          id
       | E_aux (E_app (Id_aux (Id f_id, _), args), _) -> (
           helper (classify_func_call f_id args);
           match args with
           | [ x ] -> extract_arg x
-          (* write_single_element(... vd + to_bits(...), ...) *)
-          | [
-              E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-              E_aux (E_id (Id_aux (Id id, _)), _);
-            ]
-          | [
-              E_aux (E_id (Id_aux (Id id, _)), _);
-              E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-            ]
-            when String.equal f_id "add_bits" ->
-              id
-          | _ -> "")
+          | _ -> (
+              match
+                List.find_map
+                  (function
+                    | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
+                  args
+              with
+              | Some id -> id
+              | None -> ""))
       | e -> string_of_exp e
     in
-    let process src_args dst_func =
+    let process src_args dst_id =
+      let dst_func = classify_func_call dst_id src_args in
       match FuncTable.find_opt funcs dst_func with
       | Some (dst_args, _) ->
           let args2 =
@@ -96,21 +99,13 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
               let () =
                 let speced_body, _ =
                   let substs =
-                    let speced_args =
-                      match dst_func with
-                      | F_specialized (_, speced) ->
-                          (* printfn "%s %s" dst_id
-                             (String.concat " "
-                                (List.map
-                                   (fun (a, b) ->
-                                     string_of_int a ^ " : " ^ string_of_exp b)
-                                   speced)); *)
-                          List.map
-                            (fun (i, e) -> (List.nth dst_args i |> mk_id, e))
-                            speced
-                      | _ -> assert false
-                    in
-                    Bindings.of_list speced_args
+                    match dst_func with
+                    | F_specialized (_, speced) ->
+                        speced
+                        |> List.map (fun (i, e) ->
+                               (List.nth dst_args i |> mk_id, e))
+                        |> Bindings.of_list
+                    | _ -> assert false
                   in
                   let ref_vars = Constant_propagation.referenced_vars body in
                   Myconstant_propagation.const_prop "" ast ref_vars
@@ -142,9 +137,10 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
                             [ E_aux (E_tuple src_args, _) ] ),
                         _ );
                   ] ) ->
-                process src_args (classify_func_call dst_id src_args)
-            | E_app (Id_aux (Id dst_id, _), src_args) when dst_id <> src_id ->
-                process src_args (classify_func_call dst_id src_args);
+                process src_args dst_id
+            | E_app (Id_aux (Id dst_id, _), src_args)
+              when dst_id <> Func.get_id src_func ->
+                process src_args dst_id;
                 default_iterator.exp_aux self e
             | _ -> default_iterator.exp_aux self e);
       }
@@ -154,65 +150,60 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
     | None -> ()
   in
   let () = FuncTable.iter (fun k _ -> helper k) funcs in
-  (* let () =
-       let on_edge : V.t * Edge.t * V.t -> unit =
-        fun (v_src, args, v_dst) ->
-         Format.printf "%s - " v_src;
-         List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
-         Format.printf "- %s\n" v_dst
-       in
-       G.iter_edges_e on_edge g
-     in *)
   g
 
 let rec dfs g ~start_v ~on_edge =
-  if G.mem_vertex g start_v then
-    G.iter_succ_e
-      (fun e ->
-        on_edge e;
-        dfs g
-          ~start_v:
-            (let _, _, v_dst = e in
-             v_dst)
-          ~on_edge)
-      g start_v
+  G.iter_succ_e
+    (fun e ->
+      on_edge e;
+      dfs g
+        ~start_v:
+          (let _, _, v_dst = e in
+           v_dst)
+        ~on_edge)
+    g start_v
 
 let propogate_operands ~g ~aliases info =
-  let result = Hashtbl.of_seq info in
+  let result = FuncTable.of_seq info in
   let on_edge : V.t * Edge.t * V.t -> unit =
    fun (v_src, args, v_dst) ->
-    match Hashtbl.find_opt result v_src with
-    | Some src_opers -> (
-        let check_aliases func_id xs =
-          match Hashtbl.find_opt aliases func_id with
-          | Some aliases ->
-              List.map
-                (fun op ->
-                  match List.assoc_opt op aliases with
-                  | Some alias -> alias
-                  | None -> op)
-                xs
-          | None -> xs
-        in
+    match FuncTable.find_opt result v_src with
+    | Some src_opers ->
         let mapped =
-          args
-          |> List.filter_map (fun (src, dst) ->
-                 if List.mem src src_opers then
-                   if String.equal dst "0b00000" then Some "v0" else Some dst
-                 else None)
+          let check_aliases func_id xs =
+            match FuncTable.find_opt aliases func_id with
+            | Some aliases ->
+                List.map
+                  (fun id ->
+                    match List.assoc_opt id aliases with
+                    | Some alias -> alias
+                    | None -> id)
+                  xs
+            | None -> xs
+          in
+          src_opers
+          |> List.map (fun id ->
+                 match List.assoc_opt id args with
+                 | Some id -> id
+                 | None -> if id = "0b00000" then "v0" else id)
           |> check_aliases v_dst
         in
-        match Hashtbl.find_opt result v_dst with
-        | Some dst_opers -> Hashtbl.replace result v_dst (mapped @ dst_opers)
-        | None -> Hashtbl.add result v_dst mapped
-        (* if debug then (
-           Format.printf "%s - " v_src;
-           List.iter (fun (a, b) -> Format.printf "(%s, %s) " a b) args;
-           Format.printf "- %s\n" v_dst;
-           Format.printf "%s opers: %s\n" v_src (String.concat " " src_opers);
-           Format.printf "mapped: %s\n" (String.concat " " mapped);
-           Format.printf "%s opers: %s\n\n" v_dst
-             (String.concat " " (Hashtbl.find result v_dst))) *))
+        (match FuncTable.find_opt result v_dst with
+        | Some dst_opers ->
+            FuncTable.replace result v_dst (mapped @ dst_opers |> rm_duplicates)
+        | None -> FuncTable.add result v_dst mapped);
+
+        if debug then (
+          let src_str = Func.to_string v_src in
+          let dst_str = Func.to_string v_dst in
+          printfn "%s - %s - %s" src_str
+            (String.concat " "
+               (List.map (fun (a, b) -> Format.sprintf "(%s, %s) " a b) args))
+            dst_str;
+          printfn "%s opers: %s" src_str (String.concat " " src_opers);
+          printfn "mapped: %s" (String.concat " " mapped);
+          printfn "%s opers: %s\n" dst_str
+            (String.concat " " (FuncTable.find result v_dst)))
     | None -> ()
   in
   let () = Seq.iter (fun (start_v, _) -> dfs g ~start_v ~on_edge) info in

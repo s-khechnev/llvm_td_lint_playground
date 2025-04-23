@@ -1895,12 +1895,12 @@ sail ins: (0, rsdc)
 Report: c.zext.w
 llvm: c.zext.w "rd"
 sail: c.zext.w "rsdc"
-sail c.zext.w: v0 - implicit in
+c.zext.w: Different number of outs
 c.zext.w: Different number of inputs
 llvm outs: (0, rd)
-sail outs: (0, rsdc)
+sail outs: 
 llvm ins: (0, rd)
-sail ins: (0, rsdc) (-1, v0)
+sail ins: 
 
 Report: clmul
 llvm: clmul "rd" "rs1" "rs2"
@@ -1974,7 +1974,7 @@ csrrci: Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: (2, rs1)
+sail ins: 
 
 Report: csrrs
 llvm: csrrs "rd" "imm12" "rs1"
@@ -1992,7 +1992,7 @@ csrrsi: Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: (2, rs1)
+sail ins: 
 
 Report: csrrw
 llvm: csrrw "rd" "imm12" "rs1"
@@ -2010,7 +2010,7 @@ csrrwi: Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: (2, rs1)
+sail ins: 
 
 Report: ctz
 llvm: ctz "rd" "rs1"
@@ -2027,6 +2027,22 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
+
+Report: czero.eqz
+llvm: czero.eqz "rd" "rs1" "rs2"
+sail: czero.eqz "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+
+Report: czero.nez
+llvm: czero.nez "rd" "rs1" "rs2"
+sail: czero.nez "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
 
 Report: div
 llvm: div "rd" "rs1" "rs2"
@@ -4788,38 +4804,42 @@ sail ins: (2, vm) (1, vs2) (0, vd) (-1, v0)
 Report: vfredmax.vs
 llvm: vfredmax.vs "vd" "vs2" "vs1" "vm"
 sail: vfredmax.vs "vd" "vs2" "vs1" "vm"
+sail vfredmax.vs: v0 - implicit in
 vfredmax.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfredmin.vs
 llvm: vfredmin.vs "vd" "vs2" "vs1" "vm"
 sail: vfredmin.vs "vd" "vs2" "vs1" "vm"
+sail vfredmin.vs: v0 - implicit in
 vfredmin.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfredosum.vs
 llvm: vfredosum.vs "vd" "vs2" "vs1" "vm"
 sail: vfredosum.vs "vd" "vs2" "vs1" "vm"
+sail vfredosum.vs: v0 - implicit in
 vfredosum.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfredusum.vs
 llvm: vfredusum.vs "vd" "vs2" "vs1" "vm"
 sail: vfredusum.vs "vd" "vs2" "vs1" "vm"
+sail vfredusum.vs: v0 - implicit in
 vfredusum.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfrsqrt7.v
 llvm: vfrsqrt7.v "vd" "vs2" "vm"
@@ -5164,20 +5184,22 @@ sail ins: (3, vm) (2, vs2) (1, vs1) (0, vd) (-1, v0)
 Report: vfwredosum.vs
 llvm: vfwredosum.vs "vd" "vs2" "vs1" "vm"
 sail: vfwredosum.vs "vd" "vs2" "vs1" "vm"
+sail vfwredosum.vs: v0 - implicit in
 vfwredosum.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfwredusum.vs
 llvm: vfwredusum.vs "vd" "vs2" "vs1" "vm"
 sail: vfwredusum.vs "vd" "vs2" "vs1" "vm"
+sail vfwredusum.vs: v0 - implicit in
 vfwredusum.vs: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs1) (1, vs2)
-sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd)
+sail ins: (3, vm) (2, vs1) (1, vs2) (0, vd) (-1, v0)
 
 Report: vfwsub.vf
 llvm: vfwsub.vf "vd" "vs2" "rs1" "vm"
@@ -5242,74 +5264,82 @@ sail ins: (2, vm) (1, vs2) (0, vd) (-1, v0)
 Report: vle16.v
 llvm: vle16.v "vd" "rs1" "vm"
 sail: vle16.v "vd" "rs1" "vm"
+sail vle16.v: v0 - implicit in
 vle16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle16ff.v
 llvm: vle16ff.v "vd" "rs1" "vm"
 sail: vle16ff.v "vd" "rs1" "vm"
+sail vle16ff.v: v0 - implicit in
 vle16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle32.v
 llvm: vle32.v "vd" "rs1" "vm"
 sail: vle32.v "vd" "rs1" "vm"
+sail vle32.v: v0 - implicit in
 vle32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle32ff.v
 llvm: vle32ff.v "vd" "rs1" "vm"
 sail: vle32ff.v "vd" "rs1" "vm"
+sail vle32ff.v: v0 - implicit in
 vle32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle64.v
 llvm: vle64.v "vd" "rs1" "vm"
 sail: vle64.v "vd" "rs1" "vm"
+sail vle64.v: v0 - implicit in
 vle64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle64ff.v
 llvm: vle64ff.v "vd" "rs1" "vm"
 sail: vle64ff.v "vd" "rs1" "vm"
+sail vle64ff.v: v0 - implicit in
 vle64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle8.v
 llvm: vle8.v "vd" "rs1" "vm"
 sail: vle8.v "vd" "rs1" "vm"
+sail vle8.v: v0 - implicit in
 vle8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vle8ff.v
 llvm: vle8ff.v "vd" "rs1" "vm"
 sail: vle8ff.v "vd" "rs1" "vm"
+sail vle8ff.v: v0 - implicit in
 vle8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlm.v
 llvm: vlm.v "vd" "rs1"
@@ -5323,1370 +5353,1522 @@ sail ins: (1, rs1) (0, vd_or_vs3)
 Report: vloxei16.v
 llvm: vloxei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxei16.v "vd" "rs1" "vs2" "vm"
+sail vloxei16.v: v0 - implicit in
 vloxei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxei32.v
 llvm: vloxei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxei32.v "vd" "rs1" "vs2" "vm"
+sail vloxei32.v: v0 - implicit in
 vloxei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxei64.v
 llvm: vloxei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxei64.v "vd" "rs1" "vs2" "vm"
+sail vloxei64.v: v0 - implicit in
 vloxei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxei8.v
 llvm: vloxei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxei8.v "vd" "rs1" "vs2" "vm"
+sail vloxei8.v: v0 - implicit in
 vloxei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg2ei16.v
 llvm: vloxseg2ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg2ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg2ei16.v: v0 - implicit in
 vloxseg2ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg2ei32.v
 llvm: vloxseg2ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg2ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg2ei32.v: v0 - implicit in
 vloxseg2ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg2ei64.v
 llvm: vloxseg2ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg2ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg2ei64.v: v0 - implicit in
 vloxseg2ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg2ei8.v
 llvm: vloxseg2ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg2ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg2ei8.v: v0 - implicit in
 vloxseg2ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg3ei16.v
 llvm: vloxseg3ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg3ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg3ei16.v: v0 - implicit in
 vloxseg3ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg3ei32.v
 llvm: vloxseg3ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg3ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg3ei32.v: v0 - implicit in
 vloxseg3ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg3ei64.v
 llvm: vloxseg3ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg3ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg3ei64.v: v0 - implicit in
 vloxseg3ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg3ei8.v
 llvm: vloxseg3ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg3ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg3ei8.v: v0 - implicit in
 vloxseg3ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg4ei16.v
 llvm: vloxseg4ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg4ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg4ei16.v: v0 - implicit in
 vloxseg4ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg4ei32.v
 llvm: vloxseg4ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg4ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg4ei32.v: v0 - implicit in
 vloxseg4ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg4ei64.v
 llvm: vloxseg4ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg4ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg4ei64.v: v0 - implicit in
 vloxseg4ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg4ei8.v
 llvm: vloxseg4ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg4ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg4ei8.v: v0 - implicit in
 vloxseg4ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg5ei16.v
 llvm: vloxseg5ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg5ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg5ei16.v: v0 - implicit in
 vloxseg5ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg5ei32.v
 llvm: vloxseg5ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg5ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg5ei32.v: v0 - implicit in
 vloxseg5ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg5ei64.v
 llvm: vloxseg5ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg5ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg5ei64.v: v0 - implicit in
 vloxseg5ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg5ei8.v
 llvm: vloxseg5ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg5ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg5ei8.v: v0 - implicit in
 vloxseg5ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg6ei16.v
 llvm: vloxseg6ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg6ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg6ei16.v: v0 - implicit in
 vloxseg6ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg6ei32.v
 llvm: vloxseg6ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg6ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg6ei32.v: v0 - implicit in
 vloxseg6ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg6ei64.v
 llvm: vloxseg6ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg6ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg6ei64.v: v0 - implicit in
 vloxseg6ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg6ei8.v
 llvm: vloxseg6ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg6ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg6ei8.v: v0 - implicit in
 vloxseg6ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg7ei16.v
 llvm: vloxseg7ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg7ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg7ei16.v: v0 - implicit in
 vloxseg7ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg7ei32.v
 llvm: vloxseg7ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg7ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg7ei32.v: v0 - implicit in
 vloxseg7ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg7ei64.v
 llvm: vloxseg7ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg7ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg7ei64.v: v0 - implicit in
 vloxseg7ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg7ei8.v
 llvm: vloxseg7ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg7ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg7ei8.v: v0 - implicit in
 vloxseg7ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg8ei16.v
 llvm: vloxseg8ei16.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg8ei16.v "vd" "rs1" "vs2" "vm"
+sail vloxseg8ei16.v: v0 - implicit in
 vloxseg8ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg8ei32.v
 llvm: vloxseg8ei32.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg8ei32.v "vd" "rs1" "vs2" "vm"
+sail vloxseg8ei32.v: v0 - implicit in
 vloxseg8ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg8ei64.v
 llvm: vloxseg8ei64.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg8ei64.v "vd" "rs1" "vs2" "vm"
+sail vloxseg8ei64.v: v0 - implicit in
 vloxseg8ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vloxseg8ei8.v
 llvm: vloxseg8ei8.v "vd" "rs1" "vs2" "vm"
 sail: vloxseg8ei8.v "vd" "rs1" "vs2" "vm"
+sail vloxseg8ei8.v: v0 - implicit in
 vloxseg8ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlse16.v
 llvm: vlse16.v "vd" "rs1" "rs2" "vm"
 sail: vlse16.v "vd" "rs1" "rs2" "vm"
+sail vlse16.v: v0 - implicit in
 vlse16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlse32.v
 llvm: vlse32.v "vd" "rs1" "rs2" "vm"
 sail: vlse32.v "vd" "rs1" "rs2" "vm"
+sail vlse32.v: v0 - implicit in
 vlse32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlse64.v
 llvm: vlse64.v "vd" "rs1" "rs2" "vm"
 sail: vlse64.v "vd" "rs1" "rs2" "vm"
+sail vlse64.v: v0 - implicit in
 vlse64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlse8.v
 llvm: vlse8.v "vd" "rs1" "rs2" "vm"
 sail: vlse8.v "vd" "rs1" "rs2" "vm"
+sail vlse8.v: v0 - implicit in
 vlse8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e16.v
 llvm: vlseg2e16.v "vd" "rs1" "vm"
 sail: vlseg2e16.v "vd" "rs1" "vm"
+sail vlseg2e16.v: v0 - implicit in
 vlseg2e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e16ff.v
 llvm: vlseg2e16ff.v "vd" "rs1" "vm"
 sail: vlseg2e16ff.v "vd" "rs1" "vm"
+sail vlseg2e16ff.v: v0 - implicit in
 vlseg2e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e32.v
 llvm: vlseg2e32.v "vd" "rs1" "vm"
 sail: vlseg2e32.v "vd" "rs1" "vm"
+sail vlseg2e32.v: v0 - implicit in
 vlseg2e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e32ff.v
 llvm: vlseg2e32ff.v "vd" "rs1" "vm"
 sail: vlseg2e32ff.v "vd" "rs1" "vm"
+sail vlseg2e32ff.v: v0 - implicit in
 vlseg2e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e64.v
 llvm: vlseg2e64.v "vd" "rs1" "vm"
 sail: vlseg2e64.v "vd" "rs1" "vm"
+sail vlseg2e64.v: v0 - implicit in
 vlseg2e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e64ff.v
 llvm: vlseg2e64ff.v "vd" "rs1" "vm"
 sail: vlseg2e64ff.v "vd" "rs1" "vm"
+sail vlseg2e64ff.v: v0 - implicit in
 vlseg2e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e8.v
 llvm: vlseg2e8.v "vd" "rs1" "vm"
 sail: vlseg2e8.v "vd" "rs1" "vm"
+sail vlseg2e8.v: v0 - implicit in
 vlseg2e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg2e8ff.v
 llvm: vlseg2e8ff.v "vd" "rs1" "vm"
 sail: vlseg2e8ff.v "vd" "rs1" "vm"
+sail vlseg2e8ff.v: v0 - implicit in
 vlseg2e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e16.v
 llvm: vlseg3e16.v "vd" "rs1" "vm"
 sail: vlseg3e16.v "vd" "rs1" "vm"
+sail vlseg3e16.v: v0 - implicit in
 vlseg3e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e16ff.v
 llvm: vlseg3e16ff.v "vd" "rs1" "vm"
 sail: vlseg3e16ff.v "vd" "rs1" "vm"
+sail vlseg3e16ff.v: v0 - implicit in
 vlseg3e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e32.v
 llvm: vlseg3e32.v "vd" "rs1" "vm"
 sail: vlseg3e32.v "vd" "rs1" "vm"
+sail vlseg3e32.v: v0 - implicit in
 vlseg3e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e32ff.v
 llvm: vlseg3e32ff.v "vd" "rs1" "vm"
 sail: vlseg3e32ff.v "vd" "rs1" "vm"
+sail vlseg3e32ff.v: v0 - implicit in
 vlseg3e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e64.v
 llvm: vlseg3e64.v "vd" "rs1" "vm"
 sail: vlseg3e64.v "vd" "rs1" "vm"
+sail vlseg3e64.v: v0 - implicit in
 vlseg3e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e64ff.v
 llvm: vlseg3e64ff.v "vd" "rs1" "vm"
 sail: vlseg3e64ff.v "vd" "rs1" "vm"
+sail vlseg3e64ff.v: v0 - implicit in
 vlseg3e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e8.v
 llvm: vlseg3e8.v "vd" "rs1" "vm"
 sail: vlseg3e8.v "vd" "rs1" "vm"
+sail vlseg3e8.v: v0 - implicit in
 vlseg3e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg3e8ff.v
 llvm: vlseg3e8ff.v "vd" "rs1" "vm"
 sail: vlseg3e8ff.v "vd" "rs1" "vm"
+sail vlseg3e8ff.v: v0 - implicit in
 vlseg3e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e16.v
 llvm: vlseg4e16.v "vd" "rs1" "vm"
 sail: vlseg4e16.v "vd" "rs1" "vm"
+sail vlseg4e16.v: v0 - implicit in
 vlseg4e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e16ff.v
 llvm: vlseg4e16ff.v "vd" "rs1" "vm"
 sail: vlseg4e16ff.v "vd" "rs1" "vm"
+sail vlseg4e16ff.v: v0 - implicit in
 vlseg4e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e32.v
 llvm: vlseg4e32.v "vd" "rs1" "vm"
 sail: vlseg4e32.v "vd" "rs1" "vm"
+sail vlseg4e32.v: v0 - implicit in
 vlseg4e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e32ff.v
 llvm: vlseg4e32ff.v "vd" "rs1" "vm"
 sail: vlseg4e32ff.v "vd" "rs1" "vm"
+sail vlseg4e32ff.v: v0 - implicit in
 vlseg4e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e64.v
 llvm: vlseg4e64.v "vd" "rs1" "vm"
 sail: vlseg4e64.v "vd" "rs1" "vm"
+sail vlseg4e64.v: v0 - implicit in
 vlseg4e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e64ff.v
 llvm: vlseg4e64ff.v "vd" "rs1" "vm"
 sail: vlseg4e64ff.v "vd" "rs1" "vm"
+sail vlseg4e64ff.v: v0 - implicit in
 vlseg4e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e8.v
 llvm: vlseg4e8.v "vd" "rs1" "vm"
 sail: vlseg4e8.v "vd" "rs1" "vm"
+sail vlseg4e8.v: v0 - implicit in
 vlseg4e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg4e8ff.v
 llvm: vlseg4e8ff.v "vd" "rs1" "vm"
 sail: vlseg4e8ff.v "vd" "rs1" "vm"
+sail vlseg4e8ff.v: v0 - implicit in
 vlseg4e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e16.v
 llvm: vlseg5e16.v "vd" "rs1" "vm"
 sail: vlseg5e16.v "vd" "rs1" "vm"
+sail vlseg5e16.v: v0 - implicit in
 vlseg5e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e16ff.v
 llvm: vlseg5e16ff.v "vd" "rs1" "vm"
 sail: vlseg5e16ff.v "vd" "rs1" "vm"
+sail vlseg5e16ff.v: v0 - implicit in
 vlseg5e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e32.v
 llvm: vlseg5e32.v "vd" "rs1" "vm"
 sail: vlseg5e32.v "vd" "rs1" "vm"
+sail vlseg5e32.v: v0 - implicit in
 vlseg5e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e32ff.v
 llvm: vlseg5e32ff.v "vd" "rs1" "vm"
 sail: vlseg5e32ff.v "vd" "rs1" "vm"
+sail vlseg5e32ff.v: v0 - implicit in
 vlseg5e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e64.v
 llvm: vlseg5e64.v "vd" "rs1" "vm"
 sail: vlseg5e64.v "vd" "rs1" "vm"
+sail vlseg5e64.v: v0 - implicit in
 vlseg5e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e64ff.v
 llvm: vlseg5e64ff.v "vd" "rs1" "vm"
 sail: vlseg5e64ff.v "vd" "rs1" "vm"
+sail vlseg5e64ff.v: v0 - implicit in
 vlseg5e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e8.v
 llvm: vlseg5e8.v "vd" "rs1" "vm"
 sail: vlseg5e8.v "vd" "rs1" "vm"
+sail vlseg5e8.v: v0 - implicit in
 vlseg5e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg5e8ff.v
 llvm: vlseg5e8ff.v "vd" "rs1" "vm"
 sail: vlseg5e8ff.v "vd" "rs1" "vm"
+sail vlseg5e8ff.v: v0 - implicit in
 vlseg5e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e16.v
 llvm: vlseg6e16.v "vd" "rs1" "vm"
 sail: vlseg6e16.v "vd" "rs1" "vm"
+sail vlseg6e16.v: v0 - implicit in
 vlseg6e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e16ff.v
 llvm: vlseg6e16ff.v "vd" "rs1" "vm"
 sail: vlseg6e16ff.v "vd" "rs1" "vm"
+sail vlseg6e16ff.v: v0 - implicit in
 vlseg6e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e32.v
 llvm: vlseg6e32.v "vd" "rs1" "vm"
 sail: vlseg6e32.v "vd" "rs1" "vm"
+sail vlseg6e32.v: v0 - implicit in
 vlseg6e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e32ff.v
 llvm: vlseg6e32ff.v "vd" "rs1" "vm"
 sail: vlseg6e32ff.v "vd" "rs1" "vm"
+sail vlseg6e32ff.v: v0 - implicit in
 vlseg6e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e64.v
 llvm: vlseg6e64.v "vd" "rs1" "vm"
 sail: vlseg6e64.v "vd" "rs1" "vm"
+sail vlseg6e64.v: v0 - implicit in
 vlseg6e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e64ff.v
 llvm: vlseg6e64ff.v "vd" "rs1" "vm"
 sail: vlseg6e64ff.v "vd" "rs1" "vm"
+sail vlseg6e64ff.v: v0 - implicit in
 vlseg6e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e8.v
 llvm: vlseg6e8.v "vd" "rs1" "vm"
 sail: vlseg6e8.v "vd" "rs1" "vm"
+sail vlseg6e8.v: v0 - implicit in
 vlseg6e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg6e8ff.v
 llvm: vlseg6e8ff.v "vd" "rs1" "vm"
 sail: vlseg6e8ff.v "vd" "rs1" "vm"
+sail vlseg6e8ff.v: v0 - implicit in
 vlseg6e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e16.v
 llvm: vlseg7e16.v "vd" "rs1" "vm"
 sail: vlseg7e16.v "vd" "rs1" "vm"
+sail vlseg7e16.v: v0 - implicit in
 vlseg7e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e16ff.v
 llvm: vlseg7e16ff.v "vd" "rs1" "vm"
 sail: vlseg7e16ff.v "vd" "rs1" "vm"
+sail vlseg7e16ff.v: v0 - implicit in
 vlseg7e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e32.v
 llvm: vlseg7e32.v "vd" "rs1" "vm"
 sail: vlseg7e32.v "vd" "rs1" "vm"
+sail vlseg7e32.v: v0 - implicit in
 vlseg7e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e32ff.v
 llvm: vlseg7e32ff.v "vd" "rs1" "vm"
 sail: vlseg7e32ff.v "vd" "rs1" "vm"
+sail vlseg7e32ff.v: v0 - implicit in
 vlseg7e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e64.v
 llvm: vlseg7e64.v "vd" "rs1" "vm"
 sail: vlseg7e64.v "vd" "rs1" "vm"
+sail vlseg7e64.v: v0 - implicit in
 vlseg7e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e64ff.v
 llvm: vlseg7e64ff.v "vd" "rs1" "vm"
 sail: vlseg7e64ff.v "vd" "rs1" "vm"
+sail vlseg7e64ff.v: v0 - implicit in
 vlseg7e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e8.v
 llvm: vlseg7e8.v "vd" "rs1" "vm"
 sail: vlseg7e8.v "vd" "rs1" "vm"
+sail vlseg7e8.v: v0 - implicit in
 vlseg7e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg7e8ff.v
 llvm: vlseg7e8ff.v "vd" "rs1" "vm"
 sail: vlseg7e8ff.v "vd" "rs1" "vm"
+sail vlseg7e8ff.v: v0 - implicit in
 vlseg7e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e16.v
 llvm: vlseg8e16.v "vd" "rs1" "vm"
 sail: vlseg8e16.v "vd" "rs1" "vm"
+sail vlseg8e16.v: v0 - implicit in
 vlseg8e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e16ff.v
 llvm: vlseg8e16ff.v "vd" "rs1" "vm"
 sail: vlseg8e16ff.v "vd" "rs1" "vm"
+sail vlseg8e16ff.v: v0 - implicit in
 vlseg8e16ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e32.v
 llvm: vlseg8e32.v "vd" "rs1" "vm"
 sail: vlseg8e32.v "vd" "rs1" "vm"
+sail vlseg8e32.v: v0 - implicit in
 vlseg8e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e32ff.v
 llvm: vlseg8e32ff.v "vd" "rs1" "vm"
 sail: vlseg8e32ff.v "vd" "rs1" "vm"
+sail vlseg8e32ff.v: v0 - implicit in
 vlseg8e32ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e64.v
 llvm: vlseg8e64.v "vd" "rs1" "vm"
 sail: vlseg8e64.v "vd" "rs1" "vm"
+sail vlseg8e64.v: v0 - implicit in
 vlseg8e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e64ff.v
 llvm: vlseg8e64ff.v "vd" "rs1" "vm"
 sail: vlseg8e64ff.v "vd" "rs1" "vm"
+sail vlseg8e64ff.v: v0 - implicit in
 vlseg8e64ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e8.v
 llvm: vlseg8e8.v "vd" "rs1" "vm"
 sail: vlseg8e8.v "vd" "rs1" "vm"
+sail vlseg8e8.v: v0 - implicit in
 vlseg8e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlseg8e8ff.v
 llvm: vlseg8e8ff.v "vd" "rs1" "vm"
 sail: vlseg8e8ff.v "vd" "rs1" "vm"
+sail vlseg8e8ff.v: v0 - implicit in
 vlseg8e8ff.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (2, vm) (1, rs1)
-sail ins: (2, vm) (1, rs1) (0, vd)
+sail ins: (2, vm) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg2e16.v
 llvm: vlsseg2e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg2e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg2e16.v: v0 - implicit in
 vlsseg2e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg2e32.v
 llvm: vlsseg2e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg2e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg2e32.v: v0 - implicit in
 vlsseg2e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg2e64.v
 llvm: vlsseg2e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg2e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg2e64.v: v0 - implicit in
 vlsseg2e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg2e8.v
 llvm: vlsseg2e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg2e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg2e8.v: v0 - implicit in
 vlsseg2e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg3e16.v
 llvm: vlsseg3e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg3e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg3e16.v: v0 - implicit in
 vlsseg3e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg3e32.v
 llvm: vlsseg3e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg3e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg3e32.v: v0 - implicit in
 vlsseg3e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg3e64.v
 llvm: vlsseg3e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg3e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg3e64.v: v0 - implicit in
 vlsseg3e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg3e8.v
 llvm: vlsseg3e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg3e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg3e8.v: v0 - implicit in
 vlsseg3e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg4e16.v
 llvm: vlsseg4e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg4e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg4e16.v: v0 - implicit in
 vlsseg4e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg4e32.v
 llvm: vlsseg4e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg4e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg4e32.v: v0 - implicit in
 vlsseg4e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg4e64.v
 llvm: vlsseg4e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg4e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg4e64.v: v0 - implicit in
 vlsseg4e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg4e8.v
 llvm: vlsseg4e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg4e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg4e8.v: v0 - implicit in
 vlsseg4e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg5e16.v
 llvm: vlsseg5e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg5e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg5e16.v: v0 - implicit in
 vlsseg5e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg5e32.v
 llvm: vlsseg5e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg5e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg5e32.v: v0 - implicit in
 vlsseg5e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg5e64.v
 llvm: vlsseg5e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg5e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg5e64.v: v0 - implicit in
 vlsseg5e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg5e8.v
 llvm: vlsseg5e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg5e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg5e8.v: v0 - implicit in
 vlsseg5e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg6e16.v
 llvm: vlsseg6e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg6e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg6e16.v: v0 - implicit in
 vlsseg6e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg6e32.v
 llvm: vlsseg6e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg6e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg6e32.v: v0 - implicit in
 vlsseg6e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg6e64.v
 llvm: vlsseg6e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg6e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg6e64.v: v0 - implicit in
 vlsseg6e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg6e8.v
 llvm: vlsseg6e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg6e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg6e8.v: v0 - implicit in
 vlsseg6e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg7e16.v
 llvm: vlsseg7e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg7e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg7e16.v: v0 - implicit in
 vlsseg7e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg7e32.v
 llvm: vlsseg7e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg7e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg7e32.v: v0 - implicit in
 vlsseg7e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg7e64.v
 llvm: vlsseg7e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg7e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg7e64.v: v0 - implicit in
 vlsseg7e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg7e8.v
 llvm: vlsseg7e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg7e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg7e8.v: v0 - implicit in
 vlsseg7e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg8e16.v
 llvm: vlsseg8e16.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg8e16.v "vd" "rs1" "rs2" "vm"
+sail vlsseg8e16.v: v0 - implicit in
 vlsseg8e16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg8e32.v
 llvm: vlsseg8e32.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg8e32.v "vd" "rs1" "rs2" "vm"
+sail vlsseg8e32.v: v0 - implicit in
 vlsseg8e32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg8e64.v
 llvm: vlsseg8e64.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg8e64.v "vd" "rs1" "rs2" "vm"
+sail vlsseg8e64.v: v0 - implicit in
 vlsseg8e64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vlsseg8e8.v
 llvm: vlsseg8e8.v "vd" "rs1" "rs2" "vm"
 sail: vlsseg8e8.v "vd" "rs1" "rs2" "vm"
+sail vlsseg8e8.v: v0 - implicit in
 vlsseg8e8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, rs2) (1, rs1)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxei16.v
 llvm: vluxei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxei16.v "vd" "rs1" "vs2" "vm"
+sail vluxei16.v: v0 - implicit in
 vluxei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxei32.v
 llvm: vluxei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxei32.v "vd" "rs1" "vs2" "vm"
+sail vluxei32.v: v0 - implicit in
 vluxei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxei64.v
 llvm: vluxei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxei64.v "vd" "rs1" "vs2" "vm"
+sail vluxei64.v: v0 - implicit in
 vluxei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxei8.v
 llvm: vluxei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxei8.v "vd" "rs1" "vs2" "vm"
+sail vluxei8.v: v0 - implicit in
 vluxei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg2ei16.v
 llvm: vluxseg2ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg2ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg2ei16.v: v0 - implicit in
 vluxseg2ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg2ei32.v
 llvm: vluxseg2ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg2ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg2ei32.v: v0 - implicit in
 vluxseg2ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg2ei64.v
 llvm: vluxseg2ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg2ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg2ei64.v: v0 - implicit in
 vluxseg2ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg2ei8.v
 llvm: vluxseg2ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg2ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg2ei8.v: v0 - implicit in
 vluxseg2ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg3ei16.v
 llvm: vluxseg3ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg3ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg3ei16.v: v0 - implicit in
 vluxseg3ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg3ei32.v
 llvm: vluxseg3ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg3ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg3ei32.v: v0 - implicit in
 vluxseg3ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg3ei64.v
 llvm: vluxseg3ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg3ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg3ei64.v: v0 - implicit in
 vluxseg3ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg3ei8.v
 llvm: vluxseg3ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg3ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg3ei8.v: v0 - implicit in
 vluxseg3ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg4ei16.v
 llvm: vluxseg4ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg4ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg4ei16.v: v0 - implicit in
 vluxseg4ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg4ei32.v
 llvm: vluxseg4ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg4ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg4ei32.v: v0 - implicit in
 vluxseg4ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg4ei64.v
 llvm: vluxseg4ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg4ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg4ei64.v: v0 - implicit in
 vluxseg4ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg4ei8.v
 llvm: vluxseg4ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg4ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg4ei8.v: v0 - implicit in
 vluxseg4ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg5ei16.v
 llvm: vluxseg5ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg5ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg5ei16.v: v0 - implicit in
 vluxseg5ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg5ei32.v
 llvm: vluxseg5ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg5ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg5ei32.v: v0 - implicit in
 vluxseg5ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg5ei64.v
 llvm: vluxseg5ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg5ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg5ei64.v: v0 - implicit in
 vluxseg5ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg5ei8.v
 llvm: vluxseg5ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg5ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg5ei8.v: v0 - implicit in
 vluxseg5ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg6ei16.v
 llvm: vluxseg6ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg6ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg6ei16.v: v0 - implicit in
 vluxseg6ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg6ei32.v
 llvm: vluxseg6ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg6ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg6ei32.v: v0 - implicit in
 vluxseg6ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg6ei64.v
 llvm: vluxseg6ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg6ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg6ei64.v: v0 - implicit in
 vluxseg6ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg6ei8.v
 llvm: vluxseg6ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg6ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg6ei8.v: v0 - implicit in
 vluxseg6ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg7ei16.v
 llvm: vluxseg7ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg7ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg7ei16.v: v0 - implicit in
 vluxseg7ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg7ei32.v
 llvm: vluxseg7ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg7ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg7ei32.v: v0 - implicit in
 vluxseg7ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg7ei64.v
 llvm: vluxseg7ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg7ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg7ei64.v: v0 - implicit in
 vluxseg7ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg7ei8.v
 llvm: vluxseg7ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg7ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg7ei8.v: v0 - implicit in
 vluxseg7ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg8ei16.v
 llvm: vluxseg8ei16.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg8ei16.v "vd" "rs1" "vs2" "vm"
+sail vluxseg8ei16.v: v0 - implicit in
 vluxseg8ei16.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg8ei32.v
 llvm: vluxseg8ei32.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg8ei32.v "vd" "rs1" "vs2" "vm"
+sail vluxseg8ei32.v: v0 - implicit in
 vluxseg8ei32.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg8ei64.v
 llvm: vluxseg8ei64.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg8ei64.v "vd" "rs1" "vs2" "vm"
+sail vluxseg8ei64.v: v0 - implicit in
 vluxseg8ei64.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vluxseg8ei8.v
 llvm: vluxseg8ei8.v "vd" "rs1" "vs2" "vm"
 sail: vluxseg8ei8.v "vd" "rs1" "vs2" "vm"
+sail vluxseg8ei8.v: v0 - implicit in
 vluxseg8ei8.v: Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (3, vm) (2, vs2) (1, rs1)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vd) (-1, v0)
 
 Report: vmacc.vv
 llvm: vmacc.vv "vd" "vs1" "vs2" "vm"
@@ -7946,34 +8128,42 @@ sail ins: (3, v0) (2, rs1) (1, vs2) (0, vd)
 Report: vse16.v
 llvm: vse16.v "vs3" "rs1" "vm"
 sail: vse16.v "vs3" "rs1" "vm"
+sail vse16.v: v0 - implicit in
+vse16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vse32.v
 llvm: vse32.v "vs3" "rs1" "vm"
 sail: vse32.v "vs3" "rs1" "vm"
+sail vse32.v: v0 - implicit in
+vse32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vse64.v
 llvm: vse64.v "vs3" "rs1" "vm"
 sail: vse64.v "vs3" "rs1" "vm"
+sail vse64.v: v0 - implicit in
+vse64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vse8.v
 llvm: vse8.v "vs3" "rs1" "vm"
 sail: vse8.v "vs3" "rs1" "vm"
+sail vse8.v: v0 - implicit in
+vse8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsetivli
 llvm: vsetivli "rd" "uimm" "vtypei"
@@ -8153,258 +8343,322 @@ sail ins: (3, vm) (2, rs1) (1, vs2) (0, vd) (-1, v0)
 Report: vsoxei16.v
 llvm: vsoxei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxei16.v: v0 - implicit in
+vsoxei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxei32.v
 llvm: vsoxei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxei32.v: v0 - implicit in
+vsoxei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxei64.v
 llvm: vsoxei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxei64.v: v0 - implicit in
+vsoxei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxei8.v
 llvm: vsoxei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxei8.v: v0 - implicit in
+vsoxei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg2ei16.v
 llvm: vsoxseg2ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg2ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg2ei16.v: v0 - implicit in
+vsoxseg2ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg2ei32.v
 llvm: vsoxseg2ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg2ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg2ei32.v: v0 - implicit in
+vsoxseg2ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg2ei64.v
 llvm: vsoxseg2ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg2ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg2ei64.v: v0 - implicit in
+vsoxseg2ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg2ei8.v
 llvm: vsoxseg2ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg2ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg2ei8.v: v0 - implicit in
+vsoxseg2ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg3ei16.v
 llvm: vsoxseg3ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg3ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg3ei16.v: v0 - implicit in
+vsoxseg3ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg3ei32.v
 llvm: vsoxseg3ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg3ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg3ei32.v: v0 - implicit in
+vsoxseg3ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg3ei64.v
 llvm: vsoxseg3ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg3ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg3ei64.v: v0 - implicit in
+vsoxseg3ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg3ei8.v
 llvm: vsoxseg3ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg3ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg3ei8.v: v0 - implicit in
+vsoxseg3ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg4ei16.v
 llvm: vsoxseg4ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg4ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg4ei16.v: v0 - implicit in
+vsoxseg4ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg4ei32.v
 llvm: vsoxseg4ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg4ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg4ei32.v: v0 - implicit in
+vsoxseg4ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg4ei64.v
 llvm: vsoxseg4ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg4ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg4ei64.v: v0 - implicit in
+vsoxseg4ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg4ei8.v
 llvm: vsoxseg4ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg4ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg4ei8.v: v0 - implicit in
+vsoxseg4ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg5ei16.v
 llvm: vsoxseg5ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg5ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg5ei16.v: v0 - implicit in
+vsoxseg5ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg5ei32.v
 llvm: vsoxseg5ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg5ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg5ei32.v: v0 - implicit in
+vsoxseg5ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg5ei64.v
 llvm: vsoxseg5ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg5ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg5ei64.v: v0 - implicit in
+vsoxseg5ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg5ei8.v
 llvm: vsoxseg5ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg5ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg5ei8.v: v0 - implicit in
+vsoxseg5ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg6ei16.v
 llvm: vsoxseg6ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg6ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg6ei16.v: v0 - implicit in
+vsoxseg6ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg6ei32.v
 llvm: vsoxseg6ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg6ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg6ei32.v: v0 - implicit in
+vsoxseg6ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg6ei64.v
 llvm: vsoxseg6ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg6ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg6ei64.v: v0 - implicit in
+vsoxseg6ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg6ei8.v
 llvm: vsoxseg6ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg6ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg6ei8.v: v0 - implicit in
+vsoxseg6ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg7ei16.v
 llvm: vsoxseg7ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg7ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg7ei16.v: v0 - implicit in
+vsoxseg7ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg7ei32.v
 llvm: vsoxseg7ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg7ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg7ei32.v: v0 - implicit in
+vsoxseg7ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg7ei64.v
 llvm: vsoxseg7ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg7ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg7ei64.v: v0 - implicit in
+vsoxseg7ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg7ei8.v
 llvm: vsoxseg7ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg7ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg7ei8.v: v0 - implicit in
+vsoxseg7ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg8ei16.v
 llvm: vsoxseg8ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg8ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg8ei16.v: v0 - implicit in
+vsoxseg8ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg8ei32.v
 llvm: vsoxseg8ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg8ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg8ei32.v: v0 - implicit in
+vsoxseg8ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg8ei64.v
 llvm: vsoxseg8ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg8ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg8ei64.v: v0 - implicit in
+vsoxseg8ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsoxseg8ei8.v
 llvm: vsoxseg8ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsoxseg8ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsoxseg8ei8.v: v0 - implicit in
+vsoxseg8ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsra.vi
 llvm: vsra.vi "vd" "vs2" "imm" "vm"
@@ -8469,258 +8723,322 @@ sail ins: (3, vm) (2, rs1) (1, vs2) (0, vd) (-1, v0)
 Report: vsse16.v
 llvm: vsse16.v "vs3" "rs1" "rs2" "vm"
 sail: vsse16.v "vs3" "rs1" "rs2" "vm"
+sail vsse16.v: v0 - implicit in
+vsse16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsse32.v
 llvm: vsse32.v "vs3" "rs1" "rs2" "vm"
 sail: vsse32.v "vs3" "rs1" "rs2" "vm"
+sail vsse32.v: v0 - implicit in
+vsse32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsse64.v
 llvm: vsse64.v "vs3" "rs1" "rs2" "vm"
 sail: vsse64.v "vs3" "rs1" "rs2" "vm"
+sail vsse64.v: v0 - implicit in
+vsse64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsse8.v
 llvm: vsse8.v "vs3" "rs1" "rs2" "vm"
 sail: vsse8.v "vs3" "rs1" "rs2" "vm"
+sail vsse8.v: v0 - implicit in
+vsse8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg2e16.v
 llvm: vsseg2e16.v "vs3" "rs1" "vm"
 sail: vsseg2e16.v "vs3" "rs1" "vm"
+sail vsseg2e16.v: v0 - implicit in
+vsseg2e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg2e32.v
 llvm: vsseg2e32.v "vs3" "rs1" "vm"
 sail: vsseg2e32.v "vs3" "rs1" "vm"
+sail vsseg2e32.v: v0 - implicit in
+vsseg2e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg2e64.v
 llvm: vsseg2e64.v "vs3" "rs1" "vm"
 sail: vsseg2e64.v "vs3" "rs1" "vm"
+sail vsseg2e64.v: v0 - implicit in
+vsseg2e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg2e8.v
 llvm: vsseg2e8.v "vs3" "rs1" "vm"
 sail: vsseg2e8.v "vs3" "rs1" "vm"
+sail vsseg2e8.v: v0 - implicit in
+vsseg2e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg3e16.v
 llvm: vsseg3e16.v "vs3" "rs1" "vm"
 sail: vsseg3e16.v "vs3" "rs1" "vm"
+sail vsseg3e16.v: v0 - implicit in
+vsseg3e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg3e32.v
 llvm: vsseg3e32.v "vs3" "rs1" "vm"
 sail: vsseg3e32.v "vs3" "rs1" "vm"
+sail vsseg3e32.v: v0 - implicit in
+vsseg3e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg3e64.v
 llvm: vsseg3e64.v "vs3" "rs1" "vm"
 sail: vsseg3e64.v "vs3" "rs1" "vm"
+sail vsseg3e64.v: v0 - implicit in
+vsseg3e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg3e8.v
 llvm: vsseg3e8.v "vs3" "rs1" "vm"
 sail: vsseg3e8.v "vs3" "rs1" "vm"
+sail vsseg3e8.v: v0 - implicit in
+vsseg3e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg4e16.v
 llvm: vsseg4e16.v "vs3" "rs1" "vm"
 sail: vsseg4e16.v "vs3" "rs1" "vm"
+sail vsseg4e16.v: v0 - implicit in
+vsseg4e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg4e32.v
 llvm: vsseg4e32.v "vs3" "rs1" "vm"
 sail: vsseg4e32.v "vs3" "rs1" "vm"
+sail vsseg4e32.v: v0 - implicit in
+vsseg4e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg4e64.v
 llvm: vsseg4e64.v "vs3" "rs1" "vm"
 sail: vsseg4e64.v "vs3" "rs1" "vm"
+sail vsseg4e64.v: v0 - implicit in
+vsseg4e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg4e8.v
 llvm: vsseg4e8.v "vs3" "rs1" "vm"
 sail: vsseg4e8.v "vs3" "rs1" "vm"
+sail vsseg4e8.v: v0 - implicit in
+vsseg4e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg5e16.v
 llvm: vsseg5e16.v "vs3" "rs1" "vm"
 sail: vsseg5e16.v "vs3" "rs1" "vm"
+sail vsseg5e16.v: v0 - implicit in
+vsseg5e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg5e32.v
 llvm: vsseg5e32.v "vs3" "rs1" "vm"
 sail: vsseg5e32.v "vs3" "rs1" "vm"
+sail vsseg5e32.v: v0 - implicit in
+vsseg5e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg5e64.v
 llvm: vsseg5e64.v "vs3" "rs1" "vm"
 sail: vsseg5e64.v "vs3" "rs1" "vm"
+sail vsseg5e64.v: v0 - implicit in
+vsseg5e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg5e8.v
 llvm: vsseg5e8.v "vs3" "rs1" "vm"
 sail: vsseg5e8.v "vs3" "rs1" "vm"
+sail vsseg5e8.v: v0 - implicit in
+vsseg5e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg6e16.v
 llvm: vsseg6e16.v "vs3" "rs1" "vm"
 sail: vsseg6e16.v "vs3" "rs1" "vm"
+sail vsseg6e16.v: v0 - implicit in
+vsseg6e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg6e32.v
 llvm: vsseg6e32.v "vs3" "rs1" "vm"
 sail: vsseg6e32.v "vs3" "rs1" "vm"
+sail vsseg6e32.v: v0 - implicit in
+vsseg6e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg6e64.v
 llvm: vsseg6e64.v "vs3" "rs1" "vm"
 sail: vsseg6e64.v "vs3" "rs1" "vm"
+sail vsseg6e64.v: v0 - implicit in
+vsseg6e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg6e8.v
 llvm: vsseg6e8.v "vs3" "rs1" "vm"
 sail: vsseg6e8.v "vs3" "rs1" "vm"
+sail vsseg6e8.v: v0 - implicit in
+vsseg6e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg7e16.v
 llvm: vsseg7e16.v "vs3" "rs1" "vm"
 sail: vsseg7e16.v "vs3" "rs1" "vm"
+sail vsseg7e16.v: v0 - implicit in
+vsseg7e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg7e32.v
 llvm: vsseg7e32.v "vs3" "rs1" "vm"
 sail: vsseg7e32.v "vs3" "rs1" "vm"
+sail vsseg7e32.v: v0 - implicit in
+vsseg7e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg7e64.v
 llvm: vsseg7e64.v "vs3" "rs1" "vm"
 sail: vsseg7e64.v "vs3" "rs1" "vm"
+sail vsseg7e64.v: v0 - implicit in
+vsseg7e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg7e8.v
 llvm: vsseg7e8.v "vs3" "rs1" "vm"
 sail: vsseg7e8.v "vs3" "rs1" "vm"
+sail vsseg7e8.v: v0 - implicit in
+vsseg7e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg8e16.v
 llvm: vsseg8e16.v "vs3" "rs1" "vm"
 sail: vsseg8e16.v "vs3" "rs1" "vm"
+sail vsseg8e16.v: v0 - implicit in
+vsseg8e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg8e32.v
 llvm: vsseg8e32.v "vs3" "rs1" "vm"
 sail: vsseg8e32.v "vs3" "rs1" "vm"
+sail vsseg8e32.v: v0 - implicit in
+vsseg8e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg8e64.v
 llvm: vsseg8e64.v "vs3" "rs1" "vm"
 sail: vsseg8e64.v "vs3" "rs1" "vm"
+sail vsseg8e64.v: v0 - implicit in
+vsseg8e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsseg8e8.v
 llvm: vsseg8e8.v "vs3" "rs1" "vm"
 sail: vsseg8e8.v "vs3" "rs1" "vm"
+sail vsseg8e8.v: v0 - implicit in
+vsseg8e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (2, vm) (1, rs1) (0, vs3)
-sail ins: (2, vm) (1, rs1) (0, vs3)
+sail ins: (2, vm) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssra.vi
 llvm: vssra.vi "vd" "vs2" "imm" "vm"
@@ -8785,226 +9103,282 @@ sail ins: (3, vm) (2, rs1) (1, vs2) (0, vd) (-1, v0)
 Report: vssseg2e16.v
 llvm: vssseg2e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg2e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg2e16.v: v0 - implicit in
+vssseg2e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg2e32.v
 llvm: vssseg2e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg2e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg2e32.v: v0 - implicit in
+vssseg2e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg2e64.v
 llvm: vssseg2e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg2e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg2e64.v: v0 - implicit in
+vssseg2e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg2e8.v
 llvm: vssseg2e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg2e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg2e8.v: v0 - implicit in
+vssseg2e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg3e16.v
 llvm: vssseg3e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg3e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg3e16.v: v0 - implicit in
+vssseg3e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg3e32.v
 llvm: vssseg3e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg3e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg3e32.v: v0 - implicit in
+vssseg3e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg3e64.v
 llvm: vssseg3e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg3e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg3e64.v: v0 - implicit in
+vssseg3e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg3e8.v
 llvm: vssseg3e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg3e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg3e8.v: v0 - implicit in
+vssseg3e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg4e16.v
 llvm: vssseg4e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg4e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg4e16.v: v0 - implicit in
+vssseg4e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg4e32.v
 llvm: vssseg4e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg4e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg4e32.v: v0 - implicit in
+vssseg4e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg4e64.v
 llvm: vssseg4e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg4e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg4e64.v: v0 - implicit in
+vssseg4e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg4e8.v
 llvm: vssseg4e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg4e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg4e8.v: v0 - implicit in
+vssseg4e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg5e16.v
 llvm: vssseg5e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg5e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg5e16.v: v0 - implicit in
+vssseg5e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg5e32.v
 llvm: vssseg5e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg5e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg5e32.v: v0 - implicit in
+vssseg5e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg5e64.v
 llvm: vssseg5e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg5e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg5e64.v: v0 - implicit in
+vssseg5e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg5e8.v
 llvm: vssseg5e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg5e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg5e8.v: v0 - implicit in
+vssseg5e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg6e16.v
 llvm: vssseg6e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg6e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg6e16.v: v0 - implicit in
+vssseg6e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg6e32.v
 llvm: vssseg6e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg6e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg6e32.v: v0 - implicit in
+vssseg6e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg6e64.v
 llvm: vssseg6e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg6e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg6e64.v: v0 - implicit in
+vssseg6e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg6e8.v
 llvm: vssseg6e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg6e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg6e8.v: v0 - implicit in
+vssseg6e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg7e16.v
 llvm: vssseg7e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg7e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg7e16.v: v0 - implicit in
+vssseg7e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg7e32.v
 llvm: vssseg7e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg7e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg7e32.v: v0 - implicit in
+vssseg7e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg7e64.v
 llvm: vssseg7e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg7e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg7e64.v: v0 - implicit in
+vssseg7e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg7e8.v
 llvm: vssseg7e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg7e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg7e8.v: v0 - implicit in
+vssseg7e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg8e16.v
 llvm: vssseg8e16.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg8e16.v "vs3" "rs1" "rs2" "vm"
+sail vssseg8e16.v: v0 - implicit in
+vssseg8e16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg8e32.v
 llvm: vssseg8e32.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg8e32.v "vs3" "rs1" "rs2" "vm"
+sail vssseg8e32.v: v0 - implicit in
+vssseg8e32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg8e64.v
 llvm: vssseg8e64.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg8e64.v "vs3" "rs1" "rs2" "vm"
+sail vssseg8e64.v: v0 - implicit in
+vssseg8e64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssseg8e8.v
 llvm: vssseg8e8.v "vs3" "rs1" "rs2" "vm"
 sail: vssseg8e8.v "vs3" "rs1" "rs2" "vm"
+sail vssseg8e8.v: v0 - implicit in
+vssseg8e8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, rs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vssub.vv
 llvm: vssub.vv "vd" "vs2" "vs1" "vm"
@@ -9069,258 +9443,322 @@ sail ins: (3, vm) (2, rs1) (1, vs2) (0, vd) (-1, v0)
 Report: vsuxei16.v
 llvm: vsuxei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxei16.v: v0 - implicit in
+vsuxei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxei32.v
 llvm: vsuxei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxei32.v: v0 - implicit in
+vsuxei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxei64.v
 llvm: vsuxei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxei64.v: v0 - implicit in
+vsuxei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxei8.v
 llvm: vsuxei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxei8.v: v0 - implicit in
+vsuxei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg2ei16.v
 llvm: vsuxseg2ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg2ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg2ei16.v: v0 - implicit in
+vsuxseg2ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg2ei32.v
 llvm: vsuxseg2ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg2ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg2ei32.v: v0 - implicit in
+vsuxseg2ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg2ei64.v
 llvm: vsuxseg2ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg2ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg2ei64.v: v0 - implicit in
+vsuxseg2ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg2ei8.v
 llvm: vsuxseg2ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg2ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg2ei8.v: v0 - implicit in
+vsuxseg2ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg3ei16.v
 llvm: vsuxseg3ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg3ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg3ei16.v: v0 - implicit in
+vsuxseg3ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg3ei32.v
 llvm: vsuxseg3ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg3ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg3ei32.v: v0 - implicit in
+vsuxseg3ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg3ei64.v
 llvm: vsuxseg3ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg3ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg3ei64.v: v0 - implicit in
+vsuxseg3ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg3ei8.v
 llvm: vsuxseg3ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg3ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg3ei8.v: v0 - implicit in
+vsuxseg3ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg4ei16.v
 llvm: vsuxseg4ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg4ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg4ei16.v: v0 - implicit in
+vsuxseg4ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg4ei32.v
 llvm: vsuxseg4ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg4ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg4ei32.v: v0 - implicit in
+vsuxseg4ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg4ei64.v
 llvm: vsuxseg4ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg4ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg4ei64.v: v0 - implicit in
+vsuxseg4ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg4ei8.v
 llvm: vsuxseg4ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg4ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg4ei8.v: v0 - implicit in
+vsuxseg4ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg5ei16.v
 llvm: vsuxseg5ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg5ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg5ei16.v: v0 - implicit in
+vsuxseg5ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg5ei32.v
 llvm: vsuxseg5ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg5ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg5ei32.v: v0 - implicit in
+vsuxseg5ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg5ei64.v
 llvm: vsuxseg5ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg5ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg5ei64.v: v0 - implicit in
+vsuxseg5ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg5ei8.v
 llvm: vsuxseg5ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg5ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg5ei8.v: v0 - implicit in
+vsuxseg5ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg6ei16.v
 llvm: vsuxseg6ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg6ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg6ei16.v: v0 - implicit in
+vsuxseg6ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg6ei32.v
 llvm: vsuxseg6ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg6ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg6ei32.v: v0 - implicit in
+vsuxseg6ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg6ei64.v
 llvm: vsuxseg6ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg6ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg6ei64.v: v0 - implicit in
+vsuxseg6ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg6ei8.v
 llvm: vsuxseg6ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg6ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg6ei8.v: v0 - implicit in
+vsuxseg6ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg7ei16.v
 llvm: vsuxseg7ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg7ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg7ei16.v: v0 - implicit in
+vsuxseg7ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg7ei32.v
 llvm: vsuxseg7ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg7ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg7ei32.v: v0 - implicit in
+vsuxseg7ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg7ei64.v
 llvm: vsuxseg7ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg7ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg7ei64.v: v0 - implicit in
+vsuxseg7ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg7ei8.v
 llvm: vsuxseg7ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg7ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg7ei8.v: v0 - implicit in
+vsuxseg7ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg8ei16.v
 llvm: vsuxseg8ei16.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg8ei16.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg8ei16.v: v0 - implicit in
+vsuxseg8ei16.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg8ei32.v
 llvm: vsuxseg8ei32.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg8ei32.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg8ei32.v: v0 - implicit in
+vsuxseg8ei32.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg8ei64.v
 llvm: vsuxseg8ei64.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg8ei64.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg8ei64.v: v0 - implicit in
+vsuxseg8ei64.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vsuxseg8ei8.v
 llvm: vsuxseg8ei8.v "vs3" "rs1" "vs2" "vm"
 sail: vsuxseg8ei8.v "vs3" "rs1" "vs2" "vm"
+sail vsuxseg8ei8.v: v0 - implicit in
+vsuxseg8ei8.v: Different number of inputs
 llvm outs: 
 sail outs: 
 llvm ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
-sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3)
+sail ins: (3, vm) (2, vs2) (1, rs1) (0, vs3) (-1, v0)
 
 Report: vwadd.vv
 llvm: vwadd.vv "vd" "vs2" "vs1" "vm"

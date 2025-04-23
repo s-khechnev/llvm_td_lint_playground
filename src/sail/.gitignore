@@ -1,6 +1,6 @@
-*.txt
 *.json
 *.dot
 *.svg
+pp_ast.txt
 sail_info.ml
 z3_problems

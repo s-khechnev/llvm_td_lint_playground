@@ -65,6 +65,9 @@
 (*  SUCH DAMAGE.                                                            *)
 (****************************************************************************)
 
+[@@@warning "-unused-var"]
+[@@@warning "-unused-var-strict"]
+
 open Myast
 open Libsail
 open Ast_util

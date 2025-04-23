@@ -1,30 +1,7 @@
-(env
- (dev
-  (flags
-   (:standard -warn-error -unused-var))))
-
-; (rule
-;  (target mnemonics.ml)
-;  (deps
-;   assembly.exe
-;   (:json riscv.sail.json))
-;  (mode (promote))
-;  (action
-;   (run
-;    ./assembly.exe
-;    -ocaml-ident
-;    mnemonics
-;    -ocaml-code
-;    %{target}
-;    -dump-assembly
-;    %{json})))
-
-(include dune.marshal)
-
-(executable
- (name assembly)
- (modules assembly assembly_helper)
- (libraries libsail sail_ast_tools checker.core))
+; (env
+;  (dev
+;   (flags
+;    (:standard -warn-error -unused-var))))
 
 (library
  (name sail_ast_tools)
@@ -35,78 +12,48 @@
   (pps ppx_deriving.show)))
 
 (executable
- (name mysail)
- (modules mysail)
- (link_flags -linkall)
- (libraries libsail linenoise dynlink sail_ast_tools))
+ (name assembly)
+ (modules assembly mysail spec)
+ (libraries libsail dynlink sail_ast_tools checker.core))
 
 (executable
  (name dump)
- (modules
-  dump
-  spec
-  assembly_helper
-  mnemonics
-  enums
-  call_graph
-  mysail
-  myconstant_propagation)
+ (modules dump spec assembly call_graph mysail myconstant_propagation)
  (libraries dynlink sail_ast_tools ocamlgraph checker.core))
 
 (executable
- (name enum)
- (modules enum)
- (libraries sail_ast_tools))
+ (name init)
+ (modules init mysail)
+ (libraries dynlink sail_ast_tools))
 
-; (rule
-;  (targets enums.ml)
-;  (mode (promote))
-;  (deps
-;   (:json ./riscv.sail.json)
-;   ./enum.exe)
-;  (action
-;   (run
-;    ./enum.exe
-;    -ocaml-code
-;    enums.ml
-;    -ocaml-ident
-;    enums
-;    -dump-enums
-;    %{json})))
+(rule
+ (targets z3_problems pp_ast.txt)
+ (mode
+  (promote (until-clean)))
+ (deps init.exe sail_files.txt)
+ (action
+  (run ./init.exe -memo_z3 %{read-lines:sail_files.txt})))
 
-; (rule
-;  (targets sail_info.ml graph.dot)
-;  (mode (promote))
-;  (deps
-;   (:json ./riscv.sail.json)
-;   ./dump.exe)
-;  (action
-;   (run
-;    ./dump.exe
-;    -ocaml-code
-;    sail_info.ml
-;    -ocaml-ident
-;    sail_info
-;    -dump-execute
-;    %{json})))
+(rule
+ (targets sail_info.ml graph.dot)
+ (mode
+  (promote (until-clean)))
+ (deps dump.exe z3_problems sail_files.txt)
+ (action
+  (run
+   ./dump.exe
+   -ocaml-code
+   sail_info.ml
+   -ocaml-ident
+   sail_info
+   --
+   -memo_z3
+   %{read-lines:sail_files.txt})))
 
 (rule
  (targets graph.svg)
- (mode (promote))
+ (mode
+  (promote (until-clean)))
  (deps graph.dot)
  (action
-  (run
-   dot
-   -Tsvg
-   %{deps}
-   -o
-   %{targets}
-   ; neato
-   ; -Nlen=1.8
-   ; -Gmode=hier
-   ; -Goverlap=false
-   ; -Tpng
-   ; %{deps}
-   ; -o
-   ; %{targets}
-   )))
+  (run dot -Tsvg %{deps} -o %{targets})))
