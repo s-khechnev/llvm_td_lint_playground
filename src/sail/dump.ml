@@ -1,4 +1,5 @@
-open Checker_core.Utils
+open Checker_core
+open Utils
 
 type cfg = {
   mutable ocaml_code : string;
@@ -96,9 +97,24 @@ let collect_aliases body =
 
 open Libsail
 
-let dump_execute (ast : 'a Ast_defs.ast) =
+let dump_execute ast env effect_info =
   let open Spec in
   let open Ast_util in
+  let assemblies_info = Assembly.get_info ast in
+
+  let t = profile_start () in
+  let ast, effect_info, _ =
+    (* to be able to evaluate mapping calls  *)
+    Mysail.apply_rewrites ast effect_info env [ ("realize_mappings", []) ]
+  in
+  profile_end "applying rewrites" t;
+
+  let myconst_prop =
+    Myconstant_propagation.const_prop "" ast (fun id ->
+        Effects.function_is_pure id effect_info)
+  in
+
+  let t = profile_start () in
   let funcs = FuncTable.create 2500 in
   let () =
     let pat_to_lst pat =
@@ -162,8 +178,7 @@ let dump_execute (ast : 'a Ast_defs.ast) =
                                         (fun (_, id, exp) -> (id, exp))
                                         xs)
                                  in
-                                 Myconstant_propagation.const_prop "" ast
-                                   ref_vars (substs, KBindings.empty)
+                                 myconst_prop ref_vars (substs, KBindings.empty)
                                    Bindings.empty fbody
                                in
                                let speced =
@@ -181,7 +196,8 @@ let dump_execute (ast : 'a Ast_defs.ast) =
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
                           Pat_aux (Pat_exp (parg, body), _) ),
                       _ )
-                  when String.starts_with path ~prefix:"../../sail-riscv" ->
+                  when String.starts_with path ~prefix:"../../sail-riscv"
+                       && id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
                     FuncTable.add funcs (F_usual id) (args, body)
                 | _ -> ())
@@ -189,8 +205,11 @@ let dump_execute (ast : 'a Ast_defs.ast) =
         | _ -> ())
       ast.defs
   in
+  profile_end "collect functions" t;
 
-  let g = Call_graph.generate funcs ast in
+  let t = profile_start () in
+  let g = Call_graph.generate funcs myconst_prop in
+  profile_end "call graph generation" t;
 
   let aliases : (string * string) list FuncTable.t = FuncTable.create 500 in
   let () =
@@ -210,24 +229,14 @@ let dump_execute (ast : 'a Ast_defs.ast) =
   in
 
   let outs =
-    Call_graph.propogate_operands ~g ~aliases
-      (List.to_seq
-         (* funcs for writing to regs *)
-         [
-           (Func.F_usual "wX", [ "r" ]);
-           (F_usual "wF", [ "r" ]);
-           (F_usual "wV", [ "r" ]);
-         ])
+    Call_graph.propogate_operands ~g ~aliases funcs
+      [ (* funcs for writing to regs *) ("wX", "r"); ("wF", "r"); ("wV", "r") ]
   in
   let ins =
-    Call_graph.propogate_operands ~g ~aliases
-      (List.to_seq
-         [
-           (* funcs for reading from regs *)
-           (Func.F_usual "rX", [ "r" ]);
-           (F_usual "rF", [ "r" ]);
-           (F_usual "rV", [ "r" ]);
-         ])
+    Call_graph.propogate_operands ~g ~aliases funcs
+      [
+        (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
+      ]
   in
 
   Call_graph.dump g config.dot_file;
@@ -244,15 +253,8 @@ let dump_execute (ast : 'a Ast_defs.ast) =
       printf "@[let %s =@]@," config.ocaml_ident;
       printf "@[let ans = Hashtbl.create 1000 in@]@ ";
 
-      let lst_str ppf out =
-        Format.pp_print_list
-          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-          (fun ppf -> Format.fprintf ppf "%S")
-          ppf out
-      in
-
-      Assembly.get_info ast
-      |> FuncTable.iter (fun func (mnemonics, opers) ->
+      assemblies_info
+      |> FuncTable.iter (fun func (mnemonics, operands) ->
              let ins =
                let imm_ins =
                  match
@@ -272,7 +274,7 @@ let dump_execute (ast : 'a Ast_defs.ast) =
                               "pred";
                               "succ";
                             ])
-                     opers
+                     operands
                  with
                  | xs when not (String.equal "VMVRTYPE" (Func.get_id func)) ->
                      xs
@@ -292,10 +294,8 @@ let dump_execute (ast : 'a Ast_defs.ast) =
              in
              List.iter
                (fun mnemonic ->
-                 printf
-                   "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; \
-                    ins=[%a]; outs=[%a] };@]@,"
-                   mnemonic mnemonic lst_str opers lst_str ins lst_str outs)
+                 printf_add_instr ppf
+                   ({ mnemonic; operands; ins; outs } : Instruction.t))
                mnemonics);
 
       printf "@[ans@]@ ";
@@ -315,5 +315,7 @@ let () =
     ]
     (fun s -> failwithf "Bad argument: %s\n" s)
     "";
-  let ast, _, _ = Mysail.main (Array.of_list ("sail" :: !sail_args)) in
-  dump_execute ast
+  let ast, env, effect_info =
+    Mysail.main (Array.of_list ("sail" :: !sail_args))
+  in
+  dump_execute ast env effect_info

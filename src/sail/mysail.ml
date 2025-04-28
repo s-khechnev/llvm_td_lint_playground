@@ -536,3 +536,7 @@ let main args =
     Reporting.print_error e;
     if !opt_memo_z3 then try Constraint.save_digests () with _ -> () else ();
     exit 1
+
+let apply_rewrites ast env effect_info rewrites =
+  let rewrites = Rewrites.instantiate_rewrites rewrites in
+  Rewrites.rewrite env effect_info rewrites ast

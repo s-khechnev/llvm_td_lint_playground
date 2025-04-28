@@ -8314,9 +8314,8 @@ sail ins: (3, vm) (2, rs1) (1, vs2) (0, vd) (-1, v0)
 Report: vsm.v
 llvm: vsm.v "vs3" "rs1"
 sail: vsm.v "vd_or_vs3" "rs1"
-vsm.v: Different number of outs
 llvm outs: 
-sail outs: (0, vd_or_vs3)
+sail outs: 
 llvm ins: (1, rs1) (0, vs3)
 sail ins: (1, rs1) (0, vd_or_vs3)
 

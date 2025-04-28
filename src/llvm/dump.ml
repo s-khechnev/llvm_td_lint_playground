@@ -13,6 +13,10 @@ let read_td_json filename =
   let j = In_channel.with_open_text filename Yojson.Safe.from_channel in
   match j with `Assoc xs -> xs | _ -> assert false
 
+let from_assoc = function `Assoc xs -> xs | _ -> assert false
+let from_list = function `List xs -> xs | _ -> assert false
+let from_int = function `Int d -> d | _ -> assert false
+
 let extract_operands_info (j : (string * Yojson.Safe.t) list) =
   let operands =
     match List.assoc "AsmString" j with
@@ -32,8 +36,6 @@ let extract_operands_info (j : (string * Yojson.Safe.t) list) =
         | _ -> [])
     | _ -> assert false
   in
-  let from_assoc = function `Assoc xs -> xs | _ -> assert false in
-  let from_list = function `List xs -> xs | _ -> assert false in
   let exract_operands j =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
@@ -64,20 +66,12 @@ let dump_llvm () =
       printf "@[let %s =@]@," config.ocaml_ident;
       printf "@[let ans = Hashtbl.create 1000 in@]@ ";
 
-      let lst_str ppf out =
-        Format.pp_print_list
-          ~pp_sep:(fun ppf () -> Format.fprintf ppf "; ")
-          (fun ppf -> Format.fprintf ppf "%S")
-          ppf out
-      in
       List.iter
         (fun (mnemonic, j) ->
           let j = match j with `Assoc xs -> xs | _ -> assert false in
           let operands, outs, ins = extract_operands_info j in
-          printf
-            "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; \
-             ins=[%a]; outs=[%a] };@]@,"
-            mnemonic mnemonic lst_str operands lst_str ins lst_str outs)
+          Utils.printf_add_instr ppf
+            ({ mnemonic; operands; ins; outs } : Instruction.t))
         llvm_json;
       printf "@[ans@]@ ";
       printf "@]@ ";

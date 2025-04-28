@@ -1,7 +1,7 @@
-; (env
-;  (dev
-;   (flags
-;    (:standard -warn-error -unused-var))))
+(env
+ (dev
+  (flags
+   (:standard -warn-error -unused-var -warn-error -unused-var-strict))))
 
 (library
  (name sail_ast_tools)
@@ -19,7 +19,9 @@
 (executable
  (name dump)
  (modules dump spec assembly call_graph mysail myconstant_propagation)
- (libraries dynlink sail_ast_tools ocamlgraph checker.core))
+ (libraries dynlink sail_ast_tools ocamlgraph checker.core)
+ (preprocess
+  (pps ppx_deriving.show)))
 
 (executable
  (name init)

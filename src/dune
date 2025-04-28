@@ -1,7 +1,8 @@
 (library
  (name checker_core)
  (public_name checker.core)
- (modules instruction utils))
+ (modules instruction utils)
+ (libraries unix))
 
 (executable
  (name comparator)

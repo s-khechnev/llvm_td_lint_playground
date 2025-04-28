@@ -49,7 +49,7 @@ let dump g outfile =
   end) in
   Out_channel.with_open_text outfile (fun ch -> Dot.output_graph ch g)
 
-let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
+let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop =
   let open Libsail in
   let open Ast_util in
   let open Myast_iterator in
@@ -86,13 +86,16 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
     in
     let process src_args dst_id =
       let dst_func = classify_func_call dst_id src_args in
+      let add dst_args =
+        let args2 =
+          List.map2 (fun dst src -> (dst, extract_arg src)) dst_args src_args
+        in
+        let analyzed = G.mem_vertex g dst_func in
+        G.add_edge_e g (dst_func, args2, src_func);
+        if not analyzed then helper dst_func
+      in
       match FuncTable.find_opt funcs dst_func with
-      | Some (dst_args, _) ->
-          let args2 =
-            List.map2 (fun dst src -> (dst, extract_arg src)) dst_args src_args
-          in
-          G.add_edge_e g (dst_func, args2, src_func);
-          helper dst_func
+      | Some (dst_args, _) -> add dst_args
       | None -> (
           match FuncTable.find_opt funcs (F_usual (Func.get_id dst_func)) with
           | Some (dst_args, body) ->
@@ -108,18 +111,12 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) ast =
                     | _ -> assert false
                   in
                   let ref_vars = Constant_propagation.referenced_vars body in
-                  Myconstant_propagation.const_prop "" ast ref_vars
-                    (substs, KBindings.empty) Bindings.empty body
+                  myconst_prop ref_vars (substs, KBindings.empty) Bindings.empty
+                    body
                 in
                 FuncTable.add funcs dst_func (dst_args, speced_body)
               in
-              let args2 =
-                List.map2
-                  (fun dst src -> (dst, extract_arg src))
-                  dst_args src_args
-              in
-              G.add_edge_e g (dst_func, args2, src_func);
-              helper dst_func
+              add dst_args
           | None -> ())
     in
     let it =
@@ -163,8 +160,8 @@ let rec dfs g ~start_v ~on_edge =
         ~on_edge)
     g start_v
 
-let propogate_operands ~g ~aliases info =
-  let result = FuncTable.of_seq info in
+let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
+  let result = FuncTable.create 1000 in
   let on_edge : V.t * Edge.t * V.t -> unit =
    fun (v_src, args, v_dst) ->
     match FuncTable.find_opt result v_src with
@@ -185,7 +182,7 @@ let propogate_operands ~g ~aliases info =
           |> List.map (fun id ->
                  match List.assoc_opt id args with
                  | Some id -> id
-                 | None -> if id = "0b00000" then "v0" else id)
+                 | None -> if id = "0" then "v0" else id)
           |> check_aliases v_dst
         in
         (match FuncTable.find_opt result v_dst with
@@ -206,5 +203,41 @@ let propogate_operands ~g ~aliases info =
             (String.concat " " (FuncTable.find result v_dst)))
     | None -> ()
   in
-  let () = Seq.iter (fun (start_v, _) -> dfs g ~start_v ~on_edge) info in
+
+  G.iter_vertex
+    (fun v ->
+      match List.assoc_opt (get_id v) info with
+      | Some op_name -> (
+          match v with
+          | F_usual _ -> FuncTable.add result v [ op_name ]
+          | F_specialized (_, speced) -> (
+              match FuncTable.find_opt funcs v with
+              | Some (args, _) -> (
+                  let op_i =
+                    match
+                      List.find_mapi
+                        (fun i a -> if a = op_name then Some i else None)
+                        args
+                    with
+                    | Some e -> e
+                    | None -> assert false
+                  in
+                  match
+                    List.find_map
+                      (fun (i, e) ->
+                        if op_i = i then Some (Libsail.Ast_util.string_of_exp e)
+                        else None)
+                      speced
+                  with
+                  | Some e -> FuncTable.add result v [ e ]
+                  | None -> FuncTable.add result v [ op_name ])
+              | None -> ()))
+      | None -> ())
+    g;
+
+  let () =
+    Seq.iter
+      (fun start_v -> dfs g ~start_v ~on_edge)
+      (FuncTable.to_seq_keys result)
+  in
   result
