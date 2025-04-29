@@ -341,7 +341,9 @@ let dump_execute ast env effect_info =
 
   FuncTable.iter
     (fun f _ ->
-      let reaches = Call_graph.get_reachables g ~start_f:f ~break_ids:[] in
+      let reaches =
+        Call_graph.get_reachables_from_func g ~start_f:f ~break_ids:[]
+      in
       FuncTable.iter (FuncTable.add depend_xlen_funcs) reaches)
     (FuncTable.copy depend_xlen_funcs);
 
@@ -371,6 +373,16 @@ let dump_execute ast env effect_info =
       [
         (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
       ]
+  in
+
+  let break_ids = [ "translateAddr" ] in
+  let mayLoads =
+    Call_graph.get_reachables_from_func_id g funcs ~start_id:"read_ram"
+      ~break_ids
+  in
+  let mayStores =
+    Call_graph.get_reachables_from_func_id g funcs ~start_id:"write_ram"
+      ~break_ids
   in
 
   let get_arch_from_encdec =
@@ -518,6 +530,9 @@ let dump_execute ast env effect_info =
                | Some outs -> outs
                | None -> []
              in
+             let mayStore, mayLoad =
+               (FuncTable.mem mayStores func, FuncTable.mem mayLoads func)
+             in
              let arch = get_arch_from_encdec func in
              if Arch.equal arch Utils.target_arch then
                List.iter
@@ -529,7 +544,8 @@ let dump_execute ast env effect_info =
                      else arch
                    in
                    printf_add_instr ppf
-                     ({ mnemonic; arch; operands; ins; outs } : Instruction.t))
+                     ({ mnemonic; arch; operands; ins; outs; mayLoad; mayStore }
+                       : Instruction.t))
                  mnemonics);
 
       printf "@[ans@]@ ";

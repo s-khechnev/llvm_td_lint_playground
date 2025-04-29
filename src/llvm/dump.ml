@@ -94,7 +94,12 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
           if f "IsRV32" then RV32 else if f "IsRV64" then RV64 else RV32_RV64
     | _ -> assert false
   in
-  (mnemonic, operands, out_operands, in_operands, arch)
+  let mayLoad, mayStore =
+    let int_to_bool x = x <> 0 in
+    let f s = List.assoc s j |> from_int |> int_to_bool in
+    (f "mayLoad", f "mayStore")
+  in
+  (mnemonic, operands, out_operands, in_operands, arch, mayLoad, mayStore)
 
 let is_good_data = function
   | `Assoc xs ->
@@ -159,8 +164,11 @@ let dump_llvm () =
                      (from_assoc j))
               in
               let xs = from_assoc j in
-              let mnemonic, operands, outs, ins, arch = extract_info xs in
-              Utils.printf_add_instr ppf { mnemonic; arch; operands; ins; outs };
+              let mnemonic, operands, outs, ins, arch, mayLoad, mayStore =
+                extract_info xs
+              in
+              Utils.printf_add_instr ppf
+                { mnemonic; arch; operands; ins; outs; mayLoad; mayStore };
               Some (k, j))
             else None)
           xs

@@ -30,6 +30,8 @@ type t = {
   operands : string list;
   ins : string list;
   outs : string list;
+  mayLoad : bool;
+  mayStore : bool;
 }
 
 let equal i1 i2 =
