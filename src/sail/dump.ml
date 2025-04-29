@@ -239,6 +239,14 @@ let dump_execute ast env effect_info =
       ]
   in
 
+  let break_ids = [ "translateAddr" ] in
+  let mayLoads =
+    Call_graph.get_reachables g funcs ~start_id:"read_ram" ~break_ids
+  in
+  let mayStores =
+    Call_graph.get_reachables g funcs ~start_id:"write_ram" ~break_ids
+  in
+
   Call_graph.dump g config.dot_file;
   Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
@@ -279,10 +287,14 @@ let dump_execute ast env effect_info =
                | Some outs -> outs
                | None -> []
              in
+             let mayStore, mayLoad =
+               (FuncTable.mem mayStores func, FuncTable.mem mayLoads func)
+             in
              List.iter
                (fun mnemonic ->
                  printf_add_instr ppf
-                   ({ mnemonic; operands; ins; outs } : Instruction.t))
+                   ({ mnemonic; operands; ins; outs; mayLoad; mayStore }
+                     : Instruction.t))
                mnemonics);
 
       printf "@[ans@]@ ";

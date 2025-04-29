@@ -24,11 +24,11 @@ let printf_add_instr ppf instr =
       ppf out
   in
   let open Instruction in
-  let { mnemonic; operands; ins; outs } = instr in
+  let { mnemonic; operands; ins; outs; mayLoad; mayStore } = instr in
   printf
     "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; ins=[%a]; \
-     outs=[%a] };@]@,"
-    mnemonic mnemonic lst_str operands lst_str ins lst_str outs
+     outs=[%a]; mayLoad=%B; mayStore=%B };@]@,"
+    mnemonic mnemonic lst_str operands lst_str ins lst_str outs mayLoad mayStore
 
 let profile_start () = Unix.gettimeofday ()
 

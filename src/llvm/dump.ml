@@ -70,8 +70,14 @@ let dump_llvm () =
         (fun (mnemonic, j) ->
           let j = match j with `Assoc xs -> xs | _ -> assert false in
           let operands, outs, ins = extract_operands_info j in
+          let mayLoad, mayStore =
+            let int_to_bool x = x <> 0 in
+            let f s = List.assoc s j |> from_int |> int_to_bool in
+            (f "mayLoad", f "mayStore")
+          in
           Utils.printf_add_instr ppf
-            ({ mnemonic; operands; ins; outs } : Instruction.t))
+            ({ mnemonic; operands; ins; outs; mayLoad; mayStore }
+              : Instruction.t))
         llvm_json;
       printf "@[ans@]@ ";
       printf "@]@ ";

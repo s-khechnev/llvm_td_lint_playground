@@ -241,3 +241,20 @@ let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
       (FuncTable.to_seq_keys result)
   in
   result
+
+let get_reachables g funcs ~start_id ~break_ids =
+  let result = FuncTable.create 100 in
+  let start_nodes =
+    FuncTable.fold
+      (fun func _ acc -> if get_id func = start_id then func :: acc else acc)
+      funcs []
+  in
+  let exception Break in
+  let on_edge (_, _, v_dst) =
+    if List.mem (get_id v_dst) break_ids then raise Break
+    else FuncTable.add result v_dst ()
+  in
+  List.iter
+    (fun func -> try dfs g ~start_v:func ~on_edge with _ -> ())
+    start_nodes;
+  result
