@@ -165,9 +165,6 @@ let rec options =
         "<symbol> define a symbol for the preprocessor, as $define does in the \
          source code" );
       ("-no_warn", Arg.Clear Reporting.opt_warnings, " do not print warnings");
-      ( "-strict_var",
-        Arg.Set Type_check.opt_strict_var,
-        " require var expressions for variable declarations" );
       ( "-plugin",
         Arg.String (fun plugin -> load_plugin options plugin),
         "<file> load a Sail plugin" );
@@ -230,7 +227,7 @@ let rec options =
         "<solver> choose SMT solver. Supported solvers are z3 (default), \
          alt-ergo, cvc4, mathsat, vampire and yices." );
       ( "-smt_linearize",
-        Arg.Set Type_env.opt_smt_linearize,
+        Arg.Set Type_check.opt_smt_linearize,
         "(experimental) force linearization for constraints involving \
          exponentials" );
       ( "-Oconstant_fold",
@@ -256,7 +253,7 @@ let rec options =
         Arg.Set Frontend.opt_ddump_tc_ast,
         " (debug) dump the typechecked ast to stdout" );
       ( "-dtc_verbose",
-        Arg.Int Type_check.set_tc_debug,
+        Arg.Int (fun verbosity -> Type_check.opt_tc_debug := verbosity),
         "<verbosity> (debug) verbose typechecker output: 0 is silent" );
       ( "-dsmt_verbose",
         Arg.Set Constraint.opt_smt_verbose,

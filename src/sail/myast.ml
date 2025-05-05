@@ -77,6 +77,7 @@ type kind_aux = Ast.kind_aux =
   (* base kind *)
   | K_type (* kind of types *)
   | K_int (* kind of natural number size expressions *)
+  | K_order (* kind of vector order specifications *)
   | K_bool (* kind of constraints *)
 [@@deriving show { with_path = false }]
 
@@ -137,6 +138,15 @@ type lit_aux = Ast.lit_aux =
   | L_real of string
 [@@deriving show { with_path = false }]
 
+type order_aux = Ast.order_aux =
+  | Ord_var of kid (* variable *)
+  | Ord_inc (* increasing *)
+  | Ord_dec (* decreasing *)
+(* decreasing *) [@@deriving show { with_path = false }]
+
+type order = Ast.order = Ord_aux of order_aux * l
+[@@deriving show { with_path = false }]
+
 type typ_aux = Ast.typ_aux =
   (* type expressions, of kind Type *)
   | Typ_internal_unknown
@@ -154,6 +164,7 @@ and typ_arg_aux = Ast.typ_arg_aux =
   (* type constructor arguments of all kinds *)
   | A_nexp of nexp
   | A_typ of typ
+  | A_order of order
   | A_bool of n_constraint
 
 and typ_arg = Ast.typ_arg = A_aux of typ_arg_aux * l
@@ -177,12 +188,6 @@ and n_constraint_aux = Ast.n_constraint_aux =
 and n_constraint = Ast.n_constraint = NC_aux of n_constraint_aux * l
 [@@deriving show { with_path = false }]
 
-type order_aux = Ast.order_aux =
-  (* vector order specifications, of kind Order *)
-  | Ord_inc (* increasing *)
-  | Ord_dec
-(* decreasing *) [@@deriving show { with_path = false }]
-
 type lit = Ast.lit = L_aux of lit_aux * l
 [@@deriving show { with_path = false }]
 
@@ -203,9 +208,6 @@ type quant_item_aux = Ast.quant_item_aux =
   | QI_id of kinded_id (* optionally kinded identifier *)
   | QI_constraint of n_constraint
 (* constraint *) [@@deriving show { with_path = false }]
-
-type order = Ast.order = Ord_aux of order_aux * l
-[@@deriving show { with_path = false }]
 
 type 'a pat_aux = 'a Ast.pat_aux =
   (* pattern *)
@@ -408,7 +410,7 @@ type index_range_aux = Ast.index_range_aux =
 and index_range = Ast.index_range = BF_aux of index_range_aux * l
 [@@deriving show { with_path = false }]
 
-type type_union = Ast.type_union = Tu_aux of type_union_aux * def_annot
+type type_union = Ast.type_union = Tu_aux of type_union_aux * l
 [@@deriving show { with_path = false }]
 
 type tannot_opt = Ast.tannot_opt = Typ_annot_opt_aux of tannot_opt_aux * l
@@ -481,12 +483,11 @@ type 'a scattered_def_aux = 'a Ast.scattered_def_aux =
   | SD_funcl of 'a funcl (* scattered function definition clause *)
   | SD_variant of id * typquant (* scattered union definition header *)
   | SD_unioncl of id * type_union (* scattered union definition member *)
-  | SD_internal_unioncl_record of id * id * typquant * (typ * id) list
   | SD_mapping of id * tannot_opt
   | SD_mapcl of id * 'a mapcl
   | SD_enum of id
   | SD_enumcl of id * id
-  | SD_end of id
+  | SD_end of id (* scattered definition end *)
 (* scattered definition end *) [@@deriving show { with_path = false }]
 
 type 'a dec_spec_aux = 'a Ast.dec_spec_aux =

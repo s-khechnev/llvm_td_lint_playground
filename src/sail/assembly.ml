@@ -74,7 +74,9 @@ let get_info (ast : 'a Ast_defs.ast) =
                      | ( MPat_pat lhs,
                          MPat_pat (MP_aux (MP_lit (L_aux (L_string str, _)), _))
                        ) ->
-                         if mpat_eq_exp lhs arg then Some str else None
+                         if mpat_eq_exp lhs arg then
+                           Some (String.lowercase_ascii str)
+                         else None
                      | _ -> None
                    in
                    if Typ.compare ltyp arg_typ = 0 then eval_map_to_str lhs rhs
@@ -126,31 +128,33 @@ let get_info (ast : 'a Ast_defs.ast) =
                           with
                           | Some (_, arg_value) ->
                               my_concat accu [ eval_mapping map_id arg_value ]
-                          | None ->
-                              let strs =
-                                let _, maps = Hashtbl.find mappings map_id in
-                                List.map
-                                  (function
-                                    | MCL_aux
-                                        ( MCL_bidir
-                                            ( _,
-                                              MPat_aux
-                                                ( MPat_pat
-                                                    (MP_aux
-                                                      ( MP_lit
-                                                          (L_aux
-                                                            (L_string str, _)),
-                                                        _ )),
-                                                  _ ) ),
-                                          _ ) ->
-                                        str
-                                    | _ -> "")
-                                  maps
-                              in
-                              my_concat accu strs))
+                          | None -> (
+                              try
+                                let strs =
+                                  let _, maps = Hashtbl.find mappings map_id in
+                                  List.map
+                                    (function
+                                      | MCL_aux
+                                          ( MCL_bidir
+                                              ( _,
+                                                MPat_aux
+                                                  ( MPat_pat
+                                                      (MP_aux
+                                                        ( MP_lit
+                                                            (L_aux
+                                                              (L_string str, _)),
+                                                          _ )),
+                                                    _ ) ),
+                                            _ ) ->
+                                          String.lowercase_ascii str
+                                      | _ -> "")
+                                    maps
+                                in
+                                my_concat accu strs
+                              with Not_found -> accu)))
                   | MP_aux (MP_app (Id_aux (Id "spc", _), _), _) ->
                       raise (ReachSpc (accu, tl))
-                  | _ -> assert false
+                  | _ -> accu
                 in
                 get_mnemonics accu tl
           in
