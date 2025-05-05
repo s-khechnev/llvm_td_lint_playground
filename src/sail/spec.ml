@@ -44,11 +44,11 @@ module Func = struct
       | E_lit (L_aux (L_one, _)), E_lit (L_aux (L_one, _)) ->
           true
       | E_vector xs1, E_vector xs2 -> List.equal equal_exp xs1 xs2
-      | E_struct xs1, E_struct xs2 ->
+      (* | E_struct xs1, E_struct xs2 ->
           List.equal
             (fun (FE_aux (FE_fexp (id1, e1), _)) (FE_aux (FE_fexp (id2, e2), _)) ->
               Id.compare id1 id2 = 0 && equal_exp e1 e2)
-            xs1 xs2
+            xs1 xs2 *)
       | _ -> String.equal (string_of_exp e1) (string_of_exp e2)
     in
     match (x, y) with

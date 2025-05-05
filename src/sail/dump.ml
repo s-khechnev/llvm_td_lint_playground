@@ -196,7 +196,7 @@ let dump_execute ast env effect_info =
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
                           Pat_aux (Pat_exp (parg, body), _) ),
                       _ )
-                  when String.starts_with path ~prefix:"../../sail-riscv"
+                  when String.starts_with path ~prefix:"../../sail-riscv-p"
                        && id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
                     FuncTable.add funcs (F_usual id) (args, body)

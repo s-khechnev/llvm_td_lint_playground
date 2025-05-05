@@ -77,6 +77,7 @@ module E = struct
         | _ -> ());
         self.exp self a;
         self.exp self b
+    | E_ref _ -> ()
     | e ->
         let repr = Format.asprintf "%a" (pp_exp_aux pp_tannot) e in
         let repr =
