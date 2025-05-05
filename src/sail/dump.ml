@@ -449,6 +449,8 @@ let dump_execute ast env effect_info =
       FuncTable.iter (FuncTable.add depend_xlen_funcs) reaches)
     (FuncTable.copy depend_xlen_funcs);
 
+  let outs_csr, ins_csr = Call_graph.analyze_csr g funcs in
+
   let aliases : (string * string) list FuncTable.t = FuncTable.create 500 in
   let () =
     FuncTable.iter
@@ -635,6 +637,16 @@ let dump_execute ast env effect_info =
              let mayStore, mayLoad =
                (FuncTable.mem mayStores func, FuncTable.mem mayLoads func)
              in
+             let ins_csr =
+               match FuncTable.find_opt ins_csr func with
+               | Some ins -> List.map string_of_id ins
+               | None -> []
+             in
+             let outs_csr =
+               match FuncTable.find_opt outs_csr func with
+               | Some outs -> List.map string_of_id outs
+               | None -> []
+             in
              let arch = get_arch_from_encdec func in
              if Arch.equal arch Utils.target_arch then
                List.iter
@@ -646,7 +658,17 @@ let dump_execute ast env effect_info =
                      else arch
                    in
                    printf_add_instr ppf
-                     ({ mnemonic; arch; operands; ins; outs; mayLoad; mayStore }
+                     ({
+                        mnemonic;
+                        arch;
+                        operands;
+                        ins;
+                        outs;
+                        mayLoad;
+                        mayStore;
+                        ins_csr;
+                        outs_csr;
+                      }
                        : Instruction.t))
                  mnemonics);
 

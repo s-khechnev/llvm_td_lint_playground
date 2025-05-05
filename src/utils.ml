@@ -24,13 +24,26 @@ let printf_add_instr ppf instr =
       ppf out
   in
   let open Instruction in
-  let { mnemonic; arch; operands; ins; outs; mayLoad; mayStore } = instr in
+  let {
+    mnemonic;
+    arch;
+    operands;
+    ins;
+    outs;
+    mayLoad;
+    mayStore;
+    ins_csr;
+    outs_csr;
+  } =
+    instr
+  in
   let arch_str = Arch.to_string arch in
   printf
     "@[InstrTable.add ans (%s, \"%s\") { mnemonic=\"%s\"; arch=%s; \
-     operands=[%a]; ins=[%a]; outs=[%a]; mayLoad=%B; mayStore=%B };@]@,"
+     operands=[%a]; ins=[%a]; outs=[%a]; mayLoad=%B; mayStore=%B; \
+     ins_csr=[%a]; outs_csr=[%a] };@]@,"
     arch_str mnemonic mnemonic arch_str lst_str operands lst_str ins lst_str
-    outs mayLoad mayStore
+    outs mayLoad mayStore lst_str ins_csr lst_str outs_csr
 
 let profile_start () = Unix.gettimeofday ()
 

@@ -270,5 +270,113 @@ let get_reachables_from_func_id g funcs ~start_id ~break_ids =
     if List.mem (get_id v_dst) break_ids then raise Break
     else FuncTable.add result v_dst ()
   in
-  List.iter (fun func -> dfs g ~start_v:func ~on_edge) start_nodes;
+  List.iter
+    (fun func -> try dfs g ~start_v:func ~on_edge with _ -> ())
+    start_nodes;
   result
+
+let rec rev_dfs g ~start_v ~on_edge =
+  G.iter_pred_e
+    (fun e ->
+      on_edge e;
+      rev_dfs g
+        ~start_v:
+          (let v_src, _, _ = e in
+           v_src)
+        ~on_edge)
+    g start_v
+
+let analyze_csr g funcs =
+  let open Libsail in
+  let open Ast_util in
+  let open Type_check in
+  let open Myast_iterator in
+  let csrs =
+    let csrs = ref [] in
+    let add_csr id = if List.mem id !csrs then () else csrs := id :: !csrs in
+
+    let readCSR = F_usual "readCSR" in
+    let _, readCSR_body = FuncTable.find funcs readCSR in
+    let it =
+      {
+        default_iterator with
+        exp =
+          (fun self (E_aux (e, annot) as exp) ->
+            (match e with
+            | E_id id
+              when match Env.lookup_id id (env_of_annot annot) with
+                   | Register _ -> true
+                   | _ -> false ->
+                add_csr id
+            | _ -> ());
+            default_iterator.exp self exp);
+      }
+    in
+    it.exp it readCSR_body;
+
+    let on_edge (v_src, _, _) =
+      let _, body = FuncTable.find funcs v_src in
+      it.exp it body
+    in
+    rev_dfs g ~start_v:readCSR ~on_edge;
+
+    FuncTable.iter
+      (fun func (_, body) ->
+        if get_id func = "ext_read_CSR" then it.exp it body)
+      funcs;
+
+    !csrs
+  in
+
+  let writers = FuncTable.create 500 in
+  let readers = FuncTable.create 500 in
+  FuncTable.iter
+    (fun func (_, body) ->
+      let it =
+        {
+          default_iterator with
+          exp =
+            (fun self (E_aux (e, annot) as exp) ->
+              let is_csr_reg id =
+                match Env.lookup_id id (env_of_annot annot) with
+                | Register _
+                  when List.exists (fun csr -> Id.compare csr id = 0) csrs ->
+                    true
+                | _ -> false
+              in
+              (match e with
+              | E_assign (LE_aux ((LE_id id | LE_typ (_, id)), _), _)
+              | E_ref id
+                when is_csr_reg id ->
+                  FuncTable.add writers func id
+              | E_id id when is_csr_reg id -> FuncTable.add readers func id
+              | _ -> ());
+              default_iterator.exp self exp);
+        }
+      in
+      it.exp it body)
+    funcs;
+
+  let res_writers = FuncTable.create 1000 in
+  let res_readers = FuncTable.create 1000 in
+  let f info res =
+    FuncTable.iter
+      (fun func reg ->
+        let reachs =
+          get_reachables_from_func_id g funcs ~start_id:(Func.get_id func)
+            ~break_ids:[]
+        in
+        FuncTable.iter
+          (fun func () ->
+            match FuncTable.find_opt res func with
+            | Some regs ->
+                if List.exists (fun r -> Id.compare r reg = 0) regs then ()
+                else FuncTable.replace res func (reg :: regs)
+            | None -> FuncTable.add res func [ reg ])
+          reachs)
+      info
+  in
+  f readers res_readers;
+  f writers res_writers;
+
+  (res_writers, res_readers)

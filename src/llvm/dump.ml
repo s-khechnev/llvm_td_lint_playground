@@ -126,9 +126,23 @@ let is_good_data = function
         | Some (`String s) -> s = ""
         | _ -> false
       in
+      let from_p_ext =
+        match List.assoc_opt "!locs" xs with
+        | Some (`List xs) ->
+            List.exists
+              (function
+                | `String s ->
+                    Str.string_match
+                      (Str.regexp_string "RISCVInstrInfoP.td")
+                      s 0
+                | _ -> assert false)
+              xs
+        | _ -> false
+      in
       is_instruction && (not is_pseudo) && (not is_anonymous)
       && (not is_code_gen_only)
-      && not is_null_or_empty_asm_string
+      && (not is_null_or_empty_asm_string)
+      && from_p_ext
   | _ -> false
 
 let dump_llvm () =
@@ -167,8 +181,19 @@ let dump_llvm () =
               let mnemonic, operands, outs, ins, arch, mayLoad, mayStore =
                 extract_info xs
               in
+              let ins_csr, outs_csr = ([], []) in
               Utils.printf_add_instr ppf
-                { mnemonic; arch; operands; ins; outs; mayLoad; mayStore };
+                {
+                  mnemonic;
+                  arch;
+                  operands;
+                  ins;
+                  outs;
+                  mayLoad;
+                  mayStore;
+                  ins_csr;
+                  outs_csr;
+                };
               Some (k, j))
             else None)
           xs
