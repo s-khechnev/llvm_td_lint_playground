@@ -75,8 +75,18 @@ let dump_llvm () =
             let f s = List.assoc s j |> from_int |> int_to_bool in
             (f "mayLoad", f "mayStore")
           in
+          let ins_csr, outs_csr = ([], []) in
           Utils.printf_add_instr ppf
-            ({ mnemonic; operands; ins; outs; mayLoad; mayStore }
+            ({
+               mnemonic;
+               operands;
+               ins;
+               outs;
+               mayLoad;
+               mayStore;
+               ins_csr;
+               outs_csr;
+             }
               : Instruction.t))
         llvm_json;
       printf "@[ans@]@ ";

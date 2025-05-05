@@ -12,6 +12,7 @@ let () =
            outs = llvm_outs;
            mayLoad = llvm_mayLoad;
            mayStore = llvm_mayStore;
+           _;
          } : Instruction.t =
            llvm_instr
          in
@@ -30,6 +31,8 @@ let () =
                outs = sail_outs;
                mayLoad = sail_mayLoad;
                mayStore = sail_mayStore;
+               ins_csr = sail_ins_csr;
+               outs_csr = sail_outs_csr;
              } : Instruction.t =
                sail_instr
              in
@@ -98,6 +101,9 @@ let () =
              printfn "llvm %s: mayStore = %B" iname llvm_mayStore;
              printfn "sail %s: mayStore = %B" iname sail_mayStore;
              if llvm_mayStore <> sail_mayStore then printfn "Different mayStore";
+
+             printfn "sail outs csr: %s" (String.concat " " sail_outs_csr);
+             printfn "sail ins csr: %s" (String.concat " " sail_ins_csr);
 
              printfn ""
          | None -> ())

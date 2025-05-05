@@ -5,4 +5,6 @@ type t = {
   outs : string list;
   mayLoad : bool;
   mayStore : bool;
+  ins_csr : string list;
+  outs_csr : string list;
 }

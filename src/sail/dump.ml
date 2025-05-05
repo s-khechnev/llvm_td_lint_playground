@@ -211,6 +211,8 @@ let dump_execute ast env effect_info =
   let g = Call_graph.generate funcs myconst_prop in
   profile_end "call graph generation" t;
 
+  let outs_csr, ins_csr = Call_graph.analyze_csr g funcs in
+
   let aliases : (string * string) list FuncTable.t = FuncTable.create 500 in
   let () =
     FuncTable.iter
@@ -290,10 +292,29 @@ let dump_execute ast env effect_info =
              let mayStore, mayLoad =
                (FuncTable.mem mayStores func, FuncTable.mem mayLoads func)
              in
+             let ins_csr =
+               match FuncTable.find_opt ins_csr func with
+               | Some ins -> List.map string_of_id ins
+               | None -> []
+             in
+             let outs_csr =
+               match FuncTable.find_opt outs_csr func with
+               | Some outs -> List.map string_of_id outs
+               | None -> []
+             in
              List.iter
                (fun mnemonic ->
                  printf_add_instr ppf
-                   ({ mnemonic; operands; ins; outs; mayLoad; mayStore }
+                   ({
+                      mnemonic;
+                      operands;
+                      ins;
+                      outs;
+                      mayLoad;
+                      mayStore;
+                      ins_csr;
+                      outs_csr;
+                    }
                      : Instruction.t))
                mnemonics);
 
