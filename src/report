@@ -54,6 +54,36 @@ sail add8: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: ave
+llvm: ave "rd" "rs1" "rs2"
+sail: ave "rd" "rs1" "rs2"
+ave: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm ave: mayLoad = false
+sail ave: mayLoad = false
+llvm ave: mayStore = false
+sail ave: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: bitrev
+llvm: bitrev "rd" "rs1" "rs2"
+sail: bitrev "rd" "rs1" "rs2"
+bitrev: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm bitrev: mayLoad = false
+sail bitrev: mayLoad = false
+llvm bitrev: mayStore = false
+sail bitrev: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: bitrevi
 llvm: bitrevi "rd" "rs1" "shamt"
 sail: bitrevi "rd" "rs1" "imm6"
@@ -67,6 +97,20 @@ llvm bitrevi: mayLoad = false
 sail bitrevi: mayLoad = false
 llvm bitrevi: mayStore = false
 sail bitrevi: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: bpick
+llvm: bpick "rd" "rs1" "rs2" "rs3"
+sail: bpick "rd" "rs1" "rs2" "rs3"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (3, rs3) (2, rs2) (1, rs1)
+sail ins: (3, rs3) (2, rs2) (1, rs1)
+llvm bpick: mayLoad = false
+sail bpick: mayLoad = false
+llvm bpick: mayStore = false
+sail bpick: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -238,6 +282,20 @@ sail crsa32: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: insb
+llvm: insb "rd" "rs1" "shamt"
+sail: insb "rd" "rs1" "imm3"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1) (0, rd)
+sail ins: (2, imm3) (1, rs1) (0, rd)
+llvm insb: mayLoad = false
+sail insb: mayLoad = false
+llvm insb: mayStore = false
+sail insb: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: kabs16
 llvm: kabs16 "rd" "rs1"
 sail: kabs16 "rd" "rs1"
@@ -252,6 +310,20 @@ sail kabs16: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kabs32
+llvm: kabs32 "rd" "rs1"
+sail: kabs32 "rd" "rs1"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (1, rs1)
+sail ins: (1, rs1)
+llvm kabs32: mayLoad = false
+sail kabs32: mayLoad = false
+llvm kabs32: mayStore = false
+sail kabs32: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kabs8
 llvm: kabs8 "rd" "rs1"
 sail: kabs8 "rd" "rs1"
@@ -263,6 +335,20 @@ llvm kabs8: mayLoad = false
 sail kabs8: mayLoad = false
 llvm kabs8: mayStore = false
 sail kabs8: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kabsw
+llvm: kabsw "rd" "rs1"
+sail: kabsw "rd" "rs1"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (1, rs1)
+sail ins: (1, rs1)
+llvm kabsw: mayLoad = false
+sail kabsw: mayLoad = false
+llvm kabsw: mayStore = false
+sail kabsw: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -322,6 +408,35 @@ sail kadd8: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kaddh
+llvm: kaddh "rd" "rs1" "rs2"
+sail: kaddh "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm kaddh: mayLoad = false
+sail kaddh: mayLoad = false
+llvm kaddh: mayStore = false
+sail kaddh: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kaddw
+llvm: kaddw "rd" "rs1" "rs2"
+sail: kaddw "rd" "rs1" "rs2"
+kaddw: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kaddw: mayLoad = false
+sail kaddw: mayLoad = false
+llvm kaddw: mayStore = false
+sail kaddw: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kcras16
 llvm: kcras16 "rd" "rs1" "rs2"
 sail: kcras16 "rd" "rs1" "rs2"
@@ -378,6 +493,22 @@ sail kcrsa32: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kdmabb
+llvm: kdmabb "rd" "rs1" "rs2"
+sail: kdmabb "rd" "rs1" "rs2"
+llvm kdmabb: rs3 - implicit in
+kdmabb: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmabb: mayLoad = false
+sail kdmabb: mayLoad = false
+llvm kdmabb: mayStore = false
+sail kdmabb: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kdmabb16
 llvm: kdmabb16 "rd" "rs1" "rs2"
 sail: kdmabb16 "rd" "rs1" "rs2"
@@ -391,6 +522,22 @@ llvm kdmabb16: mayLoad = false
 sail kdmabb16: mayLoad = false
 llvm kdmabb16: mayStore = false
 sail kdmabb16: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kdmabt
+llvm: kdmabt "rd" "rs1" "rs2"
+sail: kdmabt "rd" "rs1" "rs2"
+llvm kdmabt: rs3 - implicit in
+kdmabt: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmabt: mayLoad = false
+sail kdmabt: mayLoad = false
+llvm kdmabt: mayStore = false
+sail kdmabt: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -410,6 +557,22 @@ sail kdmabt16: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kdmatt
+llvm: kdmatt "rd" "rs1" "rs2"
+sail: kdmatt "rd" "rs1" "rs2"
+llvm kdmatt: rs3 - implicit in
+kdmatt: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmatt: mayLoad = false
+sail kdmatt: mayLoad = false
+llvm kdmatt: mayStore = false
+sail kdmatt: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kdmatt16
 llvm: kdmatt16 "rd" "rs1" "rs2"
 sail: kdmatt16 "rd" "rs1" "rs2"
@@ -423,6 +586,21 @@ llvm kdmatt16: mayLoad = false
 sail kdmatt16: mayLoad = false
 llvm kdmatt16: mayStore = false
 sail kdmatt16: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kdmbb
+llvm: kdmbb "rd" "rs1" "rs2"
+sail: kdmbb "rd" "rs1" "rs2"
+kdmbb: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmbb: mayLoad = false
+sail kdmbb: mayLoad = false
+llvm kdmbb: mayStore = false
+sail kdmbb: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -441,6 +619,21 @@ sail kdmbb16: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kdmbt
+llvm: kdmbt "rd" "rs1" "rs2"
+sail: kdmbt "rd" "rs1" "rs2"
+kdmbt: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmbt: mayLoad = false
+sail kdmbt: mayLoad = false
+llvm kdmbt: mayStore = false
+sail kdmbt: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kdmbt16
 llvm: kdmbt16 "rd" "rs1" "rs2"
 sail: kdmbt16 "rd" "rs1" "rs2"
@@ -453,6 +646,21 @@ llvm kdmbt16: mayLoad = false
 sail kdmbt16: mayLoad = false
 llvm kdmbt16: mayStore = false
 sail kdmbt16: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kdmtt
+llvm: kdmtt "rd" "rs1" "rs2"
+sail: kdmtt "rd" "rs1" "rs2"
+kdmtt: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kdmtt: mayLoad = false
+sail kdmtt: mayLoad = false
+llvm kdmtt: mayStore = false
+sail kdmtt: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -499,6 +707,20 @@ sail khm8: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: khmbb
+llvm: khmbb "rd" "rs1" "rs2"
+sail: khmbb "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm khmbb: mayLoad = false
+sail khmbb: mayLoad = false
+llvm khmbb: mayStore = false
+sail khmbb: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: khmbb16
 llvm: khmbb16 "rd" "rs1" "rs2"
 sail: khmbb16 "rd" "rs1" "rs2"
@@ -514,6 +736,20 @@ sail khmbb16: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: khmbt
+llvm: khmbt "rd" "rs1" "rs2"
+sail: khmbt "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm khmbt: mayLoad = false
+sail khmbt: mayLoad = false
+llvm khmbt: mayStore = false
+sail khmbt: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: khmbt16
 llvm: khmbt16 "rd" "rs1" "rs2"
 sail: khmbt16 "rd" "rs1" "rs2"
@@ -526,6 +762,20 @@ llvm khmbt16: mayLoad = false
 sail khmbt16: mayLoad = false
 llvm khmbt16: mayStore = false
 sail khmbt16: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: khmtt
+llvm: khmtt "rd" "rs1" "rs2"
+sail: khmtt "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm khmtt: mayLoad = false
+sail khmtt: mayLoad = false
+llvm khmtt: mayStore = false
+sail khmtt: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -617,6 +867,22 @@ llvm kmabt: mayLoad = false
 sail kmabt: mayLoad = false
 llvm kmabt: mayStore = false
 sail kmabt: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kmabt32
+llvm: kmabt32 "rd" "rs1" "rs2"
+sail: kmabt32 "rd" "rs1" "rs2"
+llvm kmabt32: rs3 - implicit in
+kmabt32: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmabt32: mayLoad = false
+sail kmabt32: mayLoad = false
+llvm kmabt32: mayStore = false
+sail kmabt32: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -857,6 +1123,22 @@ sail kmmac: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kmmac.u
+llvm: kmmac.u "rd" "rs1" "rs2"
+sail: kmmac.u "rd" "rs1" "rs2"
+llvm kmmac.u: rs3 - implicit in
+kmmac.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmac.u: mayLoad = false
+sail kmmac.u: mayLoad = false
+llvm kmmac.u: mayStore = false
+sail kmmac.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kmmawb
 llvm: kmmawb "rd" "rs1" "rs2"
 sail: kmmawb "rd" "rs1" "rs2"
@@ -870,6 +1152,22 @@ llvm kmmawb: mayLoad = false
 sail kmmawb: mayLoad = false
 llvm kmmawb: mayStore = false
 sail kmmawb: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kmmawb.u
+llvm: kmmawb.u "rd" "rs1" "rs2"
+sail: kmmawb.u "rd" "rs1" "rs2"
+llvm kmmawb.u: rs3 - implicit in
+kmmawb.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmawb.u: mayLoad = false
+sail kmmawb.u: mayLoad = false
+llvm kmmawb.u: mayStore = false
+sail kmmawb.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -889,6 +1187,22 @@ sail kmmawb2: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kmmawb2.u
+llvm: kmmawb2.u "rd" "rs1" "rs2"
+sail: kmmawb2.u "rd" "rs1" "rs2"
+llvm kmmawb2.u: rs3 - implicit in
+kmmawb2.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmawb2.u: mayLoad = false
+sail kmmawb2.u: mayLoad = false
+llvm kmmawb2.u: mayStore = false
+sail kmmawb2.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kmmawt
 llvm: kmmawt "rd" "rs1" "rs2"
 sail: kmmawt "rd" "rs1" "rs2"
@@ -902,6 +1216,22 @@ llvm kmmawt: mayLoad = false
 sail kmmawt: mayLoad = false
 llvm kmmawt: mayStore = false
 sail kmmawt: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kmmawt.u
+llvm: kmmawt.u "rd" "rs1" "rs2"
+sail: kmmawt.u "rd" "rs1" "rs2"
+llvm kmmawt.u: rs3 - implicit in
+kmmawt.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmawt.u: mayLoad = false
+sail kmmawt.u: mayLoad = false
+llvm kmmawt.u: mayStore = false
+sail kmmawt.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -921,6 +1251,22 @@ sail kmmawt2: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kmmawt2.u
+llvm: kmmawt2.u "rd" "rs1" "rs2"
+sail: kmmawt2.u "rd" "rs1" "rs2"
+llvm kmmawt2.u: rs3 - implicit in
+kmmawt2.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmawt2.u: mayLoad = false
+sail kmmawt2.u: mayLoad = false
+llvm kmmawt2.u: mayStore = false
+sail kmmawt2.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kmmsb
 llvm: kmmsb "rd" "rs1" "rs2"
 sail: kmmsb "rd" "rs1" "rs2"
@@ -934,6 +1280,22 @@ llvm kmmsb: mayLoad = false
 sail kmmsb: mayLoad = false
 llvm kmmsb: mayStore = false
 sail kmmsb: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kmmsb.u
+llvm: kmmsb.u "rd" "rs1" "rs2"
+sail: kmmsb.u "rd" "rs1" "rs2"
+llvm kmmsb.u: rs3 - implicit in
+kmmsb.u: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmsb.u: mayLoad = false
+sail kmmsb.u: mayLoad = false
+llvm kmmsb.u: mayStore = false
+sail kmmsb.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -952,6 +1314,21 @@ sail kmmwb2: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kmmwb2.u
+llvm: kmmwb2.u "rd" "rs1" "rs2"
+sail: kmmwb2.u "rd" "rs1" "rs2"
+kmmwb2.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmwb2.u: mayLoad = false
+sail kmmwb2.u: mayLoad = false
+llvm kmmwb2.u: mayStore = false
+sail kmmwb2.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kmmwt2
 llvm: kmmwt2 "rd" "rs1" "rs2"
 sail: kmmwt2 "rd" "rs1" "rs2"
@@ -964,6 +1341,21 @@ llvm kmmwt2: mayLoad = false
 sail kmmwt2: mayLoad = false
 llvm kmmwt2: mayStore = false
 sail kmmwt2: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kmmwt2.u
+llvm: kmmwt2.u "rd" "rs1" "rs2"
+sail: kmmwt2.u "rd" "rs1" "rs2"
+kmmwt2.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kmmwt2.u: mayLoad = false
+sail kmmwt2.u: mayLoad = false
+llvm kmmwt2.u: mayStore = false
+sail kmmwt2.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -1166,6 +1558,35 @@ sail kslli8: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kslliw
+llvm: kslliw "rd" "rs1" "shamt"
+sail: kslliw "rd" "rs1" "imm5"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm5) (1, rs1)
+llvm kslliw: mayLoad = false
+sail kslliw: mayLoad = false
+llvm kslliw: mayStore = false
+sail kslliw: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: ksllw
+llvm: ksllw "rd" "rs1" "rs2"
+sail: ksllw "rd" "rs1" "rs2"
+ksllw: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm ksllw: mayLoad = false
+sail ksllw: mayLoad = false
+llvm ksllw: mayStore = false
+sail ksllw: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kslra16
 llvm: kslra16 "rd" "rs1" "rs2"
 sail: kslra16 "rd" "rs1" "rs2"
@@ -1177,6 +1598,20 @@ llvm kslra16: mayLoad = false
 sail kslra16: mayLoad = false
 llvm kslra16: mayStore = false
 sail kslra16: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kslra16.u
+llvm: kslra16.u "rd" "rs1" "rs2"
+sail: kslra16.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm kslra16.u: mayLoad = false
+sail kslra16.u: mayLoad = false
+llvm kslra16.u: mayStore = false
+sail kslra16.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -1194,6 +1629,20 @@ sail kslra32: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: kslra32.u
+llvm: kslra32.u "rd" "rs1" "rs2"
+sail: kslra32.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm kslra32.u: mayLoad = false
+sail kslra32.u: mayLoad = false
+llvm kslra32.u: mayStore = false
+sail kslra32.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kslra8
 llvm: kslra8 "rd" "rs1" "rs2"
 sail: kslra8 "rd" "rs1" "rs2"
@@ -1205,6 +1654,50 @@ llvm kslra8: mayLoad = false
 sail kslra8: mayLoad = false
 llvm kslra8: mayStore = false
 sail kslra8: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kslra8.u
+llvm: kslra8.u "rd" "rs1" "rs2"
+sail: kslra8.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm kslra8.u: mayLoad = false
+sail kslra8.u: mayLoad = false
+llvm kslra8.u: mayStore = false
+sail kslra8.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kslraw
+llvm: kslraw "rd" "rs1" "rs2"
+sail: kslraw "rd" "rs1" "rs2"
+kslraw: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kslraw: mayLoad = false
+sail kslraw: mayLoad = false
+llvm kslraw: mayStore = false
+sail kslraw: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: kslraw.u
+llvm: kslraw.u "rd" "rs1" "rs2"
+sail: kslraw.u "rd" "rs1" "rs2"
+kslraw.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kslraw.u: mayLoad = false
+sail kslraw.u: mayLoad = false
+llvm kslraw.u: mayStore = false
+sail kslraw.u: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -1320,6 +1813,35 @@ sail ksub8: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: ksubh
+llvm: ksubh "rd" "rs1" "rs2"
+sail: ksubh "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm ksubh: mayLoad = false
+sail ksubh: mayLoad = false
+llvm ksubh: mayStore = false
+sail ksubh: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: ksubw
+llvm: ksubw "rd" "rs1" "rs2"
+sail: ksubw "rd" "rs1" "rs2"
+ksubw: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm ksubw: mayLoad = false
+sail ksubw: mayLoad = false
+llvm ksubw: mayStore = false
+sail ksubw: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: kwmmul
 llvm: kwmmul "rd" "rs1" "rs2"
 sail: kwmmul "rd" "rs1" "rs2"
@@ -1333,6 +1855,37 @@ sail kwmmul: mayLoad = false
 llvm kwmmul: mayStore = false
 sail kwmmul: mayStore = false
 sail outs csr: vxsat
+sail ins csr: 
+
+Report: kwmmul.u
+llvm: kwmmul.u "rd" "rs1" "rs2"
+sail: kwmmul.u "rd" "rs1" "rs2"
+kwmmul.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm kwmmul.u: mayLoad = false
+sail kwmmul.u: mayLoad = false
+llvm kwmmul.u: mayStore = false
+sail kwmmul.u: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: maddr32
+llvm: maddr32 "rd" "rs1" "rs2"
+sail: maddr32 "rd" "rs1" "rs2"
+llvm maddr32: rs3 - implicit in
+maddr32: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm maddr32: mayLoad = false
+sail maddr32: mayLoad = false
+llvm maddr32: mayStore = false
+sail maddr32: mayStore = false
+sail outs csr: 
 sail ins csr: 
 
 Report: maxw
@@ -1360,6 +1913,50 @@ llvm minw: mayLoad = false
 sail minw: mayLoad = false
 llvm minw: mayStore = false
 sail minw: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: msubr32
+llvm: msubr32 "rd" "rs1" "rs2"
+sail: msubr32 "rd" "rs1" "rs2"
+llvm msubr32: rs3 - implicit in
+msubr32: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm msubr32: mayLoad = false
+sail msubr32: mayLoad = false
+llvm msubr32: mayStore = false
+sail msubr32: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: mulr64
+llvm: mulr64 "rd" "rs1" "rs2"
+sail: mulr64 "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm mulr64: mayLoad = false
+sail mulr64: mayLoad = false
+llvm mulr64: mayStore = false
+sail mulr64: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: mulsr64
+llvm: mulsr64 "rd" "rs1" "rs2"
+sail: mulsr64 "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm mulsr64: mayLoad = false
+sail mulsr64: mayLoad = false
+llvm mulsr64: mayStore = false
+sail mulsr64: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -2734,6 +3331,26 @@ sail slli8: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: smal
+llvm: smal "rd" "rs1" "rs2"
+sail: smal "rd" "rs1" "rs2"
+sail smal: rs11 - implicit in
+sail smal: rs10 - implicit in
+sail smal: rd0 - implicit out
+sail smal: rd1 - implicit out
+smal: Different number of outs
+smal: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd) (-1, rd0) (-1, rd1)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (-1, rs11) (-1, rs10)
+llvm smal: mayLoad = false
+sail smal: mayLoad = false
+llvm smal: mayStore = false
+sail smal: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: smalbb
 llvm: smalbb "rd" "rs1" "rs2"
 sail: smalbb "rd" "rs1" "rs2"
@@ -2875,6 +3492,22 @@ llvm smaqa: mayLoad = false
 sail smaqa: mayLoad = false
 llvm smaqa: mayStore = false
 sail smaqa: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: smaqa.su
+llvm: smaqa.su "rd" "rs1" "rs2"
+sail: smaqa.su "rd" "rs1" "rs2"
+llvm smaqa.su: rs3 - implicit in
+smaqa.su: Different inputs (-1, 0)
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm smaqa.su: mayLoad = false
+sail smaqa.su: mayLoad = false
+llvm smaqa.su: mayStore = false
+sail smaqa.su: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3349,6 +3982,21 @@ sail smmul: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: smmul.u
+llvm: smmul.u "rd" "rs1" "rs2"
+sail: smmul.u "rd" "rs1" "rs2"
+smmul.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm smmul.u: mayLoad = false
+sail smmul.u: mayLoad = false
+llvm smmul.u: mayStore = false
+sail smmul.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: smmwb
 llvm: smmwb "rd" "rs1" "rs2"
 sail: smmwb "rd" "rs1" "rs2"
@@ -3364,6 +4012,21 @@ sail smmwb: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: smmwb.u
+llvm: smmwb.u "rd" "rs1" "rs2"
+sail: smmwb.u "rd" "rs1" "rs2"
+smmwb.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm smmwb.u: mayLoad = false
+sail smmwb.u: mayLoad = false
+llvm smmwb.u: mayStore = false
+sail smmwb.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: smmwt
 llvm: smmwt "rd" "rs1" "rs2"
 sail: smmwt "rd" "rs1" "rs2"
@@ -3376,6 +4039,21 @@ llvm smmwt: mayLoad = false
 sail smmwt: mayLoad = false
 llvm smmwt: mayStore = false
 sail smmwt: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: smmwt.u
+llvm: smmwt.u "rd" "rs1" "rs2"
+sail: smmwt.u "rd" "rs1" "rs2"
+smmwt.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm smmwt.u: mayLoad = false
+sail smmwt.u: mayLoad = false
+llvm smmwt.u: mayStore = false
+sail smmwt.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3541,6 +4219,21 @@ sail smxds32: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: sra.u
+llvm: sra.u "rd" "rs1" "rs2"
+sail: sra.u "rd" "rs1" "rs2"
+sra.u: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm sra.u: mayLoad = false
+sail sra.u: mayLoad = false
+llvm sra.u: mayStore = false
+sail sra.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: sra16
 llvm: sra16 "rd" "rs1" "rs2"
 sail: sra16 "rd" "rs1" "rs2"
@@ -3552,6 +4245,20 @@ llvm sra16: mayLoad = false
 sail sra16: mayLoad = false
 llvm sra16: mayStore = false
 sail sra16: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: sra16.u
+llvm: sra16.u "rd" "rs1" "rs2"
+sail: sra16.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm sra16.u: mayLoad = false
+sail sra16.u: mayLoad = false
+llvm sra16.u: mayStore = false
+sail sra16.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3569,6 +4276,20 @@ sail sra32: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: sra32.u
+llvm: sra32.u "rd" "rs1" "rs2"
+sail: sra32.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm sra32.u: mayLoad = false
+sail sra32.u: mayLoad = false
+llvm sra32.u: mayStore = false
+sail sra32.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: sra8
 llvm: sra8 "rd" "rs1" "rs2"
 sail: sra8 "rd" "rs1" "rs2"
@@ -3580,6 +4301,34 @@ llvm sra8: mayLoad = false
 sail sra8: mayLoad = false
 llvm sra8: mayStore = false
 sail sra8: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: sra8.u
+llvm: sra8.u "rd" "rs1" "rs2"
+sail: sra8.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm sra8.u: mayLoad = false
+sail sra8.u: mayLoad = false
+llvm sra8.u: mayStore = false
+sail sra8.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: srai.u
+llvm: srai.u "rd" "rs1" "shamt"
+sail: srai.u "rd" "rs1" "imm6"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm6) (1, rs1)
+llvm srai.u: mayLoad = false
+sail srai.u: mayLoad = false
+llvm srai.u: mayStore = false
+sail srai.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3599,6 +4348,20 @@ sail srai16: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: srai16.u
+llvm: srai16.u "rd" "rs1" "shamt"
+sail: srai16.u "rd" "rs1" "imm4"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm4) (1, rs1)
+llvm srai16.u: mayLoad = false
+sail srai16.u: mayLoad = false
+llvm srai16.u: mayStore = false
+sail srai16.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: srai32
 llvm: srai32 "rd" "rs1" "shamt"
 sail: srai32 "rd" "rs1" "imm5"
@@ -3612,6 +4375,20 @@ llvm srai32: mayLoad = false
 sail srai32: mayLoad = false
 llvm srai32: mayStore = false
 sail srai32: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: srai32.u
+llvm: srai32.u "rd" "rs1" "shamt"
+sail: srai32.u "rd" "rs1" "imm5"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm5) (1, rs1)
+llvm srai32.u: mayLoad = false
+sail srai32.u: mayLoad = false
+llvm srai32.u: mayStore = false
+sail srai32.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3631,6 +4408,34 @@ sail srai8: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: srai8.u
+llvm: srai8.u "rd" "rs1" "shamt"
+sail: srai8.u "rd" "rs1" "imm3"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm3) (1, rs1)
+llvm srai8.u: mayLoad = false
+sail srai8.u: mayLoad = false
+llvm srai8.u: mayStore = false
+sail srai8.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: sraiw.u
+llvm: sraiw.u "rd" "rs1" "shamt"
+sail: sraiw.u "rd" "rs1" "imm5"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm5) (1, rs1)
+llvm sraiw.u: mayLoad = false
+sail sraiw.u: mayLoad = false
+llvm sraiw.u: mayStore = false
+sail sraiw.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: srl16
 llvm: srl16 "rd" "rs1" "rs2"
 sail: srl16 "rd" "rs1" "rs2"
@@ -3642,6 +4447,20 @@ llvm srl16: mayLoad = false
 sail srl16: mayLoad = false
 llvm srl16: mayStore = false
 sail srl16: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: srl16.u
+llvm: srl16.u "rd" "rs1" "rs2"
+sail: srl16.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm srl16.u: mayLoad = false
+sail srl16.u: mayLoad = false
+llvm srl16.u: mayStore = false
+sail srl16.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3659,6 +4478,20 @@ sail srl32: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: srl32.u
+llvm: srl32.u "rd" "rs1" "rs2"
+sail: srl32.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm srl32.u: mayLoad = false
+sail srl32.u: mayLoad = false
+llvm srl32.u: mayStore = false
+sail srl32.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: srl8
 llvm: srl8 "rd" "rs1" "rs2"
 sail: srl8 "rd" "rs1" "rs2"
@@ -3670,6 +4503,20 @@ llvm srl8: mayLoad = false
 sail srl8: mayLoad = false
 llvm srl8: mayStore = false
 sail srl8: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: srl8.u
+llvm: srl8.u "rd" "rs1" "rs2"
+sail: srl8.u "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm srl8.u: mayLoad = false
+sail srl8.u: mayLoad = false
+llvm srl8.u: mayStore = false
+sail srl8.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -3689,6 +4536,20 @@ sail srli16: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: srli16.u
+llvm: srli16.u "rd" "rs1" "shamt"
+sail: srli16.u "rd" "rs1" "imm4"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm4) (1, rs1)
+llvm srli16.u: mayLoad = false
+sail srli16.u: mayLoad = false
+llvm srli16.u: mayStore = false
+sail srli16.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: srli32
 llvm: srli32 "rd" "rs1" "shamt"
 sail: srli32 "rd" "rs1" "imm5"
@@ -3705,6 +4566,20 @@ sail srli32: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
+Report: srli32.u
+llvm: srli32.u "rd" "rs1" "shamt"
+sail: srli32.u "rd" "rs1" "imm5"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm5) (1, rs1)
+llvm srli32.u: mayLoad = false
+sail srli32.u: mayLoad = false
+llvm srli32.u: mayStore = false
+sail srli32.u: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
 Report: srli8
 llvm: srli8 "rd" "rs1" "shamt"
 sail: srli8 "rd" "rs1" "imm3"
@@ -3718,6 +4593,20 @@ llvm srli8: mayLoad = false
 sail srli8: mayLoad = false
 llvm srli8: mayStore = false
 sail srli8: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: srli8.u
+llvm: srli8.u "rd" "rs1" "shamt"
+sail: srli8.u "rd" "rs1" "imm3"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm3) (1, rs1)
+llvm srli8.u: mayLoad = false
+sail srli8.u: mayLoad = false
+llvm srli8.u: mayStore = false
+sail srli8.u: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
@@ -4328,6 +5217,20 @@ sail ukadd8: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
+Report: ukaddh
+llvm: ukaddh "rd" "rs1" "rs2"
+sail: ukaddh "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm ukaddh: mayLoad = false
+sail ukaddh: mayLoad = false
+llvm ukaddh: mayStore = false
+sail ukaddh: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
 Report: ukaddw
 llvm: ukaddw "rd" "rs1" "rs2"
 sail: ukaddw "rd" "rs1" "rs2"
@@ -4540,6 +5443,35 @@ llvm uksub8: mayLoad = false
 sail uksub8: mayLoad = false
 llvm uksub8: mayStore = false
 sail uksub8: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: uksubh
+llvm: uksubh "rd" "rs1" "rs2"
+sail: uksubh "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm uksubh: mayLoad = false
+sail uksubh: mayLoad = false
+llvm uksubh: mayStore = false
+sail uksubh: mayStore = false
+sail outs csr: vxsat
+sail ins csr: 
+
+Report: uksubw
+llvm: uksubw "rd" "rs1" "rs2"
+sail: uksubw "rd" "rs1" "rs2"
+uksubw: Different number of inputs
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1) (0, rd)
+llvm uksubw: mayLoad = false
+sail uksubw: mayLoad = false
+llvm uksubw: mayStore = false
+sail uksubw: mayStore = false
 sail outs csr: vxsat
 sail ins csr: 
 
@@ -13792,6 +14724,34 @@ llvm ursubw: mayLoad = false
 sail ursubw: mayLoad = false
 llvm ursubw: mayStore = false
 sail ursubw: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: wext
+llvm: wext "rd" "rs1" "rs2"
+sail: wext "rd" "rs1" "rs2"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, rs2) (1, rs1)
+sail ins: (2, rs2) (1, rs1)
+llvm wext: mayLoad = false
+sail wext: mayLoad = false
+llvm wext: mayStore = false
+sail wext: mayStore = false
+sail outs csr: 
+sail ins csr: 
+
+Report: wexti
+llvm: wexti "rd" "rs1" "shamt"
+sail: wexti "rd" "rs1" "imm5"
+llvm outs: (0, rd)
+sail outs: (0, rd)
+llvm ins: (2, shamt) (1, rs1)
+sail ins: (2, imm5) (1, rs1)
+llvm wexti: mayLoad = false
+sail wexti: mayLoad = false
+llvm wexti: mayStore = false
+sail wexti: mayStore = false
 sail outs csr: 
 sail ins csr: 
 
