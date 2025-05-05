@@ -4,6 +4,7 @@
 ( select(.value | type == "object")
 | select(.value."Pseudo" == null)
 | select(.value."!anonymous" != true)
+| select(any(.value."!locs"[]; contains("RISCVInstrInfoP.td")))
 | select(any(.value."!superclasses"[]; . != "Instruction"))
 | select(all(.value."!superclasses"[]; . != "Pseudo" and . != "StandardPseudoInstruction"))
 | select(.value."isCodeGenOnly" != 1)
