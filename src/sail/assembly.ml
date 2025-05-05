@@ -54,6 +54,15 @@ let get_info (ast : 'a Ast_defs.ast) =
          defs
   in
   let collect_mnemonics substs =
+    let handle_str str =
+      (* typo *)
+      if str = "KMABBT32" then "kmabt32"
+      else
+        String.map
+          (fun c -> if c = '_' then '.' else Char.lowercase_ascii c)
+          str
+        |> String.trim
+    in
     let eval_mapping map_id arg =
       match Hashtbl.find mappings map_id with
       | Typ_aux (Typ_bidir (ltyp, _), _), maps ->
@@ -74,8 +83,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                      | ( MPat_pat lhs,
                          MPat_pat (MP_aux (MP_lit (L_aux (L_string str, _)), _))
                        ) ->
-                         if mpat_eq_exp lhs arg then
-                           Some (String.lowercase_ascii str)
+                         if mpat_eq_exp lhs arg then Some (handle_str str)
                          else None
                      | _ -> None
                    in
@@ -103,7 +111,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                 let accu =
                   match a with
                   | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
-                      my_concat accu [ str ]
+                      my_concat accu [ handle_str str ]
                   | MP_aux
                       ( MP_app
                           ( Id_aux (Id map_id, _),
@@ -146,7 +154,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                                                           _ )),
                                                     _ ) ),
                                             _ ) ->
-                                          String.lowercase_ascii str
+                                          handle_str str
                                       | _ -> "")
                                     maps
                                 in
@@ -211,7 +219,7 @@ let get_info (ast : 'a Ast_defs.ast) =
             tail []
         in
         (mnemonics, operands, !imms)
-    | MP_lit (L_aux (L_string s, _)) -> ([ s ], [], [])
+    | MP_lit (L_aux (L_string s, _)) -> ([ handle_str s ], [], [])
     | _ -> assert false
   in
   let collected = FuncTable.create 1000 in
