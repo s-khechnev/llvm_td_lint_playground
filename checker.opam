@@ -10,7 +10,7 @@ depends: [
   "bisect_ppx"
   "linenoise"
   "ocamlformat" {= "0.26.2"}
-  "sail" {= "0.17.1"}
+  "sail" {= "0.16"}
   "odoc" {with-doc}
 ]
 build: [

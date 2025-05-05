@@ -5,7 +5,7 @@
 
 (rule
  (targets ./RISCV.td.json)
- (deps llvm19/RISCV.tar.xz)
+ (deps llvm_p_ext/RISCV.tar.xz)
  (action
   (run tar -xvf %{deps})))
 
