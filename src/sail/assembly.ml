@@ -204,7 +204,7 @@ let get_info (ast : 'a Ast_defs.ast) =
               | _ -> acc)
             tail []
         in
-        (mnemonics, operands)
+        (mnemonics, operands, !imms)
     | MP_lit (L_aux (L_string s, _)) -> ([ handle_str s ], [], [])
     | _ -> assert false
   in
