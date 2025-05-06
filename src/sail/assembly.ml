@@ -141,6 +141,7 @@ let get_info (ast : 'a Ast_defs.ast) =
           in
           try get_mnemonics [] xs with ReachSpc result -> result
         in
+        let imms = ref [] in
         let operands =
           List.fold_right
             (fun x acc ->
@@ -151,7 +152,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                           ( Id
                               ( "reg_name" | "creg_name" | "vreg_name"
                               | "freg_or_reg_name" | "freg_name"
-                              | "csr_name_map" | "fence_bits" ),
+                              | "csr_name_map" ),
                             _ ),
                         [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ] ),
                     _ ) ->
@@ -163,7 +164,9 @@ let get_info (ast : 'a Ast_defs.ast) =
                     _ )
                 when String.starts_with ~prefix:"hex_bits" m_id
                      || String.equal "frm_mnemonic" m_id
-                     || String.equal "maybe_vmask" m_id ->
+                     || String.equal "maybe_vmask" m_id
+                     || String.equal "fence_bits" m_id ->
+                  imms := imm :: !imms;
                   imm :: acc
               | MP_aux
                   ( MP_app
@@ -182,13 +185,14 @@ let get_info (ast : 'a Ast_defs.ast) =
                            | _ -> None)
                          xs
                   in
+                  imms := imm :: !imms;
                   imm :: acc
               | MP_aux (MP_lit (L_aux (L_string "v0", _)), _) -> "v0" :: acc
               | _ -> acc)
             tail []
         in
-        (mnemonics, operands)
-    | MP_lit (L_aux (L_string s, _)) -> ([ s ], [])
+        (mnemonics, operands, !imms)
+    | MP_lit (L_aux (L_string s, _)) -> ([ s ], [], [])
     | _ -> assert false
   in
   let collected = FuncTable.create 1000 in

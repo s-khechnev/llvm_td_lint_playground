@@ -254,38 +254,25 @@ let dump_execute ast env effect_info =
       printf "@[let ans = Hashtbl.create 1000 in@]@ ";
 
       assemblies_info
-      |> FuncTable.iter (fun func (mnemonics, operands) ->
+      |> FuncTable.iter (fun func (mnemonics, operands, imms) ->
              let ins =
-               let imm_ins =
-                 match
-                   List.find_all
-                     (fun id ->
-                       String.ends_with ~suffix:"imm" id
-                       || List.mem id
-                            (* arguments names of imm *)
-                            [
-                              "nzi";
-                              "bs";
-                              "shamt";
-                              "rnum";
-                              "rm";
-                              "constantidx";
-                              "vm";
-                              "pred";
-                              "succ";
-                            ])
-                     operands
-                 with
-                 | xs when not (String.equal "VMVRTYPE" (Func.get_id func)) ->
-                     xs
-                 | _ -> []
+               let imms =
+                 (* typo in sail *)
+                 if
+                   List.exists
+                     (fun s ->
+                       List.mem s
+                         [ "vslideup.vi"; "vslidedown.vi"; "vrgather.vi" ])
+                     mnemonics
+                 then "simm" :: imms
+                 else imms
                in
                let regs_ins =
                  match FuncTable.find_opt ins func with
                  | Some ins -> ins
                  | None -> []
                in
-               regs_ins @ imm_ins
+               regs_ins @ imms
              in
              let outs =
                match FuncTable.find_opt outs func with

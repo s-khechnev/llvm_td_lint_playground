@@ -1974,7 +1974,7 @@ Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: 
+sail ins: (2, rs1)
 
 Report: csrrs
 llvm: csrrs "rd" "imm12" "rs1"
@@ -1992,7 +1992,7 @@ Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: 
+sail ins: (2, rs1)
 
 Report: csrrw
 llvm: csrrw "rd" "imm12" "rs1"
@@ -2010,7 +2010,7 @@ Different number of inputs
 llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs1) (1, imm12)
-sail ins: 
+sail ins: (2, rs1)
 
 Report: ctz
 llvm: ctz "rd" "rs1"
