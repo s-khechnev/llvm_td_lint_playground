@@ -1,6 +1,6 @@
 ../../sail-riscv-p/model/prelude.sail
 ../../sail-riscv-p/model/prelude_mapping.sail
-../../sail-riscv-p/model/riscv_xlen64.sail
+../../sail-riscv-p/model/riscv_xlen32.sail
 ../../sail-riscv-p/model/riscv_flen_D.sail
 ../../sail-riscv-p/model/prelude_mem_metadata.sail
 ../../sail-riscv-p/model/prelude_mem.sail
@@ -37,9 +37,8 @@
 ../../sail-riscv-p/model/riscv_ptw.sail
 ../../sail-riscv-p/model/riscv_vmem_common.sail
 ../../sail-riscv-p/model/riscv_vmem_tlb.sail
-../../sail-riscv-p/model/riscv_vmem_sv39.sail
-../../sail-riscv-p/model/riscv_vmem_sv48.sail
-../../sail-riscv-p/model/riscv_vmem_rv64.sail
+../../sail-riscv-p/model/riscv_vmem_sv32.sail
+../../sail-riscv-p/model/riscv_vmem_rv32.sail
 ../../sail-riscv-p/model/riscv_types_kext.sail
 ../../sail-riscv-p/model/riscv_insts_begin.sail
 ../../sail-riscv-p/model/riscv_insts_base.sail
@@ -58,7 +57,6 @@
 ../../sail-riscv-p/model/riscv_insts_pext_partial_SIMD.sail
 ../../sail-riscv-p/model/riscv_insts_pext_non_SIMD.sail
 ../../sail-riscv-p/model/riscv_insts_pext_64bits_computation.sail
-../../sail-riscv-p/model/riscv_insts_pext_RV64_only.sail
 ../../sail-riscv-p/model/riscv_insts_zba.sail
 ../../sail-riscv-p/model/riscv_insts_zbb.sail
 ../../sail-riscv-p/model/riscv_insts_zbc.sail
@@ -75,4 +73,3 @@
 ../../sail-riscv-p/model/riscv_decode_ext.sail
 ../../sail-riscv-p/model/riscv_fetch.sail
 ../../sail-riscv-p/model/riscv_step.sail
-../../sail-riscv-p/model/riscv_analysis.sail
