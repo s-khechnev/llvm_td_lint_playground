@@ -494,11 +494,9 @@ sail ins csr:
 Report: kdmabb
 llvm: kdmabb "rd" "rs1" "rs2"
 sail: kdmabb "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmabb: mayLoad = false
 sail kdmabb: mayLoad = false
@@ -510,11 +508,9 @@ sail ins csr:
 Report: kdmabb16
 llvm: kdmabb16 "rd" "rs1" "rs2"
 sail: kdmabb16 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmabb16: mayLoad = false
 sail kdmabb16: mayLoad = false
@@ -526,11 +522,9 @@ sail ins csr:
 Report: kdmabt
 llvm: kdmabt "rd" "rs1" "rs2"
 sail: kdmabt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmabt: mayLoad = false
 sail kdmabt: mayLoad = false
@@ -542,11 +536,9 @@ sail ins csr:
 Report: kdmabt16
 llvm: kdmabt16 "rd" "rs1" "rs2"
 sail: kdmabt16 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmabt16: mayLoad = false
 sail kdmabt16: mayLoad = false
@@ -558,11 +550,9 @@ sail ins csr:
 Report: kdmatt
 llvm: kdmatt "rd" "rs1" "rs2"
 sail: kdmatt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmatt: mayLoad = false
 sail kdmatt: mayLoad = false
@@ -574,11 +564,9 @@ sail ins csr:
 Report: kdmatt16
 llvm: kdmatt16 "rd" "rs1" "rs2"
 sail: kdmatt16 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kdmatt16: mayLoad = false
 sail kdmatt16: mayLoad = false
@@ -823,11 +811,9 @@ sail ins csr:
 Report: kmabb
 llvm: kmabb "rd" "rs1" "rs2"
 sail: kmabb "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmabb: mayLoad = false
 sail kmabb: mayLoad = false
@@ -839,11 +825,9 @@ sail ins csr:
 Report: kmabb32
 llvm: kmabb32 "rd" "rs1" "rs2"
 sail: kmabb32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmabb32: mayLoad = false
 sail kmabb32: mayLoad = false
@@ -855,11 +839,9 @@ sail ins csr:
 Report: kmabt
 llvm: kmabt "rd" "rs1" "rs2"
 sail: kmabt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmabt: mayLoad = false
 sail kmabt: mayLoad = false
@@ -871,11 +853,9 @@ sail ins csr:
 Report: kmabt32
 llvm: kmabt32 "rd" "rs1" "rs2"
 sail: kmabt32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmabt32: mayLoad = false
 sail kmabt32: mayLoad = false
@@ -887,11 +867,9 @@ sail ins csr:
 Report: kmada
 llvm: kmada "rd" "rs1" "rs2"
 sail: kmada "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmada: mayLoad = false
 sail kmada: mayLoad = false
@@ -903,11 +881,9 @@ sail ins csr:
 Report: kmadrs
 llvm: kmadrs "rd" "rs1" "rs2"
 sail: kmadrs "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmadrs: mayLoad = false
 sail kmadrs: mayLoad = false
@@ -919,11 +895,9 @@ sail ins csr:
 Report: kmadrs32
 llvm: kmadrs32 "rd" "rs1" "rs2"
 sail: kmadrs32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmadrs32: mayLoad = false
 sail kmadrs32: mayLoad = false
@@ -935,11 +909,9 @@ sail ins csr:
 Report: kmads
 llvm: kmads "rd" "rs1" "rs2"
 sail: kmads "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmads: mayLoad = false
 sail kmads: mayLoad = false
@@ -951,11 +923,9 @@ sail ins csr:
 Report: kmads32
 llvm: kmads32 "rd" "rs1" "rs2"
 sail: kmads32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmads32: mayLoad = false
 sail kmads32: mayLoad = false
@@ -967,11 +937,9 @@ sail ins csr:
 Report: kmar64
 llvm: kmar64 "rd" "rs1" "rs2"
 sail: kmar64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmar64: mayLoad = false
 sail kmar64: mayLoad = false
@@ -983,11 +951,9 @@ sail ins csr:
 Report: kmatt
 llvm: kmatt "rd" "rs1" "rs2"
 sail: kmatt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmatt: mayLoad = false
 sail kmatt: mayLoad = false
@@ -999,11 +965,9 @@ sail ins csr:
 Report: kmatt32
 llvm: kmatt32 "rd" "rs1" "rs2"
 sail: kmatt32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmatt32: mayLoad = false
 sail kmatt32: mayLoad = false
@@ -1015,11 +979,9 @@ sail ins csr:
 Report: kmaxda
 llvm: kmaxda "rd" "rs1" "rs2"
 sail: kmaxda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmaxda: mayLoad = false
 sail kmaxda: mayLoad = false
@@ -1031,11 +993,9 @@ sail ins csr:
 Report: kmaxda32
 llvm: kmaxda32 "rd" "rs1" "rs2"
 sail: kmaxda32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmaxda32: mayLoad = false
 sail kmaxda32: mayLoad = false
@@ -1047,11 +1007,9 @@ sail ins csr:
 Report: kmaxds
 llvm: kmaxds "rd" "rs1" "rs2"
 sail: kmaxds "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmaxds: mayLoad = false
 sail kmaxds: mayLoad = false
@@ -1063,11 +1021,9 @@ sail ins csr:
 Report: kmaxds32
 llvm: kmaxds32 "rd" "rs1" "rs2"
 sail: kmaxds32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmaxds32: mayLoad = false
 sail kmaxds32: mayLoad = false
@@ -1108,11 +1064,9 @@ sail ins csr:
 Report: kmmac
 llvm: kmmac "rd" "rs1" "rs2"
 sail: kmmac "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmac: mayLoad = false
 sail kmmac: mayLoad = false
@@ -1124,11 +1078,9 @@ sail ins csr:
 Report: kmmac.u
 llvm: kmmac.u "rd" "rs1" "rs2"
 sail: kmmac.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmac.u: mayLoad = false
 sail kmmac.u: mayLoad = false
@@ -1140,11 +1092,9 @@ sail ins csr:
 Report: kmmawb
 llvm: kmmawb "rd" "rs1" "rs2"
 sail: kmmawb "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawb: mayLoad = false
 sail kmmawb: mayLoad = false
@@ -1156,11 +1106,9 @@ sail ins csr:
 Report: kmmawb.u
 llvm: kmmawb.u "rd" "rs1" "rs2"
 sail: kmmawb.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawb.u: mayLoad = false
 sail kmmawb.u: mayLoad = false
@@ -1172,11 +1120,9 @@ sail ins csr:
 Report: kmmawb2
 llvm: kmmawb2 "rd" "rs1" "rs2"
 sail: kmmawb2 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawb2: mayLoad = false
 sail kmmawb2: mayLoad = false
@@ -1188,11 +1134,9 @@ sail ins csr:
 Report: kmmawb2.u
 llvm: kmmawb2.u "rd" "rs1" "rs2"
 sail: kmmawb2.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawb2.u: mayLoad = false
 sail kmmawb2.u: mayLoad = false
@@ -1204,11 +1148,9 @@ sail ins csr:
 Report: kmmawt
 llvm: kmmawt "rd" "rs1" "rs2"
 sail: kmmawt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawt: mayLoad = false
 sail kmmawt: mayLoad = false
@@ -1220,11 +1162,9 @@ sail ins csr:
 Report: kmmawt.u
 llvm: kmmawt.u "rd" "rs1" "rs2"
 sail: kmmawt.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawt.u: mayLoad = false
 sail kmmawt.u: mayLoad = false
@@ -1236,11 +1176,9 @@ sail ins csr:
 Report: kmmawt2
 llvm: kmmawt2 "rd" "rs1" "rs2"
 sail: kmmawt2 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawt2: mayLoad = false
 sail kmmawt2: mayLoad = false
@@ -1252,11 +1190,9 @@ sail ins csr:
 Report: kmmawt2.u
 llvm: kmmawt2.u "rd" "rs1" "rs2"
 sail: kmmawt2.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmawt2.u: mayLoad = false
 sail kmmawt2.u: mayLoad = false
@@ -1268,11 +1204,9 @@ sail ins csr:
 Report: kmmsb
 llvm: kmmsb "rd" "rs1" "rs2"
 sail: kmmsb "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmsb: mayLoad = false
 sail kmmsb: mayLoad = false
@@ -1284,11 +1218,9 @@ sail ins csr:
 Report: kmmsb.u
 llvm: kmmsb.u "rd" "rs1" "rs2"
 sail: kmmsb.u "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmmsb.u: mayLoad = false
 sail kmmsb.u: mayLoad = false
@@ -1360,11 +1292,9 @@ sail ins csr:
 Report: kmsda
 llvm: kmsda "rd" "rs1" "rs2"
 sail: kmsda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmsda: mayLoad = false
 sail kmsda: mayLoad = false
@@ -1376,11 +1306,9 @@ sail ins csr:
 Report: kmsda32
 llvm: kmsda32 "rd" "rs1" "rs2"
 sail: kmsda32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmsda32: mayLoad = false
 sail kmsda32: mayLoad = false
@@ -1392,11 +1320,9 @@ sail ins csr:
 Report: kmsr64
 llvm: kmsr64 "rd" "rs1" "rs2"
 sail: kmsr64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmsr64: mayLoad = false
 sail kmsr64: mayLoad = false
@@ -1408,11 +1334,9 @@ sail ins csr:
 Report: kmsxda
 llvm: kmsxda "rd" "rs1" "rs2"
 sail: kmsxda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmsxda: mayLoad = false
 sail kmsxda: mayLoad = false
@@ -1424,11 +1348,9 @@ sail ins csr:
 Report: kmsxda32
 llvm: kmsxda32 "rd" "rs1" "rs2"
 sail: kmsxda32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm kmsxda32: mayLoad = false
 sail kmsxda32: mayLoad = false
@@ -1867,11 +1789,9 @@ sail ins csr:
 Report: maddr32
 llvm: maddr32 "rd" "rs1" "rs2"
 sail: maddr32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm maddr32: mayLoad = false
 sail maddr32: mayLoad = false
@@ -1911,11 +1831,9 @@ sail ins csr:
 Report: msubr32
 llvm: msubr32 "rd" "rs1" "rs2"
 sail: msubr32 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm msubr32: mayLoad = false
 sail msubr32: mayLoad = false
@@ -1969,11 +1887,9 @@ sail ins csr:
 Report: pbsada
 llvm: pbsada "rd" "rs1" "rs2"
 sail: pbsada "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm pbsada: mayLoad = false
 sail pbsada: mayLoad = false
@@ -2523,11 +2439,9 @@ sail ins csr:
 Report: smalbb
 llvm: smalbb "rd" "rs1" "rs2"
 sail: smalbb "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalbb: mayLoad = false
 sail smalbb: mayLoad = false
@@ -2539,11 +2453,9 @@ sail ins csr:
 Report: smalbt
 llvm: smalbt "rd" "rs1" "rs2"
 sail: smalbt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalbt: mayLoad = false
 sail smalbt: mayLoad = false
@@ -2555,11 +2467,9 @@ sail ins csr:
 Report: smalda
 llvm: smalda "rd" "rs1" "rs2"
 sail: smalda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalda: mayLoad = false
 sail smalda: mayLoad = false
@@ -2571,11 +2481,9 @@ sail ins csr:
 Report: smaldrs
 llvm: smaldrs "rd" "rs1" "rs2"
 sail: smaldrs "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smaldrs: mayLoad = false
 sail smaldrs: mayLoad = false
@@ -2587,11 +2495,9 @@ sail ins csr:
 Report: smalds
 llvm: smalds "rd" "rs1" "rs2"
 sail: smalds "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalds: mayLoad = false
 sail smalds: mayLoad = false
@@ -2603,11 +2509,9 @@ sail ins csr:
 Report: smaltt
 llvm: smaltt "rd" "rs1" "rs2"
 sail: smaltt "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smaltt: mayLoad = false
 sail smaltt: mayLoad = false
@@ -2619,11 +2523,9 @@ sail ins csr:
 Report: smalxda
 llvm: smalxda "rd" "rs1" "rs2"
 sail: smalxda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalxda: mayLoad = false
 sail smalxda: mayLoad = false
@@ -2635,11 +2537,9 @@ sail ins csr:
 Report: smalxds
 llvm: smalxds "rd" "rs1" "rs2"
 sail: smalxds "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smalxds: mayLoad = false
 sail smalxds: mayLoad = false
@@ -2651,11 +2551,9 @@ sail ins csr:
 Report: smaqa
 llvm: smaqa "rd" "rs1" "rs2"
 sail: smaqa "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smaqa: mayLoad = false
 sail smaqa: mayLoad = false
@@ -2667,11 +2565,9 @@ sail ins csr:
 Report: smaqa.su
 llvm: smaqa.su "rd" "rs1" "rs2"
 sail: smaqa.su "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smaqa.su: mayLoad = false
 sail smaqa.su: mayLoad = false
@@ -2683,11 +2579,9 @@ sail ins csr:
 Report: smar64
 llvm: smar64 "rd" "rs1" "rs2"
 sail: smar64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smar64: mayLoad = false
 sail smar64: mayLoad = false
@@ -2975,11 +2869,9 @@ sail ins csr:
 Report: smslda
 llvm: smslda "rd" "rs1" "rs2"
 sail: smslda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smslda: mayLoad = false
 sail smslda: mayLoad = false
@@ -2991,11 +2883,9 @@ sail ins csr:
 Report: smslxda
 llvm: smslxda "rd" "rs1" "rs2"
 sail: smslxda "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smslxda: mayLoad = false
 sail smslxda: mayLoad = false
@@ -3007,11 +2897,9 @@ sail ins csr:
 Report: smsr64
 llvm: smsr64 "rd" "rs1" "rs2"
 sail: smsr64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm smsr64: mayLoad = false
 sail smsr64: mayLoad = false
@@ -3951,11 +3839,9 @@ sail ins csr:
 Report: ukmar64
 llvm: ukmar64 "rd" "rs1" "rs2"
 sail: ukmar64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm ukmar64: mayLoad = false
 sail ukmar64: mayLoad = false
@@ -3967,11 +3853,9 @@ sail ins csr:
 Report: ukmsr64
 llvm: ukmsr64 "rd" "rs1" "rs2"
 sail: ukmsr64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm ukmsr64: mayLoad = false
 sail ukmsr64: mayLoad = false
@@ -4124,11 +4008,9 @@ sail ins csr:
 Report: umaqa
 llvm: umaqa "rd" "rs1" "rs2"
 sail: umaqa "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm umaqa: mayLoad = false
 sail umaqa: mayLoad = false
@@ -4140,11 +4022,9 @@ sail ins csr:
 Report: umar64
 llvm: umar64 "rd" "rs1" "rs2"
 sail: umar64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm umar64: mayLoad = false
 sail umar64: mayLoad = false
@@ -4240,11 +4120,9 @@ sail ins csr:
 Report: umsr64
 llvm: umsr64 "rd" "rs1" "rs2"
 sail: umsr64 "rd" "rs1" "rs2"
-llvm: rs3 - implicit in
-Different inputs (-1, 0)
 llvm outs: (0, rd)
 sail outs: (0, rd)
-llvm ins: (2, rs2) (1, rs1) (-1, rs3)
+llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
 llvm umsr64: mayLoad = false
 sail umsr64: mayLoad = false

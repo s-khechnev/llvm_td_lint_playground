@@ -36,6 +36,20 @@ let extract_operands_info (j : (string * Yojson.Safe.t) list) =
         | _ -> [])
     | _ -> assert false
   in
+  let fconstraint =
+    match List.assoc "Constraints" j with
+    | `String str ->
+        let re =
+          Str.regexp
+            "^[ \t]*\\$\\([^ \t=]+\\)[ \t]*=[ \t]*\\$\\([^ \t=]+\\)[ \t]*$"
+        in
+        if Str.string_match re str 0 then
+          let lhs = Str.matched_group 1 str in
+          let rhs = Str.matched_group 2 str in
+          fun s -> if s = lhs && not (List.mem lhs operands) then rhs else s
+        else Fun.id
+    | _ -> assert false
+  in
   let exract_operands j =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
@@ -46,6 +60,7 @@ let extract_operands_info (j : (string * Yojson.Safe.t) list) =
                (Yojson.Safe.pretty_print ~std:false)
                other;
              assert false)
+    |> List.map fconstraint
   in
   let in_operands = exract_operands (List.assoc "InOperandList" j) in
   let out_operands = exract_operands (List.assoc "OutOperandList" j) in
