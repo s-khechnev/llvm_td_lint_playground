@@ -156,6 +156,14 @@ let dump_execute ast env effect_info =
                     let pargs = pat_to_lst parg in
                     let str_args = pats_to_strs pargs in
                     let pargsi = List.mapi (fun i p -> (i, p)) pargs in
+                    let fbody, _ =
+                      let ref_vars =
+                        Constant_propagation.referenced_vars fbody
+                      in
+                      myconst_prop ref_vars
+                        (Bindings.empty, KBindings.empty)
+                        Bindings.empty fbody
+                    in
                     match
                       (Spec.get_speced_args pargsi, Spec.get_args_to_spec pargsi)
                     with
@@ -199,6 +207,14 @@ let dump_execute ast env effect_info =
                   when String.starts_with path ~prefix:"../../sail-riscv-p"
                        && id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
+                    let body, _ =
+                      let ref_vars =
+                        Constant_propagation.referenced_vars body
+                      in
+                      myconst_prop ref_vars
+                        (Bindings.empty, KBindings.empty)
+                        Bindings.empty body
+                    in
                     FuncTable.add funcs (F_usual id) (args, body)
                 | _ -> ())
               funcls

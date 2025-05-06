@@ -2419,16 +2419,10 @@ sail ins csr:
 Report: smal
 llvm: smal "rd" "rs1" "rs2"
 sail: smal "rd" "rs1" "rs2"
-sail: rs11 - implicit in
-sail: rs10 - implicit in
-sail: rd0 - implicit out
-sail: rd1 - implicit out
-Different number of outs
-Different number of inputs
 llvm outs: (0, rd)
-sail outs: (0, rd) (-1, rd0) (-1, rd1)
+sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
-sail ins: (2, rs2) (1, rs1) (-1, rs11) (-1, rs10)
+sail ins: (2, rs2) (1, rs1)
 llvm smal: mayLoad = false
 sail smal: mayLoad = false
 llvm smal: mayStore = false
