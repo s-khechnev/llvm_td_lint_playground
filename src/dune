@@ -6,24 +6,23 @@
 
 (executable
  (name comparator)
- (modules comparator llvm_info sail_info)
+ (modules comparator llvm_info sail_info_RV32 sail_info_RV64)
  (libraries checker_core))
 
-(rule
- (target llvm_info.ml)
- (deps ./llvm/llvm_info.ml)
+(copy_files
  (mode
   (promote (until-clean)))
- (action
-  (run cp %{deps} %{target})))
+ (files ./llvm/llvm_info.ml))
 
-(rule
- (target sail_info.ml)
- (deps ./sail/sail_info.ml)
+(copy_files
  (mode
   (promote (until-clean)))
- (action
-  (run cp %{deps} %{target})))
+ (files ./sail/sail_info_RV32.ml))
+
+(copy_files
+ (mode
+  (promote (until-clean)))
+ (files ./sail/sail_info_RV64.ml))
 
 (rule
  (target report)

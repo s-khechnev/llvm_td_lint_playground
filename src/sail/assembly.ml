@@ -4,7 +4,7 @@ open Spec
 open Type_check
 open Ast_util
 
-(* analyze assembly clauses and returns mnemonics and operands of instructions *)
+(* analyze assembly clauses and returns mnemonics, operands and imms of instructions *)
 let get_info (ast : 'a Ast_defs.ast) =
   let defs = ast.defs in
   let mappings : (string, typ * Type_check.tannot mapcl list) Hashtbl.t =
@@ -98,46 +98,61 @@ let get_info (ast : 'a Ast_defs.ast) =
           let rec get_mnemonics accu = function
             | [] -> (accu, [])
             | a :: tl ->
-                get_mnemonics
-                  (match a with
+                let accu =
+                  match a with
                   | MP_aux (MP_lit (L_aux (L_string str, _)), _) ->
                       my_concat accu [ str ]
                   | MP_aux
                       ( MP_app
-                          (Id_aux (Id map_id, _), [ MP_aux (MP_id arg_id, _) ]),
+                          ( Id_aux (Id map_id, _),
+                            [ MP_aux (MP_id arg_id, annot) ] ),
                         _ ) -> (
-                      match
-                        List.find_opt
-                          (fun (id, _) -> Id.compare arg_id id = 0)
-                          substs
-                      with
-                      | Some (_, arg_value) ->
-                          my_concat accu [ eval_mapping map_id arg_value ]
-                      | None ->
-                          let strs =
-                            let _, maps = Hashtbl.find mappings map_id in
-                            List.map
-                              (function
-                                | MCL_aux
-                                    ( MCL_bidir
-                                        ( _,
-                                          MPat_aux
-                                            ( MPat_pat
-                                                (MP_aux
-                                                  ( MP_lit
-                                                      (L_aux (L_string str, _)),
-                                                    _ )),
-                                              _ ) ),
-                                      _ ) ->
-                                    str
-                                | _ -> "")
-                              maps
-                          in
-                          my_concat accu strs)
+                      match Env.lookup_id arg_id (env_of_annot annot) with
+                      | Enum typ ->
+                          my_concat accu
+                            [
+                              eval_mapping map_id
+                                (E_aux
+                                   ( E_id arg_id,
+                                     ( Unknown,
+                                       Type_check.mk_tannot (env_of_annot annot)
+                                         typ ) ));
+                            ]
+                      | _ -> (
+                          match
+                            List.find_opt
+                              (fun (id, _) -> Id.compare arg_id id = 0)
+                              substs
+                          with
+                          | Some (_, arg_value) ->
+                              my_concat accu [ eval_mapping map_id arg_value ]
+                          | None ->
+                              let strs =
+                                let _, maps = Hashtbl.find mappings map_id in
+                                List.map
+                                  (function
+                                    | MCL_aux
+                                        ( MCL_bidir
+                                            ( _,
+                                              MPat_aux
+                                                ( MPat_pat
+                                                    (MP_aux
+                                                      ( MP_lit
+                                                          (L_aux
+                                                            (L_string str, _)),
+                                                        _ )),
+                                                  _ ) ),
+                                          _ ) ->
+                                        str
+                                    | _ -> "")
+                                  maps
+                              in
+                              my_concat accu strs))
                   | MP_aux (MP_app (Id_aux (Id "spc", _), _), _) ->
                       raise (ReachSpc (accu, tl))
-                  | _ -> assert false)
-                  tl
+                  | _ -> assert false
+                in
+                get_mnemonics accu tl
           in
           try get_mnemonics [] xs with ReachSpc result -> result
         in
@@ -211,7 +226,8 @@ let get_info (ast : 'a Ast_defs.ast) =
                       (MP_aux (MP_app (Id_aux (Id ident, _), args), _), _),
                     _ ),
                 MPat_aux (MPat_when (MP_aux (body, _), _), _) ),
-            _ ) -> (
+            _ )
+        when ident <> "FENCEI_RESERVED" && ident <> "FENCE_RESERVED" -> (
           let args = List.mapi (fun i a -> (i, Ast_util.pat_of_mpat a)) args in
           match (get_speced_args args, get_args_to_spec args) with
           | [], [] ->

@@ -24,14 +24,22 @@ let printf_add_instr ppf instr =
       ppf out
   in
   let open Instruction in
-  let { mnemonic; operands; ins; outs } = instr in
+  let { mnemonic; arch; operands; ins; outs } = instr in
+  let arch_str = Arch.to_string arch in
   printf
-    "@[Hashtbl.add ans \"%s\" { mnemonic=\"%s\"; operands=[%a]; ins=[%a]; \
-     outs=[%a] };@]@,"
-    mnemonic mnemonic lst_str operands lst_str ins lst_str outs
+    "@[InstrTable.add ans (%s, \"%s\") { mnemonic=\"%s\"; arch=%s; \
+     operands=[%a]; ins=[%a]; outs=[%a] };@]@,"
+    arch_str mnemonic mnemonic arch_str lst_str operands lst_str ins lst_str
+    outs
 
 let profile_start () = Unix.gettimeofday ()
 
 let profile_end msg start_time =
   let end_time = Unix.gettimeofday () in
   if debug then printfn "Exec time of %s: %f" msg (end_time -. start_time)
+
+let target_arch =
+  match Sys.getenv "ARCH" with
+  | "RV32" -> Instruction.Arch.RV32
+  | "RV64" -> RV64
+  | (exception Not_found) | _ -> RV32_RV64

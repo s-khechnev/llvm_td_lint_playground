@@ -355,7 +355,7 @@ let const_props target ast is_pure_func =
     with _ -> exp
   in
 
-  fun ref_vars ->
+  fun add_depend_xlen_func ref_vars ->
     let constants =
       let add m = function
         | DEF_aux
@@ -445,6 +445,11 @@ let const_props target ast is_pure_func =
                | _ -> exp
              with Not_found -> exp),
             assigns )
+      | E_lit (L_aux (L_num n, Unknown))
+        when Nat_big_num.(equal (of_int 32) n || equal (of_int 64) n) ->
+          (* xlen case *)
+          add_depend_xlen_func ();
+          (exp, assigns)
       | E_lit _ | E_sizeof _ | E_constraint _ -> (exp, assigns)
       | E_typ (t, e') ->
           let e'', assigns = const_prop_exp substs assigns e' in
@@ -1039,7 +1044,7 @@ let const_props target ast is_pure_func =
 
 let const_prop target d is_pure_func =
   let f = const_props target d is_pure_func in
-  fun r -> fst (f r)
+  fun add_f ref_vars -> fst (f add_f ref_vars)
 
 let referenced_vars exp =
   let open Rewriter in

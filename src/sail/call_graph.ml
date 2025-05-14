@@ -49,7 +49,8 @@ let dump g outfile =
   end) in
   Out_channel.with_open_text outfile (fun ch -> Dot.output_graph ch g)
 
-let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop =
+let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop
+    add_depend_xlen_func =
   let open Libsail in
   let open Ast_util in
   let open Myast_iterator in
@@ -111,8 +112,9 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop =
                     | _ -> assert false
                   in
                   let ref_vars = Constant_propagation.referenced_vars body in
-                  myconst_prop ref_vars (substs, KBindings.empty) Bindings.empty
-                    body
+                  myconst_prop
+                    (fun () -> add_depend_xlen_func dst_func)
+                    ref_vars (substs, KBindings.empty) Bindings.empty body
                 in
                 FuncTable.add funcs dst_func (dst_args, speced_body)
               in
@@ -241,3 +243,15 @@ let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
       (FuncTable.to_seq_keys result)
   in
   result
+
+let get_reachables g ~start_f ~break_ids =
+  let result = FuncTable.create 100 in
+  let exception Break in
+  let on_edge (_, _, v_dst) =
+    if List.mem (get_id v_dst) break_ids then raise Break
+    else FuncTable.add result v_dst ()
+  in
+  try
+    dfs g ~start_v:start_f ~on_edge;
+    result
+  with _ -> result
