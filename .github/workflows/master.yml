@@ -1,0 +1,39 @@
+name: Build Master in docker
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+  push:
+    branches:
+      - '**'
+
+env:
+  OPAMROOT: /home/opam/.opam
+  OPAMYES: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam:ubuntu-lts-ocaml-5.1
+      options: --user root
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+            submodules: 'true'
+
+      - run: |
+            sudo apt-get update -y
+            sudo apt-get install autoconf libgmp-dev pkg-config zlib1g-dev z3 graphviz jq -y
+
+      - name: Installing dependencies
+        run: |
+            opam pin add ./ -n
+            opam install . --deps-only --with-test --with-doc
+
+      - name: Building
+        run: |
+            opam exec -- dune build
+            opam exec -- dune build @install

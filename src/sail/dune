@@ -1,0 +1,49 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error -unused-var -warn-error -unused-var-strict))))
+
+(library
+ (name sail_ast_tools)
+ (modules mysail myast myast_iterator)
+ (wrapped false)
+ (libraries libsail checker.core dynlink)
+ (preprocess
+  (pps ppx_deriving.show)))
+
+(executable
+ (name assembly)
+ (modules assembly spec)
+ (libraries libsail sail_ast_tools checker.core))
+
+(executable
+ (name dump)
+ (modules dump spec assembly call_graph myconstant_propagation)
+ (libraries sail_ast_tools ocamlgraph checker.core))
+
+(executable
+ (name init)
+ (modules init)
+ (libraries sail_ast_tools))
+
+(executable
+ (name gen)
+ (modules gen))
+
+(rule
+ (targets z3_problems pp_ast_RV32.txt pp_ast_RV64.txt)
+ (deps init.exe sail_files_RV32.txt sail_files_RV64.txt)
+ (mode (promote))
+ (action
+  (run ./init.exe)))
+
+(rule
+ (deps gen.ml)
+ (alias default)
+ (mode (promote))
+ (action
+  (with-stdout-to
+   dune.inc
+   (run ./gen.exe))))
+
+(include dune.inc)

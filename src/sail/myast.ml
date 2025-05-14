@@ -1,16 +1,6 @@
-let failwithf fmt = Format.kasprintf failwith fmt
-
 open Libsail
 
 type position = Lexing.position
-
-let position_to_yojson : position -> Yojson.Safe.t =
- fun pos -> `List [ `String pos.Lexing.pos_fname; `Int pos.Lexing.pos_lnum ]
-
-let position_of_yojson : Yojson.Safe.t -> (position, _) Result.t = function
-  | `List [ `String pos_fname; `Int pos_lnum ] ->
-      Result.ok @@ { Lexing.pos_fname; pos_lnum; pos_bol = 0; pos_cnum = 0 }
-  | _ -> Result.Ok Lexing.dummy_pos
 
 let pp_position ppf { Lexing.pos_fname; pos_lnum; _ } =
   Format.fprintf ppf "%s/%d" pos_fname pos_lnum
@@ -21,7 +11,7 @@ type l = Libsail.Parse_ast.l =
   | Generated of l
   | Hint of string * l * l
   | Range of position * position
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 let pp_l ppf = function
   | Range (a, b) when a.pos_cnum = b.pos_cnum && a.pos_fname = b.pos_fname ->
@@ -31,33 +21,15 @@ let pp_l ppf = function
 type 'a string_map = 'a Value.StringMap.t
 
 let pp_string_map _fa ppf _ = Format.fprintf ppf "???"
-let string_map_to_yojson _ : _ -> Yojson.Safe.t = fun _ -> `List []
 
-let string_map_of_yojson fv : Yojson.Safe.t -> ('v string_map, _) Result.t =
-  let rec helper acc = function
-    | `String name :: j :: tl -> (
-        match fv j with
-        | Result.Ok v -> helper (Value.StringMap.add name v acc) tl
-        | Error s -> Error s)
-    | [] -> Result.Ok acc
-    | _ -> assert false
-  in
-  function `List xs -> helper Value.StringMap.empty xs | _ -> assert false
-
-type bit = Sail_lib.bit = B0 | B1
-[@@deriving yojson, show { with_path = false }]
-
+type bit = Sail_lib.bit = B0 | B1 [@@deriving show { with_path = false }]
 type rational = Rational.t
 
 let pp_rational ppf _ = Format.fprintf ppf "???"
-let rational_to_yojson _r = `Int 42
-let rational_of_yojson _ = Result.Ok (Rational.of_int 42)
 
 type z = Z.t
 
 let pp_z ppf _ = Format.fprintf ppf "???"
-let z_to_yojson _ = `Int 42
-let z_of_yojson _ = Result.Ok (Z.of_int 42)
 
 type value = Libsail.Value.value =
   | V_vector of value list
@@ -73,76 +45,64 @@ type value = Libsail.Value.value =
   | V_ctor of string * value list
   | V_record of value string_map
   | V_attempted_read of string
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
-type loop = Ast.loop = While | Until
-[@@deriving yojson, show { with_path = false }]
-
-type 'a annot = l * 'a [@@deriving yojson, show { with_path = false }]
+type loop = Ast.loop = While | Until [@@deriving show { with_path = false }]
+type 'a annot = l * 'a [@@deriving show { with_path = false }]
 
 type extern = Ast.extern = { pure : bool; bindings : (string * string) list }
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type def_annot = Ast.def_annot = {
   doc_comment : string option;
   attrs : (l * string * string) list;
   loc : l;
 }
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 let pp_def_annot ppf = function
   | { doc_comment = None; attrs = []; loc } -> pp_l ppf loc
   | x -> pp_def_annot ppf x
 
-type 'a clause_annot = def_annot * 'a
-[@@deriving yojson, show { with_path = false }]
-
-type x = string (* identifier *) [@@deriving yojson, show { with_path = false }]
-
-type ix = string
-(* infix identifier *) [@@deriving yojson, show { with_path = false }]
+type 'a clause_annot = def_annot * 'a [@@deriving show { with_path = false }]
+type x = string (* identifier *) [@@deriving show { with_path = false }]
+type ix = string (* infix identifier *) [@@deriving show { with_path = false }]
 
 type kid_aux = Ast.kid_aux =
   (* kinded IDs: Type, Int, and Bool variables *)
   | Var of x
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type kind_aux = Ast.kind_aux =
   (* base kind *)
   | K_type (* kind of types *)
   | K_int (* kind of natural number size expressions *)
   | K_bool (* kind of constraints *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type id_aux = Ast.id_aux =
   (* Identifier *)
   | Id of x
   | Operator of x (* remove infix status *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type kid = Ast.kid = Kid_aux of kid_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type kind = Ast.kind = K_aux of kind_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type id = Ast.id = Id_aux of id_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type kinded_id_aux = Ast.kinded_id_aux =
   (* optionally kind-annotated identifier *)
   | KOpt_kind of kind * kid (* kind-annotated variable *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type num = Nat_big_num.num
 
 let pp_num = Nat_big_num.pp_num
-
-let num_to_yojson : num -> Yojson.Safe.t =
- fun n -> `String (Format.asprintf "%a" Nat_big_num.pp_num n)
-
-let num_of_yojson : Yojson.Safe.t -> (num, _) Result.t =
- fun _ -> Result.Ok (Nat_big_num.of_int 42)
 
 type nexp_aux = Ast.nexp_aux =
   (* numeric expression, of kind Int *)
@@ -157,10 +117,10 @@ type nexp_aux = Ast.nexp_aux =
   | Nexp_neg of nexp (* unary negation *)
 
 and nexp = Ast.nexp = Nexp_aux of nexp_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type kinded_id = Ast.kinded_id = KOpt_aux of kinded_id_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type lit_aux = Ast.lit_aux =
   (* literal constant *)
@@ -175,7 +135,7 @@ type lit_aux = Ast.lit_aux =
   | L_string of string (* string constant *)
   | L_undef (* undefined-value constant *)
   | L_real of string
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typ_aux = Ast.typ_aux =
   (* type expressions, of kind Type *)
@@ -215,16 +175,16 @@ and n_constraint_aux = Ast.n_constraint_aux =
   | NC_false
 
 and n_constraint = Ast.n_constraint = NC_aux of n_constraint_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type order_aux = Ast.order_aux =
   (* vector order specifications, of kind Order *)
   | Ord_inc (* increasing *)
   | Ord_dec
-(* decreasing *) [@@deriving yojson, show { with_path = false }]
+(* decreasing *) [@@deriving show { with_path = false }]
 
 type lit = Ast.lit = L_aux of lit_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typ_pat_aux = Ast.typ_pat_aux =
   (* type pattern *)
@@ -233,19 +193,19 @@ type typ_pat_aux = Ast.typ_pat_aux =
   | TP_app of id * typ_pat list
 
 and typ_pat = Ast.typ_pat = TP_aux of typ_pat_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type field_pat_wildcard = Ast.field_pat_wildcard = FP_wild of l | FP_no_wild
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type quant_item_aux = Ast.quant_item_aux =
   (* kinded identifier or Int constraint *)
   | QI_id of kinded_id (* optionally kinded identifier *)
   | QI_constraint of n_constraint
-(* constraint *) [@@deriving yojson, show { with_path = false }]
+(* constraint *) [@@deriving show { with_path = false }]
 
 type order = Ast.order = Ord_aux of order_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a pat_aux = 'a Ast.pat_aux =
   (* pattern *)
@@ -268,10 +228,10 @@ type 'a pat_aux = 'a Ast.pat_aux =
   | P_struct of (id * 'a pat) list * field_pat_wildcard (* struct pattern *)
 
 and 'a pat = 'a Ast.pat = P_aux of 'a pat_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type quant_item = Ast.quant_item = QI_aux of quant_item_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a internal_loop_measure_aux = 'a Ast.internal_loop_measure_aux =
   (* internal syntax for an optional termination measure for a loop *)
@@ -363,7 +323,7 @@ and 'a letbind_aux = 'a Ast.letbind_aux =
 (* let, implicit type ($(pat 'a)$ must be total) *)
 
 and 'a letbind = 'a Ast.letbind = LB_aux of 'a letbind_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a mpat_aux = 'a Ast.mpat_aux =
   (* Mapping pattern. Mostly the same as normal patterns but only constructible parts *)
@@ -382,37 +342,37 @@ type 'a mpat_aux = 'a Ast.mpat_aux =
   | MP_struct of (id * 'a mpat) list
 
 and 'a mpat = 'a Ast.mpat = MP_aux of 'a mpat_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typquant_aux = Ast.typquant_aux =
   (* type quantifiers and constraints *)
   | TypQ_tq of quant_item list
   | TypQ_no_forall
-(* empty *) [@@deriving yojson, show { with_path = false }]
+(* empty *) [@@deriving show { with_path = false }]
 
 type 'a mpexp_aux = 'a Ast.mpexp_aux =
   | MPat_pat of 'a mpat
   | MPat_when of 'a mpat * 'a exp
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typquant = Ast.typquant = TypQ_aux of typquant_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
-type 'a pexp_funcl = 'a pexp [@@deriving yojson, show { with_path = false }]
+type 'a pexp_funcl = 'a pexp [@@deriving show { with_path = false }]
 
 type 'a mpexp = 'a Ast.mpexp = MPat_aux of 'a mpexp_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type type_union_aux = Ast.type_union_aux =
   (* type union constructors *)
   | Tu_ty_id of typ * id
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type tannot_opt_aux = Ast.tannot_opt_aux =
   (* optional type annotation for functions *)
   | Typ_annot_opt_none
   | Typ_annot_opt_some of typquant * typ
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a rec_opt_aux = 'a Ast.rec_opt_aux =
   (* optional recursive annotation for functions *)
@@ -420,24 +380,24 @@ type 'a rec_opt_aux = 'a Ast.rec_opt_aux =
   | Rec_rec (* recursive without termination measure *)
   | Rec_measure of 'a pat * 'a exp
 (* recursive with termination measure *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a funcl_aux = 'a Ast.funcl_aux =
   (* function clause *)
   | FCL_funcl of id * 'a pexp_funcl
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a mapcl_aux = 'a Ast.mapcl_aux =
   (* mapping clause (bidirectional pattern-match) *)
   | MCL_bidir of 'a mpexp * 'a mpexp
   | MCL_forwards of 'a mpexp * 'a exp
   | MCL_backwards of 'a mpexp * 'a exp
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typschm_aux = Ast.typschm_aux =
   (* type scheme *)
   | TypSchm_ts of typquant * typ
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type index_range_aux = Ast.index_range_aux =
   (* index specification, for bitfields in register types *)
@@ -446,25 +406,25 @@ type index_range_aux = Ast.index_range_aux =
   | BF_concat of index_range * index_range (* concatenation of index ranges *)
 
 and index_range = Ast.index_range = BF_aux of index_range_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type type_union = Ast.type_union = Tu_aux of type_union_aux * def_annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type tannot_opt = Ast.tannot_opt = Typ_annot_opt_aux of tannot_opt_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a rec_opt = 'a Ast.rec_opt = Rec_aux of 'a rec_opt_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a funcl = 'a Ast.funcl = FCL_aux of 'a funcl_aux * 'a clause_annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a mapcl = 'a Ast.mapcl = MCL_aux of 'a mapcl_aux * 'a clause_annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type typschm = Ast.typschm = TypSchm_aux of typschm_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type type_def_aux = Ast.type_def_aux =
   (* type definition body *)
@@ -478,41 +438,41 @@ type type_def_aux = Ast.type_def_aux =
       id
       * typ
       * (id * index_range) list (* register mutable bitfield type definition *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a fundef_aux = 'a Ast.fundef_aux =
   (* function definition *)
   | FD_function of 'a rec_opt * tannot_opt * 'a funcl list
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a mapdef_aux = 'a Ast.mapdef_aux =
   (* mapping definition (bidirectional pattern-match function) *)
   | MD_mapping of id * tannot_opt * 'a mapcl list
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type subst_aux = Ast.subst_aux =
   (* instantiation substitution *)
   | IS_typ of kid * typ (* instantiate a type variable with a type *)
   | IS_id of id * id
 (* instantiate an identifier with another identifier *)
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type outcome_spec_aux = Ast.outcome_spec_aux =
   (* outcome declaration *)
   | OV_outcome of id * typschm * kinded_id list
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a instantiation_spec_aux = 'a Ast.instantiation_spec_aux = IN_id of id
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type val_spec_aux = Ast.val_spec_aux =
   | VS_val_spec of typschm * id * extern option
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type default_spec_aux = Ast.default_spec_aux =
   (* default kinding or typing assumption *)
   | DT_order of order
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a scattered_def_aux = 'a Ast.scattered_def_aux =
   (* scattered function and union type definitions *)
@@ -527,68 +487,68 @@ type 'a scattered_def_aux = 'a Ast.scattered_def_aux =
   | SD_enum of id
   | SD_enumcl of id * id
   | SD_end of id
-(* scattered definition end *) [@@deriving yojson, show { with_path = false }]
+(* scattered definition end *) [@@deriving show { with_path = false }]
 
 type 'a dec_spec_aux = 'a Ast.dec_spec_aux =
   (* register declarations *)
   | DEC_reg of typ * id * 'a exp option
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a opt_default_aux = 'a Ast.opt_default_aux =
   (* optional default value for indexed vector expressions *)
   | Def_val_empty
   | Def_val_dec of 'a exp
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a impldef_aux = 'a Ast.impldef_aux =
   (* impl for target *)
   | Impl_impl of 'a funcl
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a type_def = 'a Ast.type_def = TD_aux of type_def_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a fundef = 'a Ast.fundef = FD_aux of 'a fundef_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a mapdef = 'a Ast.mapdef = MD_aux of 'a mapdef_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type subst = Ast.subst = IS_aux of subst_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type outcome_spec = Ast.outcome_spec = OV_aux of outcome_spec_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a instantiation_spec = 'a Ast.instantiation_spec =
   | IN_aux of 'a instantiation_spec_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a val_spec = 'a Ast.val_spec = VS_aux of val_spec_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type default_spec = Ast.default_spec = DT_aux of default_spec_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a scattered_def = 'a Ast.scattered_def =
   | SD_aux of 'a scattered_def_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a dec_spec = 'a Ast.dec_spec = DEC_aux of 'a dec_spec_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type prec = Ast.prec = Infix | InfixL | InfixR
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a loop_measure = 'a Ast.loop_measure = Loop of loop * 'a exp
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a opt_default = 'a Ast.opt_default =
   | Def_val_aux of 'a opt_default_aux * 'a annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a impldef = 'a Ast.impldef = Impl_aux of 'a impldef_aux * l
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
 type 'a def_aux = 'a Ast.def_aux =
   (* top-level definition *)
@@ -615,22 +575,11 @@ type 'a def_aux = 'a Ast.def_aux =
   | DEF_pragma of string * string * l (* compiler directive *)
 
 and 'a def = 'a Ast.def = DEF_aux of 'a def_aux * def_annot
-[@@deriving yojson, show { with_path = false }]
+[@@deriving show { with_path = false }]
 
-(* type tannot = Type_check.tannot *)
+let pp_tannot ppf t = Format.fprintf ppf "%s" (Type_check.string_of_tannot t)
 
-let pp_tannot ppf _ = Format.fprintf ppf "???"
-let tannot_to_yojson _ = `Int 42
-
-let tannot_of_yojson _ : Type_check.tannot Ppx_deriving_yojson_runtime.error_or
-    =
-  Result.Ok Type_check.empty_tannot
-
-let save filename ast =
-  print_endline __FUNCTION__;
-
-  let _ : Type_check.tannot Ast_defs.ast = ast in
-
+let save filename (ast : Type_check.tannot Ast_defs.ast) =
   Out_channel.with_open_bin filename (fun ch ->
-      let j = `List (List.map (def_to_yojson tannot_to_yojson) ast.defs) in
-      Yojson.Safe.pretty_to_channel ch j)
+      let ppf = Format.formatter_of_out_channel ch in
+      List.iter (pp_def pp_tannot ppf) ast.defs)

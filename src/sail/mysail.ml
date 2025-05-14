@@ -92,7 +92,6 @@ let rec fix_options = function
   | [] -> []
 
 let load_plugin opts plugin =
-  Printf.printf "%s %s\n" __FUNCTION__ plugin;
   try
     Dynlink.loadfile_private plugin;
     opts := Arg.align (!opts @ fix_options (Target.extract_options ()))
@@ -345,15 +344,8 @@ module Manifest = struct
 end
 
 let run_sail (config : Yojson.Basic.t option) tgt =
-  (* Printf.printf "%s %d\n" __FILE__ __LINE__; *)
   Target.run_pre_parse_hook tgt ();
   let ast, env, effect_info =
-    (* Printf.printf "%s %d\n" __FILE__ __LINE__;
-       Printf.printf "opt-file-args = %s\n%!"
-         (String.concat " " !opt_file_arguments);
-
-       Printf.printf "tgt.name = %s\n%!" (Target.name tgt); *)
-    Printf.printf "Manifest.dir = %S\n%!" Manifest.dir;
     Frontend.load_files ~target:tgt Manifest.dir !options Type_check.initial_env
       !opt_file_arguments
   in
@@ -486,13 +478,12 @@ let parse_config_file file =
       (Printf.sprintf "Failed to parse configuration file: %s" message);
     None
 
-let main () =
+let main' args =
   (match Sys.getenv_opt "SAIL_NO_PLUGINS" with
   | Some _ -> ()
   | None -> (
       match get_plugin_dir () with
       | dir :: _ ->
-          Printf.printf "plugin dir = %s\n" dir;
           List.iter
             (fun plugin ->
               let path = Filename.concat dir plugin in
@@ -503,7 +494,7 @@ let main () =
 
   options := Arg.align !options;
 
-  Arg.parse_dynamic options
+  Arg.parse_argv ~current:(ref 0) args !options
     (fun s -> opt_file_arguments := !opt_file_arguments @ [ s ])
     usage_msg;
 
@@ -527,22 +518,25 @@ let main () =
 
   if !opt_memo_z3 then Constraint.load_digests ();
 
-  let ast, _env, _effect_info =
+  let ast, env, effect_info =
     match Target.get_the_target () with
     | Some target when not !opt_just_check -> run_sail config target
     | _ -> run_sail config default_target
   in
-  print_endline "got AST";
-  let _ = Myast.save "riscv.sail.json" ast in
 
-  if !opt_memo_z3 then Constraint.save_digests ();
-  ()
+  (if !opt_memo_z3 then try Constraint.save_digests () with _ -> ());
 
-let () =
+  (ast, env, effect_info)
+
+let main args =
   try
-    try main ()
+    try main' args
     with Failure s -> raise (Reporting.err_general Parse_ast.Unknown s)
   with Reporting.Fatal_error e ->
     Reporting.print_error e;
-    if !opt_memo_z3 then Constraint.save_digests () else ();
+    if !opt_memo_z3 then try Constraint.save_digests () with _ -> () else ();
     exit 1
+
+let apply_rewrites ast env effect_info rewrites =
+  let rewrites = Rewrites.instantiate_rewrites rewrites in
+  Rewrites.rewrite env effect_info rewrites ast
