@@ -15,7 +15,7 @@
 (library
  (public_name checker.analysis_tools)
  (name analysis_tools)
- (modules spec assembly call_graph myconstant_propagation)
+ (modules spec assembly call_graph myconstant_propagation data_graph myanf)
  (libraries sail_ast_tools ocamlgraph checker.core)
  (instrumentation
   (backend bisect_ppx)))

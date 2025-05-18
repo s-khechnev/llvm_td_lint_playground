@@ -58,10 +58,11 @@ let () =
            let f opers xs ppf =
              xs
              |> List.map (fun oper ->
-                    match List.find_index (String.equal oper) opers with
+                    let op_str = Operand.get oper in
+                    match List.find_index (String.equal op_str) opers with
                     | Some i -> (oper, i)
                     | None ->
-                        printfn ppf oper;
+                        printfn ppf (Operand.to_string oper);
                         (oper, -1))
              |> List.sort (fun (_, i1) (_, i2) -> compare i2 i1)
            in
@@ -79,7 +80,7 @@ let () =
                     let prr_err () =
                       printfn "Different outs (%d, %d)" llvm_i sail_i
                     in
-                    if llvm_i = -1 && sail_i = -1 && llvm_reg <> sail_reg then
+                    if llvm_i = -1 && sail_i = -1 && not (Operand.equal_t llvm_reg sail_reg) then
                       prr_err ()
                     else if llvm_i <> sail_i then prr_err ())
                   llvm_outs sail_outs
@@ -91,18 +92,21 @@ let () =
                List.iter2
                  (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
                    let prr_err () =
-                     printfn "Different ins (%d, %d)" llvm_i sail_i
-                   in
-                   if llvm_i = -1 && sail_i = -1 && llvm_reg <> sail_reg then
-                     prr_err ()
-                   else if llvm_i <> sail_i then prr_err ())
+                      printfn "Different ins (%d, %d)" llvm_i sail_i
+                    in
+                    if llvm_i = -1 && sail_i = -1 && not (Operand.equal_t llvm_reg sail_reg) then
+                      prr_err ()
+                    else if llvm_i <> sail_i then prr_err ())
                  llvm_ins sail_ins
              with
              | Invalid_argument _ -> printfn "Different number of inputs"
              | _ -> ());
 
            let f lst =
-             List.map (fun (oper, i) -> Format.sprintf "(%d, %s)" i oper) lst
+             List.map
+               (fun (oper, i) ->
+                 Format.sprintf "(%d, %s)" i (Operand.to_string oper))
+               lst
            in
            printfn "llvm outs: %s" (String.concat " " (f llvm_outs));
            printfn "sail outs: %s" (String.concat " " (f sail_outs));

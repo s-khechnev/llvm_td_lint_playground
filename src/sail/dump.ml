@@ -22,72 +22,23 @@ let collect_aliases body =
       exp_aux =
         (fun self e ->
           (match e with
-          | E_let
-              ( LB_aux
-                  ( LB_val
-                      ( P_aux (P_id (Id_aux (Id alias, _)), _),
-                        E_aux
-                          ( E_app
-                              ( Id_aux (Id "creg2reg_idx", _),
-                                [ E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
-                            _ ) ),
-                    _ ),
-                _ )
-          | E_let
-              ( LB_aux
-                  ( LB_val
-                      ( P_aux
-                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
-                        E_aux
-                          ( E_app
-                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
-                                [ _; E_aux (E_id (Id_aux (Id arg, _)), _) ] ),
-                            _ ) ),
-                    _ ),
-                _ ) ->
-              add_alias alias arg
-          | E_let
-              ( LB_aux
-                  ( LB_val
-                      ( P_aux
-                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
-                        E_aux
-                          ( E_app
-                              ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
-                                [
-                                  _;
-                                  E_aux
-                                    ( E_app
-                                        (Id_aux (Id "bitvector_concat", _), xs),
-                                      _ );
-                                ] ),
-                            _ ) ),
-                    _ ),
-                _ ) -> (
-              match
-                List.find_map
-                  (function
-                    | E_aux (E_id (Id_aux (Id id, _)), _) -> Some id | _ -> None)
-                  xs
-              with
-              | Some arg -> add_alias alias arg
-              | None -> ())
-          | E_let
-              ( LB_aux
-                  ( LB_val
-                      ( P_aux
-                          (P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)), _),
-                        E_aux
-                          ( E_app
-                              ( Id_aux (Id "add_bits", _),
-                                [
-                                  E_aux (E_id (Id_aux (Id arg, _)), _);
-                                  E_aux (E_app (Id_aux (Id "to_bits", _), _), _);
-                                ] ),
-                            _ ) ),
-                    _ ),
-                _ ) ->
-              add_alias alias arg
+          | E_let (LB_aux (LB_val (P_aux (pat, _), E_aux (bind, _)), _), _) -> (
+              match pat with
+              | P_id (Id_aux (Id alias, _))
+              | P_typ (_, P_aux (P_id (Id_aux (Id alias, _)), _)) ->
+                  let rec f = function
+                    | E_app
+                        ( Id_aux (Id ("creg2reg_idx" | "signed" | "unsigned"), _),
+                          [ E_aux (E_id (Id_aux (Id arg, _)), _) ] )
+                    | E_app
+                        ( Id_aux (Id ("zero_extend" | "sign_extend"), _),
+                          [ _; E_aux (E_id (Id_aux (Id arg, _)), _) ] ) ->
+                        add_alias alias arg
+                    | E_typ (_, E_aux (e, _)) -> f e
+                    | _ -> ()
+                  in
+                  f bind
+              | _ -> ())
           | _ -> ());
           default_iterator.exp_aux self e);
     }
@@ -267,10 +218,52 @@ let remove_unused_let_binds body =
   in
   remove_unused_let_binds' body
 
+let anf_rewrite ast =
+  let open Libsail.Rewriter in
+  let rw_funcl (FCL_aux (FCL_funcl (id, pexp), (l, annot))) =
+    let pexp =
+      match pexp with
+      | Pat_aux (Pat_exp (pat, body), t) -> (
+          let anf = Myanf.anf body in
+          try
+            let recheked_body =
+              Type_check.(check_exp (env_of body) anf (typ_of body))
+            in
+
+            (* printfn "\n\n\n\nsuccess %s %s\n%s\n\n" (string_of_id id)
+               (string_of_pat pat) (string_of_exp anf); *)
+            Pat_aux (Pat_exp (pat, recheked_body), t)
+          with exn ->
+            printfn "\n\n\n\ncannotqwe %s %s\n%s\n\n" (string_of_id id)
+              (string_of_pat pat) (string_of_exp anf);
+
+            (match exn with
+            | Type_check.Type_error (_, _, err) ->
+                printfn "Type_error %s" (Type_error.string_of_type_error err)
+            | Reporting.Fatal_error err ->
+                printfn "Type_error";
+                Reporting.print_error err
+            | _ -> printfn "trash %s" (Printexc.to_string exn));
+            pexp)
+      | _ -> pexp
+    in
+    FCL_aux (FCL_funcl (id, pexp), (l, annot))
+  in
+  let rewrites =
+    {
+      rewriters_base with
+      rewrite_fun =
+        (fun _ (FD_aux (FD_function (r, t, funcls), annot)) ->
+          FD_aux (FD_function (r, t, List.map rw_funcl funcls), annot));
+    }
+  in
+  rewrite_ast_base rewrites ast
+
 (* funcs that depend on xlen *)
 let depend_xlen_funcs = FuncTable.create 1000
 
 let dump_execute ast env effect_info =
+  let ast = anf_rewrite ast in
   let ast = rewrite_for_analyze_encdecs ast in
   let assemblies_info = Assembly.get_info ast in
 
@@ -431,6 +424,14 @@ let dump_execute ast env effect_info =
   in
   profile_end "collect functions" t;
 
+  let data_graphs = FuncTable.create (FuncTable.length funcs) in
+  FuncTable.iter
+    (fun f (_, body) ->
+      printfn "\n\nqweqwe %s\n%s\n" (Func.to_string f) (string_of_exp body);
+      FuncTable.add data_graphs f (Data_graph.generate body);
+      printfn "")
+    funcs;
+
   let t = profile_start () in
   let g =
     Call_graph.generate funcs
@@ -478,6 +479,16 @@ let dump_execute ast env effect_info =
         (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
       ]
   in
+
+  FuncTable.iter
+    (fun f xs ->
+      printfn "%s ouuuuts: %s" (Func.to_string f) (String.concat " " xs))
+    outs;
+
+  FuncTable.iter
+    (fun f xs ->
+      printfn "%s iiiiins: %s" (Func.to_string f) (String.concat " " xs))
+    ins;
 
   let break_ids = [ "translateAddr" ] in
   let mayLoads =
@@ -595,6 +606,28 @@ let dump_execute ast env effect_info =
         else RV32_RV64
   in
 
+  let check_regs f regs =
+    let remove_duplicates ~equal lst =
+      List.fold_left
+        (fun acc x -> if List.exists (equal x) acc then acc else x :: acc)
+        [] lst
+    in
+    printfn "proccessss %s" (Func.to_string f);
+    match FuncTable.find_opt data_graphs f with
+    | Some data_g ->
+        regs
+        |> List.concat_map (fun r ->
+               match Data_graph.find_sources data_g r with
+               | [] -> assert false
+               | [ src ] ->
+                   printfn "regqwe %s reg - %s src - %s" (Func.to_string f) r
+                     src;
+                   if r <> src then [ Operand.GPRPair src ] else [ GPR r ]
+               | srcs -> List.map (fun s -> Operand.GPRPair s) srcs)
+        |> remove_duplicates ~equal:(fun a b -> Operand.get a = Operand.get b)
+    | None -> List.map (fun s -> Operand.GPR s) regs
+  in
+
   Call_graph.dump g config.dot_file;
   Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
@@ -624,14 +657,14 @@ let dump_execute ast env effect_info =
                in
                let regs_ins =
                  match FuncTable.find_opt ins func with
-                 | Some ins -> ins
+                 | Some ins -> check_regs func ins
                  | None -> []
                in
-               regs_ins @ imms
+               regs_ins @ List.map (fun i -> Operand.Imm i) imms
              in
              let outs =
                match FuncTable.find_opt outs func with
-               | Some outs -> outs
+               | Some outs -> check_regs func outs
                | None -> []
              in
              let mayStore, mayLoad =

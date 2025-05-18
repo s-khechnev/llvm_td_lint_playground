@@ -1,5 +1,4 @@
 open Checker_core
-open Utils
 
 type config = {
   mutable riscv_td_json : string;
@@ -45,21 +44,30 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
         if Str.string_match re str 0 then
           let lhs = Str.matched_group 1 str in
           let rhs = Str.matched_group 2 str in
-          fun s -> if s = lhs && not (List.mem lhs operands) then rhs else s
+          fun s ->
+            let f a = s = a && not (List.mem a operands) in
+            if f lhs then rhs else if f rhs then lhs else s
         else Fun.id
     | _ -> assert false
   in
+  let open Instruction in
   let exract_operands j =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
-         | `List [ `Assoc [ _; _; _ ]; `String s ] ->
-             chop_suffix s ~suffix:"_wb"
+         | `List [ `Assoc [ ("def", `String typ); _; _ ]; `String s ] ->
+             if Str.string_match (Str.regexp ".*imm.*") typ 0 then Operand.Imm s
+             else if Str.string_match (Str.regexp ".*PairOp.*") typ 0 then
+               GPRPair s
+             else GPR s
          | other ->
              Format.printf "Unsupported case: %a\n"
                (Yojson.Safe.pretty_print ~std:false)
                other;
              assert false)
-    |> List.map fconstraint
+    |> List.map (function
+         | Operand.Imm s -> Operand.Imm (fconstraint s)
+         | GPR s -> GPR (fconstraint s)
+         | GPRPair s -> GPRPair (fconstraint s))
   in
   let extract_implicit_gprs j =
     let map = function
@@ -86,12 +94,12 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
   let in_operands =
     let explicit = exract_operands (List.assoc "InOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Uses" j) in
-    explicit @ implicit
+    explicit @ List.map (fun i -> Operand.GPR i) implicit
   in
   let out_operands =
     let explicit = exract_operands (List.assoc "OutOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Defs" j) in
-    explicit @ implicit
+    explicit @ List.map (fun i -> Operand.GPR i) implicit
   in
   let arch =
     let open Checker_core.Instruction.Arch in

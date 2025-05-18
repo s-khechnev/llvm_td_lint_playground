@@ -64,6 +64,7 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop
       if List.is_empty speced then F_usual id else F_specialized (id, speced)
     in
     let rec extract_arg = function
+      | E_aux (E_typ (_, e), _) -> extract_arg e
       | E_aux
           ( E_app
               ( Id_aux (Id ("sign_extend" | "zero_extend"), _),
@@ -86,6 +87,9 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop
       | e -> string_of_exp e
     in
     let process src_args dst_id =
+      let src_args =
+        match src_args with [ E_aux (E_tuple xs, _) ] -> xs | _ -> src_args
+      in
       let dst_func = classify_func_call dst_id src_args in
       let add dst_args =
         let args2 =
