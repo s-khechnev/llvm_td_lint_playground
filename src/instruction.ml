@@ -62,6 +62,9 @@ let equal i1 i2 =
   && List.equal String.equal i1.operands i2.operands
   && List.equal Operand.equal i1.ins i2.ins
   && List.equal Operand.equal i1.outs i2.outs
+  && i1.mayLoad = i2.mayLoad && i1.mayStore = i2.mayStore
+  && List.equal String.equal i1.ins_csr i2.ins_csr
+  && List.equal String.equal i1.outs_csr i2.outs_csr
 
 module InstrTable = Hashtbl.Make (struct
   type t = Arch.t * string

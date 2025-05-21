@@ -69,6 +69,9 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
          | GPR s -> GPR (fconstraint s)
          | GPRPair s -> GPRPair (fconstraint s))
   in
+  let is_gpr str =
+    Str.string_match (Str.regexp "^X\\([0-9]\\|[12][0-9]\\|3[01]\\)$") str 0
+  in
   let extract_implicit_gprs j =
     let map = function
       | "X0" -> "zreg"
@@ -79,11 +82,6 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
     j |> from_list
     |> List.filter_map (function
          | `Assoc [ ("def", `String s); _; _ ] ->
-             let is_gpr str =
-               Str.string_match
-                 (Str.regexp "^X\\([0-9]\\|[12][0-9]\\|3[01]\\)$")
-                 str 0
-             in
              if is_gpr s then Some (map s) else None
          | other ->
              Format.printf "Unsupported case: %a\n"
@@ -94,12 +92,12 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
   let in_operands =
     let explicit = exract_operands (List.assoc "InOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Uses" j) in
-    explicit @ List.map (fun i -> Operand.GPR i) implicit
+    explicit @ List.map (fun r -> Operand.GPR r) implicit
   in
   let out_operands =
     let explicit = exract_operands (List.assoc "OutOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Defs" j) in
-    explicit @ List.map (fun i -> Operand.GPR i) implicit
+    explicit @ List.map (fun r -> Operand.GPR r) implicit
   in
   let arch =
     let open Checker_core.Instruction.Arch in

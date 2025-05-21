@@ -80,9 +80,14 @@ let () =
                     let prr_err () =
                       printfn "Different outs (%d, %d)" llvm_i sail_i
                     in
-                    if llvm_i = -1 && sail_i = -1 && not (Operand.equal_t llvm_reg sail_reg) then
-                      prr_err ()
-                    else if llvm_i <> sail_i then prr_err ())
+                    if
+                      llvm_i = -1 && sail_i = -1
+                      && not (Operand.equal llvm_reg sail_reg)
+                    then prr_err ()
+                    else if
+                      llvm_i <> sail_i
+                      || not (Operand.equal_t llvm_reg sail_reg)
+                    then prr_err ())
                   llvm_outs sail_outs
               with
              | Invalid_argument _ -> printfn "Different number of outs"
@@ -92,11 +97,15 @@ let () =
                List.iter2
                  (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
                    let prr_err () =
-                      printfn "Different ins (%d, %d)" llvm_i sail_i
-                    in
-                    if llvm_i = -1 && sail_i = -1 && not (Operand.equal_t llvm_reg sail_reg) then
-                      prr_err ()
-                    else if llvm_i <> sail_i then prr_err ())
+                     printfn "Different ins (%d, %d)" llvm_i sail_i
+                   in
+                   if
+                     llvm_i = -1 && sail_i = -1
+                     && not (Operand.equal llvm_reg sail_reg)
+                   then prr_err ()
+                   else if
+                     llvm_i <> sail_i || not (Operand.equal_t llvm_reg sail_reg)
+                   then prr_err ())
                  llvm_ins sail_ins
              with
              | Invalid_argument _ -> printfn "Different number of inputs"
