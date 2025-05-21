@@ -2,6 +2,8 @@ open Checker_core
 open Utils
 open Instruction
 
+let not_found_in_sail = ref []
+
 let () =
   Llvm_info.llvm_info |> InstrTable.to_seq |> List.of_seq
   |> List.sort_uniq (fun ((a1, m1), _) ((a2, m2), _) ->
@@ -66,9 +68,13 @@ let () =
            else (
              (try
                 List.iter2
-                  (fun (_, llvm_i) (_, sail_i) ->
-                    if llvm_i <> sail_i then
-                      printfn "Different outs (%d, %d)" llvm_i sail_i)
+                  (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
+                    let prr_err () =
+                      printfn "Different outs (%d, %d)" llvm_i sail_i
+                    in
+                    if llvm_i = -1 && sail_i = -1 && llvm_reg <> sail_reg then
+                      prr_err ()
+                    else if llvm_i <> sail_i then prr_err ())
                   llvm_outs sail_outs
               with
              | Invalid_argument _ -> printfn "Different number of outs"
@@ -76,9 +82,13 @@ let () =
 
              try
                List.iter2
-                 (fun (_, llvm_i) (_, sail_i) ->
-                   if llvm_i <> sail_i then
-                     printfn "Different inputs (%d, %d)" llvm_i sail_i)
+                 (fun (llvm_reg, llvm_i) (sail_reg, sail_i) ->
+                   let prr_err () =
+                     printfn "Different ins (%d, %d)" llvm_i sail_i
+                   in
+                   if llvm_i = -1 && sail_i = -1 && llvm_reg <> sail_reg then
+                     prr_err ()
+                   else if llvm_i <> sail_i then prr_err ())
                  llvm_ins sail_ins
              with
              | Invalid_argument _ -> printfn "Different number of inputs"
@@ -91,35 +101,34 @@ let () =
            printfn "sail outs: %s" (String.concat " " (f sail_outs));
            printfn "llvm ins: %s" (String.concat " " (f llvm_ins));
            printfn "sail ins: %s" (String.concat " " (f sail_ins));
-           printfn "";
+           printfn ""
+         in
 
-           sail_arch
-         in
-         let f find_opt =
-           match find_opt (arch, llvm_mnemonic) with
-           | Some instr -> Some (process instr)
-           | None -> None
-         in
-         let cannot_find () =
-           printfn "Couldn't find in sail %s %s\n" iname
-             (Arch.to_string llvm_arch)
-         in
+         let cannot_find i = not_found_in_sail := i :: !not_found_in_sail in
+         let llvm_instr = (arch, llvm_mnemonic) in
          match llvm_arch with
          | RV32 -> (
-             match f Sail_info_RV32.find_opt with
-             | Some _ -> ()
-             | None -> cannot_find ())
+             match Sail_info_RV32.find_opt llvm_instr with
+             | Some i -> process i
+             | None -> cannot_find llvm_instr)
          | RV64 -> (
-             match f Sail_info_RV64.find_opt with
-             | Some _ -> ()
-             | None -> cannot_find ())
+             match Sail_info_RV64.find_opt llvm_instr with
+             | Some i -> process i
+             | None -> cannot_find llvm_instr)
          | RV32_RV64 -> (
-             match f Sail_info_RV32.find_opt with
-             | Some sail_arch -> (
-                 match sail_arch with
-                 | RV32_RV64 -> ()
-                 | _ -> (
-                     match f Sail_info_RV64.find_opt with
-                     | Some _ -> ()
-                     | None -> cannot_find ()))
-             | None -> ()))
+             match
+               ( Sail_info_RV32.find_opt llvm_instr,
+                 Sail_info_RV64.find_opt llvm_instr )
+             with
+             | None, Some i -> process i
+             | Some i, None -> process i
+             | Some i32, Some i64 ->
+                 if Instruction.equal i32 i64 then process i32
+                 else (
+                   process i32;
+                   process i64)
+             | _ -> cannot_find llvm_instr));
+
+  printfn "Not found in sail: %s"
+    (String.concat " "
+       (List.map (fun (_, i) -> Format.sprintf "%s" i) !not_found_in_sail))
