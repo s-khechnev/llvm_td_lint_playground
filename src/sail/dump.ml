@@ -63,7 +63,8 @@ let rewrite_for_analyze_encdecs ast =
     in
     match e with
     | E_app (Id_aux (Id id, _), _)
-      when id = "extensionEnabled" || id = "validDoubleRegs" ->
+      when id = "extensionEnabled" || id = "validDoubleRegs"
+           || id = "sys_enable_fdext" ->
         mk_bool_lit L_true
     | E_app (Id_aux (Id id, _), _) when id = "in32BitMode" -> (
         match Utils.target_arch with
@@ -218,33 +219,41 @@ let remove_unused_let_binds body =
   in
   remove_unused_let_binds' body
 
-let anf_rewrite ast =
+let anf_rewrite ast env =
+  let read_write_regs_funcs =
+    Type_check.Env.get_overloads (Id_aux (Id "X", Parse_ast.Unknown)) env
+  in
   let open Libsail.Rewriter in
   let rw_funcl (FCL_aux (FCL_funcl (id, pexp), (l, annot))) =
     let pexp =
       match pexp with
-      | Pat_aux (Pat_exp (pat, body), t) -> (
-          let anf = Myanf.anf body in
-          try
-            let recheked_body =
-              Type_check.(check_exp (env_of body) anf (typ_of body))
-            in
-
-            (* printfn "\n\n\n\nsuccess %s %s\n%s\n\n" (string_of_id id)
-               (string_of_pat pat) (string_of_exp anf); *)
-            Pat_aux (Pat_exp (pat, recheked_body), t)
-          with exn ->
-            printfn "\n\n\n\ncannotqwe %s %s\n%s\n\n" (string_of_id id)
-              (string_of_pat pat) (string_of_exp anf);
-
-            (match exn with
-            | Type_check.Type_error (_, _, err) ->
-                printfn "Type_error %s" (Type_error.string_of_type_error err)
-            | Reporting.Fatal_error err ->
-                printfn "Type_error";
-                Reporting.print_error err
-            | _ -> printfn "trash %s" (Printexc.to_string exn));
-            pexp)
+      | Pat_aux (Pat_exp (pat, body), t) ->
+          let try_rw_x_call e annot =
+            match e with
+            | E_app (id, _)
+              when List.exists
+                     (fun id' -> Id.compare id id' == 0)
+                     read_write_regs_funcs -> (
+                let exp = E_aux (e, annot) in
+                let anf = Myanf.anf exp in
+                try Type_check.(check_exp (env_of exp) anf (typ_of exp))
+                with _ -> exp)
+            | e -> E_aux (e, annot)
+          in
+          let anf_x_calls =
+            {
+              rewriters_base with
+              rewrite_exp =
+                (fun _ ->
+                  fold_exp
+                    {
+                      id_exp_alg with
+                      e_aux = (fun (e_aux, annot) -> try_rw_x_call e_aux annot);
+                    });
+            }
+          in
+          let body = anf_x_calls.rewrite_exp anf_x_calls body in
+          Pat_aux (Pat_exp (pat, body), t)
       | _ -> pexp
     in
     FCL_aux (FCL_funcl (id, pexp), (l, annot))
@@ -263,7 +272,7 @@ let anf_rewrite ast =
 let depend_xlen_funcs = FuncTable.create 1000
 
 let dump_execute ast env effect_info =
-  let ast = anf_rewrite ast in
+  let ast = anf_rewrite ast env in
   let ast = rewrite_for_analyze_encdecs ast in
   let assemblies_info = Assembly.get_info ast in
 
@@ -426,10 +435,7 @@ let dump_execute ast env effect_info =
 
   let data_graphs = FuncTable.create (FuncTable.length funcs) in
   FuncTable.iter
-    (fun f (_, body) ->
-      printfn "\n\nqweqwe %s\n%s\n" (Func.to_string f) (string_of_exp body);
-      FuncTable.add data_graphs f (Data_graph.generate body);
-      printfn "")
+    (fun f (_, body) -> FuncTable.add data_graphs f (Data_graph.generate body))
     funcs;
 
   let t = profile_start () in
@@ -479,16 +485,6 @@ let dump_execute ast env effect_info =
         (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
       ]
   in
-
-  FuncTable.iter
-    (fun f xs ->
-      printfn "%s ouuuuts: %s" (Func.to_string f) (String.concat " " xs))
-    outs;
-
-  FuncTable.iter
-    (fun f xs ->
-      printfn "%s iiiiins: %s" (Func.to_string f) (String.concat " " xs))
-    ins;
 
   let break_ids = [ "translateAddr" ] in
   let mayLoads =
@@ -607,24 +603,27 @@ let dump_execute ast env effect_info =
   in
 
   let check_regs f regs =
-    let remove_duplicates ~equal lst =
-      List.fold_left
-        (fun acc x -> if List.exists (equal x) acc then acc else x :: acc)
-        [] lst
-    in
-    printfn "proccessss %s" (Func.to_string f);
     match FuncTable.find_opt data_graphs f with
     | Some data_g ->
-        regs
-        |> List.concat_map (fun r ->
-               match Data_graph.find_sources data_g r with
-               | [] -> assert false
-               | [ src ] ->
-                   printfn "regqwe %s reg - %s src - %s" (Func.to_string f) r
-                     src;
-                   if r <> src then [ Operand.GPRPair src ] else [ GPR r ]
-               | srcs -> List.map (fun s -> Operand.GPRPair s) srcs)
-        |> remove_duplicates ~equal:(fun a b -> Operand.get a = Operand.get b)
+        let reg_srcs_pairs =
+          List.map (fun r -> (r, Data_graph.find_sources data_g r)) regs
+        in
+        (* find all unique sources *)
+        reg_srcs_pairs |> List.concat_map snd |> rm_duplicates
+        (* for each source, find the dependent ones *)
+        |> List.map (fun src ->
+               let deps_regs =
+                 List.filter_map
+                   (fun (r, srcs) ->
+                     if src <> r && List.mem src srcs then Some r else None)
+                   reg_srcs_pairs
+               in
+               (src, deps_regs))
+        |> List.map (function
+             | src, [ _; _ ] -> Operand.GPRPair src
+             | src, [ reg ] when src = reg -> Operand.GPR src
+             | src, [] -> Operand.GPR src
+             | _ -> assert false)
     | None -> List.map (fun s -> Operand.GPR s) regs
   in
 

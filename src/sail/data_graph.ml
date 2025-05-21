@@ -19,9 +19,7 @@ let generate exp =
                    | Local _ | Register _ -> true
                    | _ -> false ->
                 let dst_id = string_of_id dst_id in
-                if dst_id <> src_id then
-                  (* Checker_core.Utils.printfn "%s -> %s" src_id dst_id; *)
-                  G.add_edge g src_id dst_id
+                if dst_id <> src_id then G.add_edge g src_id dst_id
             | _ -> ()
           in
           default_iterator.exp_aux self e);
@@ -36,10 +34,6 @@ let generate exp =
             match e with
             | E_aux (E_id _, _) -> ()
             | _ ->
-                (* Checker_core.Utils.printfn "%s\n%s = %s"
-                   (String.concat " "
-                      (List.map string_of_id (pat_ids pat |> IdSet.to_list)))
-                   (string_of_pat pat) (string_of_exp e); *)
                 IdSet.iter
                   (fun id ->
                     let collect_ids_it = collect_ids_it (string_of_id id) in
@@ -64,11 +58,9 @@ let rec dfs g ~start_v ~on_edge =
     g start_v
 
 let find_sources g id =
-  if (not (G.mem_vertex g id)) || List.is_empty (G.succ g id) then
-    [ (* Checker_core.Utils.printfn "emptqweqwey %s" id; *) id ]
+  if (not (G.mem_vertex g id)) || List.is_empty (G.succ g id) then [ id ]
   else
     let result = ref [] in
-    (* Checker_core.Utils.printfn "srcqweq %s" id; *)
     let on_edge (_, dst) =
       if List.is_empty (G.succ g dst) then result := dst :: !result
     in
