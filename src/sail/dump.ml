@@ -1,5 +1,6 @@
 open Checker_core
 open Utils
+open Analysis_tools
 
 type cfg = {
   mutable ocaml_code : string;
@@ -8,7 +9,6 @@ type cfg = {
 }
 
 let config = { ocaml_code = ""; ocaml_ident = ""; dot_file = "" }
-let is_name_for_tracing = function "" -> true | _ -> false
 
 open Myast
 open Myast_iterator
@@ -320,7 +320,7 @@ let dump_execute ast env effect_info =
                         ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
                           Pat_aux (Pat_exp (parg, body), _) ),
                       _ )
-                  when String.starts_with path ~prefix:"../../sail-riscv"
+                  when Str.string_match (Str.regexp ".*sail-riscv.*") path 0
                        && id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
                     let func = Func.F_usual id in
@@ -376,16 +376,18 @@ let dump_execute ast env effect_info =
   let get_arch_from_encdec =
     let encdecs =
       let f id =
-        ast.defs
-        |> List.find_map (function
-             | DEF_aux
-                 ( DEF_mapdef
-                     (MD_aux (MD_mapping (Id_aux (Id id', _), _, encdecs), _)),
-                   _ )
-               when id = id' ->
-                 Some encdecs
-             | _ -> None)
-        |> Option.get
+        let xs =
+          ast.defs
+          |> List.find_map (function
+               | DEF_aux
+                   ( DEF_mapdef
+                       (MD_aux (MD_mapping (Id_aux (Id id', _), _, encdecs), _)),
+                     _ )
+                 when id = id' ->
+                   Some encdecs
+               | _ -> None)
+        in
+        match xs with Some xs -> xs | None -> []
       in
       f "encdec" @ f "encdec_compressed"
     in
@@ -538,6 +540,7 @@ let dump_execute ast env effect_info =
       printf "@[let mem = InstrTable.mem %s @]@," config.ocaml_ident)
 
 let () =
+  (* Libsail.Type_check.set_tc_debug 2; *)
   let sail_args = ref [] in
   Arg.parse
     [

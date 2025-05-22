@@ -15,6 +15,7 @@
  (depends
   ppx_deriving_yojson
   ppx_expect
+  bisect_ppx
   linenoise
   (ocamlformat
    (= 0.26.2))

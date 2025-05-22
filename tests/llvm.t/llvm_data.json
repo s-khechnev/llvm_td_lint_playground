@@ -1,0 +1,434 @@
+{
+  "empty_ins": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALU_rr", "Sched"
+    ],
+    "AsmString": "epmty_ins",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [ { "def": "X2", "kind": "def", "printable": "X2" } ],
+    "Uses": [ { "def": "X2", "kind": "def", "printable": "X2" } ]
+  },
+  "ADD": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALU_rr", "Sched"
+    ],
+    "AsmString": "add\t$rd, $rs1, $rs2",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "ADDI": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstIBase", "RVInstI", "Sched", "ALU_ri"
+    ],
+    "AsmString": "addi\t$rd, $rs1, $imm12",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [
+          { "def": "simm12", "kind": "def", "printable": "simm12" }, "imm12"
+        ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, simm12:$imm12)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "ADDIW": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstIBase", "RVInstI", "Sched"
+    ],
+    "AsmString": "addiw\t$rd, $rs1, $imm12",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [
+          { "def": "simm12", "kind": "def", "printable": "simm12" }, "imm12"
+        ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, simm12:$imm12)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "IsRV64", "kind": "def", "printable": "IsRV64" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "ADDW": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALUW_rr", "Sched"
+    ],
+    "AsmString": "addw\t$rd, $rs1, $rs2",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "IsRV64", "kind": "def", "printable": "IsRV64" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "ADD_UW": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALUW_rr", "Sched"
+    ],
+    "AsmString": "add.uw\t$rd, $rs1, $rs2",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZba", "kind": "def", "printable": "HasStdExtZba" },
+      { "def": "IsRV64", "kind": "def", "printable": "IsRV64" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AES32DSI": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "RVKByteSelect"
+    ],
+    "AsmString": "aes32dsi\t$rd, $rs1, $rs2, $bs",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ],
+        [
+          { "def": "byteselect", "kind": "def", "printable": "byteselect" },
+          "bs"
+        ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2, byteselect:$bs)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZknd", "kind": "def", "printable": "HasStdExtZknd" },
+      { "def": "IsRV32", "kind": "def", "printable": "IsRV32" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AES32DSMI": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "RVKByteSelect"
+    ],
+    "AsmString": "aes32dsmi\t$rd, $rs1, $rs2, $bs",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ],
+        [
+          { "def": "byteselect", "kind": "def", "printable": "byteselect" },
+          "bs"
+        ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2, byteselect:$bs)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZknd", "kind": "def", "printable": "HasStdExtZknd" },
+      { "def": "IsRV32", "kind": "def", "printable": "IsRV32" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AES32ESI": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "RVKByteSelect"
+    ],
+    "AsmString": "aes32esi\t$rd, $rs1, $rs2, $bs",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ],
+        [
+          { "def": "byteselect", "kind": "def", "printable": "byteselect" },
+          "bs"
+        ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2, byteselect:$bs)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZkne", "kind": "def", "printable": "HasStdExtZkne" },
+      { "def": "IsRV32", "kind": "def", "printable": "IsRV32" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AES64DS": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALU_rr"
+    ],
+    "AsmString": "aes64ds\t$rd, $rs1, $rs2",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZknd", "kind": "def", "printable": "HasStdExtZknd" },
+      { "def": "IsRV64", "kind": "def", "printable": "IsRV64" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AES64DSM": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALU_rr"
+    ],
+    "AsmString": "aes64dsm\t$rd, $rs1, $rs2",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      { "def": "HasStdExtZknd", "kind": "def", "printable": "HasStdExtZknd" },
+      { "def": "IsRV64", "kind": "def", "printable": "IsRV64" }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
+  "AMOADD_B": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstRAtomic", "AMO_rr", "Sched"
+    ],
+    "AsmString": "amoadd.b\t$rd, $rs2, $rs1",
+    "Constraints": "",
+    "InOperandList": {
+      "args": [
+        [
+          {
+            "def": "GPRMemZeroOffset",
+            "kind": "def",
+            "printable": "GPRMemZeroOffset"
+          },
+          "rs1"
+        ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPRMemZeroOffset:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rd" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$rd)"
+    },
+    "Predicates": [
+      {
+        "def": "HasStdExtZabha",
+        "kind": "def",
+        "printable": "HasStdExtZabha"
+      }
+    ],
+    "isCodeGenOnly": 0,
+    "mayLoad": 1,
+    "mayStore": 1,
+    "Defs": [],
+    "Uses": []
+  }
+}

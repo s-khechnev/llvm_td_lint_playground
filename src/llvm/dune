@@ -10,8 +10,11 @@
   (run tar -xvf %{deps})))
 
 (executable
+ (public_name dump_llvm)
  (name dump)
- (libraries checker.core yojson str))
+ (libraries checker.core yojson str)
+ (instrumentation
+  (backend bisect_ppx)))
 
 (rule
  (targets llvm_info.ml filtered.json)
