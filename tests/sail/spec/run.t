@@ -10,7 +10,7 @@
   function f_speced_false (rs : bitvector(5), false) -> unit = ()
   
   function complicated (n : int, false, true, false, flag : bool, op : op_enum) -> unit = ()
-  $ dune exec ./spec_tester.exe funcs.sail
+  $ ./spec_tester.exe funcs.sail
   op_enum_of_num args to spec: 
   op_enum_of_num speced args: 
   num_of_op_enum args to spec: (0, arg#, [ OP_A; OP_B; OP_C ])

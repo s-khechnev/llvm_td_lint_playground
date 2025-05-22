@@ -5,7 +5,7 @@
   function g() -> unit = let _ = h1() in h2()
   
   function f() -> unit = g()
-  $ dune exec ./callgraph_tester.exe funcs1.sail
+  $ ./callgraph_tester.exe funcs1.sail
   $ cat graph.dot
   digraph G {
     f;
@@ -35,7 +35,7 @@
       let _ = add1(10) in
       let _ = add1(5) in
       my_print_int(foo)
-  $ dune exec ./callgraph_tester.exe funcs2.sail
+  $ ./callgraph_tester.exe funcs2.sail
   $ cat graph.dot
   digraph G {
     <add1 (0:5)>;
