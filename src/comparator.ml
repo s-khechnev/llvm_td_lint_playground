@@ -15,9 +15,10 @@ let () =
            operands = llvm_opers;
            ins = llvm_ins;
            outs = llvm_outs;
-           mayLoad = llvm_mayLoad;
-           mayStore = llvm_mayStore;
-           _;
+           mayLoad = _;
+           mayStore = _;
+           ins_csr = llvm_ins_csr;
+           outs_csr = llvm_outs_csr;
          } : Instruction.t =
            llvm_instr
          in
@@ -34,8 +35,8 @@ let () =
              operands = sail_opers;
              ins = sail_ins;
              outs = sail_outs;
-             mayLoad = sail_mayLoad;
-             mayStore = sail_mayStore;
+             mayLoad = _;
+             mayStore = _;
              ins_csr = sail_ins_csr;
              outs_csr = sail_outs_csr;
            } : Instruction.t =
@@ -122,16 +123,33 @@ let () =
            printfn "llvm ins: %s" (String.concat " " (f llvm_ins));
            printfn "sail ins: %s" (String.concat " " (f sail_ins));
 
-           printfn "llvm %s: mayLoad = %B" iname llvm_mayLoad;
-           printfn "sail %s: mayLoad = %B" iname sail_mayLoad;
-           if llvm_mayLoad <> sail_mayLoad then printfn "Different mayLoad";
+           (* printfn "llvm %s: mayLoad = %B" iname llvm_mayLoad;
+              printfn "sail %s: mayLoad = %B" iname sail_mayLoad;
+              if llvm_mayLoad <> sail_mayLoad then printfn "Different mayLoad";
 
-           printfn "llvm %s: mayStore = %B" iname llvm_mayStore;
-           printfn "sail %s: mayStore = %B" iname sail_mayStore;
-           if llvm_mayStore <> sail_mayStore then printfn "Different mayStore";
+              printfn "llvm %s: mayStore = %B" iname llvm_mayStore;
+              printfn "sail %s: mayStore = %B" iname sail_mayStore;
+              if llvm_mayStore <> sail_mayStore then printfn "Different mayStore"; *)
+           if List.length sail_outs_csr <> List.length llvm_outs_csr then
+             printfn "Different number of outs csr"
+           else if
+             List.exists2 String.equal
+               (List.sort String.compare sail_outs_csr)
+               (List.sort String.compare llvm_outs_csr)
+           then printfn "Different out csr";
+
+           if List.length sail_ins_csr <> List.length llvm_ins_csr then
+             printfn "Different number of ins csr"
+           else if
+             List.exists2 String.equal
+               (List.sort String.compare sail_ins_csr)
+               (List.sort String.compare llvm_ins_csr)
+           then printfn "Different ins csr";
 
            printfn "sail outs csr: %s" (String.concat " " sail_outs_csr);
+           printfn "llvm outs csr: %s" (String.concat " " llvm_outs_csr);
            printfn "sail ins csr: %s" (String.concat " " sail_ins_csr);
+           printfn "llvm ins csr: %s" (String.concat " " llvm_ins_csr);
 
            printfn ""
          in

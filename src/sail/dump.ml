@@ -602,7 +602,7 @@ let dump_execute ast env effect_info =
         else RV32_RV64
   in
 
-  let check_regs f regs =
+  let check_pair_regs f regs =
     match FuncTable.find_opt data_graphs f with
     | Some data_g ->
         let reg_srcs_pairs =
@@ -656,14 +656,14 @@ let dump_execute ast env effect_info =
                in
                let regs_ins =
                  match FuncTable.find_opt ins func with
-                 | Some ins -> check_regs func ins
+                 | Some ins -> check_pair_regs func ins
                  | None -> []
                in
                regs_ins @ List.map (fun i -> Operand.Imm i) imms
              in
              let outs =
                match FuncTable.find_opt outs func with
-               | Some outs -> check_regs func outs
+               | Some outs -> check_pair_regs func outs
                | None -> []
              in
              let mayStore, mayLoad =

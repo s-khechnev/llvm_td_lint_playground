@@ -5,12 +5,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm add16: mayLoad = false
-sail add16: mayLoad = false
-llvm add16: mayStore = false
-sail add16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: add32
 llvm RV64: add32 "rd" "rs1" "rs2"
@@ -19,12 +17,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm add32: mayLoad = false
-sail add32: mayLoad = false
-llvm add32: mayStore = false
-sail add32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: add64
 llvm RV32: add64 "rd" "rs1" "rs2"
@@ -33,12 +29,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm add64: mayLoad = false
-sail add64: mayLoad = false
-llvm add64: mayStore = false
-sail add64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: add8
 llvm RV32_RV64: add8 "rd" "rs1" "rs2"
@@ -47,12 +41,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm add8: mayLoad = false
-sail add8: mayLoad = false
-llvm add8: mayStore = false
-sail add8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ave
 llvm RV32_RV64: ave "rd" "rs1" "rs2"
@@ -61,12 +53,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ave: mayLoad = false
-sail ave: mayLoad = false
-llvm ave: mayStore = false
-sail ave: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: bitrev
 llvm RV32_RV64: bitrev "rd" "rs1" "rs2"
@@ -75,12 +65,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm bitrev: mayLoad = false
-sail bitrev: mayLoad = false
-llvm bitrev: mayStore = false
-sail bitrev: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: bitrevi
 llvm RV32_RV64: bitrevi "rd" "rs1" "shamt"
@@ -89,12 +77,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm6) (1, rs1)
-llvm bitrevi: mayLoad = false
-sail bitrevi: mayLoad = false
-llvm bitrevi: mayStore = false
-sail bitrevi: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: bpick
 llvm RV32_RV64: bpick "rd" "rs1" "rs2" "rs3"
@@ -103,12 +89,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (3, rs3) (2, rs2) (1, rs1)
 sail ins: (3, rs3) (2, rs2) (1, rs1)
-llvm bpick: mayLoad = false
-sail bpick: mayLoad = false
-llvm bpick: mayStore = false
-sail bpick: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clrs16
 llvm RV32_RV64: clrs16 "rd" "rs1"
@@ -117,12 +101,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clrs16: mayLoad = false
-sail clrs16: mayLoad = false
-llvm clrs16: mayStore = false
-sail clrs16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clrs32
 llvm RV32_RV64: clrs32 "rd" "rs1"
@@ -131,12 +113,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clrs32: mayLoad = false
-sail clrs32: mayLoad = false
-llvm clrs32: mayStore = false
-sail clrs32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clrs8
 llvm RV32_RV64: clrs8 "rd" "rs1"
@@ -145,12 +125,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clrs8: mayLoad = false
-sail clrs8: mayLoad = false
-llvm clrs8: mayStore = false
-sail clrs8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clz16
 llvm RV32_RV64: clz16 "rd" "rs1"
@@ -159,12 +137,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clz16: mayLoad = false
-sail clz16: mayLoad = false
-llvm clz16: mayStore = false
-sail clz16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clz32
 llvm RV32_RV64: clz32 "rd" "rs1"
@@ -173,12 +149,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clz32: mayLoad = false
-sail clz32: mayLoad = false
-llvm clz32: mayStore = false
-sail clz32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: clz8
 llvm RV32_RV64: clz8 "rd" "rs1"
@@ -187,12 +161,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm clz8: mayLoad = false
-sail clz8: mayLoad = false
-llvm clz8: mayStore = false
-sail clz8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: cmpeq16
 llvm RV32_RV64: cmpeq16 "rd" "rs1" "rs2"
@@ -201,12 +173,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm cmpeq16: mayLoad = false
-sail cmpeq16: mayLoad = false
-llvm cmpeq16: mayStore = false
-sail cmpeq16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: cmpeq8
 llvm RV32_RV64: cmpeq8 "rd" "rs1" "rs2"
@@ -215,12 +185,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm cmpeq8: mayLoad = false
-sail cmpeq8: mayLoad = false
-llvm cmpeq8: mayStore = false
-sail cmpeq8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: cras16
 llvm RV32_RV64: cras16 "rd" "rs1" "rs2"
@@ -229,12 +197,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm cras16: mayLoad = false
-sail cras16: mayLoad = false
-llvm cras16: mayStore = false
-sail cras16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: cras32
 llvm RV64: cras32 "rd" "rs1" "rs2"
@@ -243,12 +209,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm cras32: mayLoad = false
-sail cras32: mayLoad = false
-llvm cras32: mayStore = false
-sail cras32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: crsa16
 llvm RV32_RV64: crsa16 "rd" "rs1" "rs2"
@@ -257,12 +221,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm crsa16: mayLoad = false
-sail crsa16: mayLoad = false
-llvm crsa16: mayStore = false
-sail crsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: crsa32
 llvm RV64: crsa32 "rd" "rs1" "rs2"
@@ -271,12 +233,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm crsa32: mayLoad = false
-sail crsa32: mayLoad = false
-llvm crsa32: mayStore = false
-sail crsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: insb
 llvm RV32_RV64: insb "rd" "rs1" "shamt"
@@ -285,12 +245,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1) (0, rd)
 sail ins: (2, imm3) (1, rs1) (0, rd)
-llvm insb: mayLoad = false
-sail insb: mayLoad = false
-llvm insb: mayStore = false
-sail insb: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kabs16
 llvm RV32_RV64: kabs16 "rd" "rs1"
@@ -299,12 +257,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm kabs16: mayLoad = false
-sail kabs16: mayLoad = false
-llvm kabs16: mayStore = false
-sail kabs16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kabs32
 llvm RV64: kabs32 "rd" "rs1"
@@ -313,12 +270,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm kabs32: mayLoad = false
-sail kabs32: mayLoad = false
-llvm kabs32: mayStore = false
-sail kabs32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kabs8
 llvm RV32_RV64: kabs8 "rd" "rs1"
@@ -327,12 +283,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm kabs8: mayLoad = false
-sail kabs8: mayLoad = false
-llvm kabs8: mayStore = false
-sail kabs8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kabsw
 llvm RV32_RV64: kabsw "rd" "rs1"
@@ -341,12 +296,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm kabsw: mayLoad = false
-sail kabsw: mayLoad = false
-llvm kabsw: mayStore = false
-sail kabsw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kadd16
 llvm RV32_RV64: kadd16 "rd" "rs1" "rs2"
@@ -355,12 +309,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kadd16: mayLoad = false
-sail kadd16: mayLoad = false
-llvm kadd16: mayStore = false
-sail kadd16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kadd32
 llvm RV64: kadd32 "rd" "rs1" "rs2"
@@ -369,12 +322,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kadd32: mayLoad = false
-sail kadd32: mayLoad = false
-llvm kadd32: mayStore = false
-sail kadd32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kadd64
 llvm RV32: kadd64 "rd" "rs1" "rs2"
@@ -383,12 +335,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm kadd64: mayLoad = false
-sail kadd64: mayLoad = false
-llvm kadd64: mayStore = false
-sail kadd64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kadd64
 llvm RV64: kadd64 "rd" "rs1" "rs2"
@@ -397,12 +348,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kadd64: mayLoad = false
-sail kadd64: mayLoad = false
-llvm kadd64: mayStore = false
-sail kadd64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kadd8
 llvm RV32_RV64: kadd8 "rd" "rs1" "rs2"
@@ -411,12 +361,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kadd8: mayLoad = false
-sail kadd8: mayLoad = false
-llvm kadd8: mayStore = false
-sail kadd8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kaddh
 llvm RV32_RV64: kaddh "rd" "rs1" "rs2"
@@ -425,12 +374,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kaddh: mayLoad = false
-sail kaddh: mayLoad = false
-llvm kaddh: mayStore = false
-sail kaddh: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kaddw
 llvm RV32_RV64: kaddw "rd" "rs1" "rs2"
@@ -439,12 +387,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kaddw: mayLoad = false
-sail kaddw: mayLoad = false
-llvm kaddw: mayStore = false
-sail kaddw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kcras16
 llvm RV32_RV64: kcras16 "rd" "rs1" "rs2"
@@ -453,12 +400,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kcras16: mayLoad = false
-sail kcras16: mayLoad = false
-llvm kcras16: mayStore = false
-sail kcras16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kcras32
 llvm RV64: kcras32 "rd" "rs1" "rs2"
@@ -467,12 +413,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kcras32: mayLoad = false
-sail kcras32: mayLoad = false
-llvm kcras32: mayStore = false
-sail kcras32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kcrsa16
 llvm RV32_RV64: kcrsa16 "rd" "rs1" "rs2"
@@ -481,12 +426,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kcrsa16: mayLoad = false
-sail kcrsa16: mayLoad = false
-llvm kcrsa16: mayStore = false
-sail kcrsa16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kcrsa32
 llvm RV64: kcrsa32 "rd" "rs1" "rs2"
@@ -495,12 +439,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kcrsa32: mayLoad = false
-sail kcrsa32: mayLoad = false
-llvm kcrsa32: mayStore = false
-sail kcrsa32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kdmabb
 llvm RV32_RV64: kdmabb "rd" "rs1" "rs2"
@@ -509,12 +452,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmabb: mayLoad = false
-sail kdmabb: mayLoad = false
-llvm kdmabb: mayStore = false
-sail kdmabb: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmabb16
 llvm RV64: kdmabb16 "rd" "rs1" "rs2"
@@ -523,12 +466,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmabb16: mayLoad = false
-sail kdmabb16: mayLoad = false
-llvm kdmabb16: mayStore = false
-sail kdmabb16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmabt
 llvm RV32_RV64: kdmabt "rd" "rs1" "rs2"
@@ -537,12 +480,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmabt: mayLoad = false
-sail kdmabt: mayLoad = false
-llvm kdmabt: mayStore = false
-sail kdmabt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmabt16
 llvm RV64: kdmabt16 "rd" "rs1" "rs2"
@@ -551,12 +494,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmabt16: mayLoad = false
-sail kdmabt16: mayLoad = false
-llvm kdmabt16: mayStore = false
-sail kdmabt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmatt
 llvm RV32_RV64: kdmatt "rd" "rs1" "rs2"
@@ -565,12 +508,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmatt: mayLoad = false
-sail kdmatt: mayLoad = false
-llvm kdmatt: mayStore = false
-sail kdmatt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmatt16
 llvm RV64: kdmatt16 "rd" "rs1" "rs2"
@@ -579,12 +522,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kdmatt16: mayLoad = false
-sail kdmatt16: mayLoad = false
-llvm kdmatt16: mayStore = false
-sail kdmatt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmbb
 llvm RV32_RV64: kdmbb "rd" "rs1" "rs2"
@@ -593,12 +536,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmbb: mayLoad = false
-sail kdmbb: mayLoad = false
-llvm kdmbb: mayStore = false
-sail kdmbb: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmbb16
 llvm RV64: kdmbb16 "rd" "rs1" "rs2"
@@ -607,12 +550,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmbb16: mayLoad = false
-sail kdmbb16: mayLoad = false
-llvm kdmbb16: mayStore = false
-sail kdmbb16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmbt
 llvm RV32_RV64: kdmbt "rd" "rs1" "rs2"
@@ -621,12 +564,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmbt: mayLoad = false
-sail kdmbt: mayLoad = false
-llvm kdmbt: mayStore = false
-sail kdmbt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmbt16
 llvm RV64: kdmbt16 "rd" "rs1" "rs2"
@@ -635,12 +578,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmbt16: mayLoad = false
-sail kdmbt16: mayLoad = false
-llvm kdmbt16: mayStore = false
-sail kdmbt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmtt
 llvm RV32_RV64: kdmtt "rd" "rs1" "rs2"
@@ -649,12 +592,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmtt: mayLoad = false
-sail kdmtt: mayLoad = false
-llvm kdmtt: mayStore = false
-sail kdmtt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kdmtt16
 llvm RV64: kdmtt16 "rd" "rs1" "rs2"
@@ -663,12 +606,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kdmtt16: mayLoad = false
-sail kdmtt16: mayLoad = false
-llvm kdmtt16: mayStore = false
-sail kdmtt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khm16
 llvm RV32_RV64: khm16 "rd" "rs1" "rs2"
@@ -677,12 +620,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khm16: mayLoad = false
-sail khm16: mayLoad = false
-llvm khm16: mayStore = false
-sail khm16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khm8
 llvm RV32_RV64: khm8 "rd" "rs1" "rs2"
@@ -691,12 +634,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khm8: mayLoad = false
-sail khm8: mayLoad = false
-llvm khm8: mayStore = false
-sail khm8: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmbb
 llvm RV32_RV64: khmbb "rd" "rs1" "rs2"
@@ -705,12 +648,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmbb: mayLoad = false
-sail khmbb: mayLoad = false
-llvm khmbb: mayStore = false
-sail khmbb: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmbb16
 llvm RV64: khmbb16 "rd" "rs1" "rs2"
@@ -719,12 +662,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmbb16: mayLoad = false
-sail khmbb16: mayLoad = false
-llvm khmbb16: mayStore = false
-sail khmbb16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmbt
 llvm RV32_RV64: khmbt "rd" "rs1" "rs2"
@@ -733,12 +676,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmbt: mayLoad = false
-sail khmbt: mayLoad = false
-llvm khmbt: mayStore = false
-sail khmbt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmbt16
 llvm RV64: khmbt16 "rd" "rs1" "rs2"
@@ -747,12 +690,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmbt16: mayLoad = false
-sail khmbt16: mayLoad = false
-llvm khmbt16: mayStore = false
-sail khmbt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmtt
 llvm RV32_RV64: khmtt "rd" "rs1" "rs2"
@@ -761,12 +704,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmtt: mayLoad = false
-sail khmtt: mayLoad = false
-llvm khmtt: mayStore = false
-sail khmtt: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmtt16
 llvm RV64: khmtt16 "rd" "rs1" "rs2"
@@ -775,12 +718,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmtt16: mayLoad = false
-sail khmtt16: mayLoad = false
-llvm khmtt16: mayStore = false
-sail khmtt16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmx16
 llvm RV32_RV64: khmx16 "rd" "rs1" "rs2"
@@ -789,12 +732,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmx16: mayLoad = false
-sail khmx16: mayLoad = false
-llvm khmx16: mayStore = false
-sail khmx16: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: khmx8
 llvm RV32_RV64: khmx8 "rd" "rs1" "rs2"
@@ -803,12 +746,12 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm khmx8: mayLoad = false
-sail khmx8: mayLoad = false
-llvm khmx8: mayStore = false
-sail khmx8: mayStore = false
+Different number of outs csr
+Different number of ins csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: vxsat
 
 Report: kmabb
 llvm RV32_RV64: kmabb "rd" "rs1" "rs2"
@@ -817,12 +760,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmabb: mayLoad = false
-sail kmabb: mayLoad = false
-llvm kmabb: mayStore = false
-sail kmabb: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmabb32
 llvm RV64: kmabb32 "rd" "rs1" "rs2"
@@ -831,12 +773,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmabb32: mayLoad = false
-sail kmabb32: mayLoad = false
-llvm kmabb32: mayStore = false
-sail kmabb32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmabt
 llvm RV32_RV64: kmabt "rd" "rs1" "rs2"
@@ -845,12 +786,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmabt: mayLoad = false
-sail kmabt: mayLoad = false
-llvm kmabt: mayStore = false
-sail kmabt: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmabt32
 llvm RV64: kmabt32 "rd" "rs1" "rs2"
@@ -859,12 +799,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmabt32: mayLoad = false
-sail kmabt32: mayLoad = false
-llvm kmabt32: mayStore = false
-sail kmabt32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmada
 llvm RV32_RV64: kmada "rd" "rs1" "rs2"
@@ -873,12 +812,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmada: mayLoad = false
-sail kmada: mayLoad = false
-llvm kmada: mayStore = false
-sail kmada: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmadrs
 llvm RV32_RV64: kmadrs "rd" "rs1" "rs2"
@@ -887,12 +825,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmadrs: mayLoad = false
-sail kmadrs: mayLoad = false
-llvm kmadrs: mayStore = false
-sail kmadrs: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmadrs32
 llvm RV64: kmadrs32 "rd" "rs1" "rs2"
@@ -901,12 +838,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmadrs32: mayLoad = false
-sail kmadrs32: mayLoad = false
-llvm kmadrs32: mayStore = false
-sail kmadrs32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmads
 llvm RV32_RV64: kmads "rd" "rs1" "rs2"
@@ -915,12 +851,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmads: mayLoad = false
-sail kmads: mayLoad = false
-llvm kmads: mayStore = false
-sail kmads: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmads32
 llvm RV64: kmads32 "rd" "rs1" "rs2"
@@ -929,12 +864,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmads32: mayLoad = false
-sail kmads32: mayLoad = false
-llvm kmads32: mayStore = false
-sail kmads32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmar64
 llvm RV32: kmar64 "rd" "rs1" "rs2"
@@ -943,12 +877,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm kmar64: mayLoad = false
-sail kmar64: mayLoad = false
-llvm kmar64: mayStore = false
-sail kmar64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmar64
 llvm RV64: kmar64 "rd" "rs1" "rs2"
@@ -957,12 +890,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmar64: mayLoad = false
-sail kmar64: mayLoad = false
-llvm kmar64: mayStore = false
-sail kmar64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmatt
 llvm RV32_RV64: kmatt "rd" "rs1" "rs2"
@@ -971,12 +903,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmatt: mayLoad = false
-sail kmatt: mayLoad = false
-llvm kmatt: mayStore = false
-sail kmatt: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmatt32
 llvm RV64: kmatt32 "rd" "rs1" "rs2"
@@ -985,12 +916,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmatt32: mayLoad = false
-sail kmatt32: mayLoad = false
-llvm kmatt32: mayStore = false
-sail kmatt32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmaxda
 llvm RV32_RV64: kmaxda "rd" "rs1" "rs2"
@@ -999,12 +929,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmaxda: mayLoad = false
-sail kmaxda: mayLoad = false
-llvm kmaxda: mayStore = false
-sail kmaxda: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmaxda32
 llvm RV64: kmaxda32 "rd" "rs1" "rs2"
@@ -1013,12 +942,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmaxda32: mayLoad = false
-sail kmaxda32: mayLoad = false
-llvm kmaxda32: mayStore = false
-sail kmaxda32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmaxds
 llvm RV32_RV64: kmaxds "rd" "rs1" "rs2"
@@ -1027,12 +955,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmaxds: mayLoad = false
-sail kmaxds: mayLoad = false
-llvm kmaxds: mayStore = false
-sail kmaxds: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmaxds32
 llvm RV64: kmaxds32 "rd" "rs1" "rs2"
@@ -1041,12 +968,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmaxds32: mayLoad = false
-sail kmaxds32: mayLoad = false
-llvm kmaxds32: mayStore = false
-sail kmaxds32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmda
 llvm RV32_RV64: kmda "rd" "rs1" "rs2"
@@ -1055,12 +981,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmda: mayLoad = false
-sail kmda: mayLoad = false
-llvm kmda: mayStore = false
-sail kmda: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmda32
 llvm RV64: kmda32 "rd" "rs1" "rs2"
@@ -1069,12 +994,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmda32: mayLoad = false
-sail kmda32: mayLoad = false
-llvm kmda32: mayStore = false
-sail kmda32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmac
 llvm RV32_RV64: kmmac "rd" "rs1" "rs2"
@@ -1083,12 +1007,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmac: mayLoad = false
-sail kmmac: mayLoad = false
-llvm kmmac: mayStore = false
-sail kmmac: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmac.u
 llvm RV32_RV64: kmmac.u "rd" "rs1" "rs2"
@@ -1097,12 +1020,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmac.u: mayLoad = false
-sail kmmac.u: mayLoad = false
-llvm kmmac.u: mayStore = false
-sail kmmac.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawb
 llvm RV32_RV64: kmmawb "rd" "rs1" "rs2"
@@ -1111,12 +1033,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawb: mayLoad = false
-sail kmmawb: mayLoad = false
-llvm kmmawb: mayStore = false
-sail kmmawb: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawb.u
 llvm RV32_RV64: kmmawb.u "rd" "rs1" "rs2"
@@ -1125,12 +1046,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawb.u: mayLoad = false
-sail kmmawb.u: mayLoad = false
-llvm kmmawb.u: mayStore = false
-sail kmmawb.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawb2
 llvm RV32_RV64: kmmawb2 "rd" "rs1" "rs2"
@@ -1139,12 +1059,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawb2: mayLoad = false
-sail kmmawb2: mayLoad = false
-llvm kmmawb2: mayStore = false
-sail kmmawb2: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawb2.u
 llvm RV32_RV64: kmmawb2.u "rd" "rs1" "rs2"
@@ -1153,12 +1072,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawb2.u: mayLoad = false
-sail kmmawb2.u: mayLoad = false
-llvm kmmawb2.u: mayStore = false
-sail kmmawb2.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawt
 llvm RV32_RV64: kmmawt "rd" "rs1" "rs2"
@@ -1167,12 +1085,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawt: mayLoad = false
-sail kmmawt: mayLoad = false
-llvm kmmawt: mayStore = false
-sail kmmawt: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawt.u
 llvm RV32_RV64: kmmawt.u "rd" "rs1" "rs2"
@@ -1181,12 +1098,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawt.u: mayLoad = false
-sail kmmawt.u: mayLoad = false
-llvm kmmawt.u: mayStore = false
-sail kmmawt.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawt2
 llvm RV32_RV64: kmmawt2 "rd" "rs1" "rs2"
@@ -1195,12 +1111,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawt2: mayLoad = false
-sail kmmawt2: mayLoad = false
-llvm kmmawt2: mayStore = false
-sail kmmawt2: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmawt2.u
 llvm RV32_RV64: kmmawt2.u "rd" "rs1" "rs2"
@@ -1209,12 +1124,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmawt2.u: mayLoad = false
-sail kmmawt2.u: mayLoad = false
-llvm kmmawt2.u: mayStore = false
-sail kmmawt2.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmsb
 llvm RV32_RV64: kmmsb "rd" "rs1" "rs2"
@@ -1223,12 +1137,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmsb: mayLoad = false
-sail kmmsb: mayLoad = false
-llvm kmmsb: mayStore = false
-sail kmmsb: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmsb.u
 llvm RV32_RV64: kmmsb.u "rd" "rs1" "rs2"
@@ -1237,12 +1150,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmmsb.u: mayLoad = false
-sail kmmsb.u: mayLoad = false
-llvm kmmsb.u: mayStore = false
-sail kmmsb.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmwb2
 llvm RV32_RV64: kmmwb2 "rd" "rs1" "rs2"
@@ -1251,12 +1163,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmmwb2: mayLoad = false
-sail kmmwb2: mayLoad = false
-llvm kmmwb2: mayStore = false
-sail kmmwb2: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmwb2.u
 llvm RV32_RV64: kmmwb2.u "rd" "rs1" "rs2"
@@ -1265,12 +1176,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmmwb2.u: mayLoad = false
-sail kmmwb2.u: mayLoad = false
-llvm kmmwb2.u: mayStore = false
-sail kmmwb2.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmwt2
 llvm RV32_RV64: kmmwt2 "rd" "rs1" "rs2"
@@ -1279,12 +1189,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmmwt2: mayLoad = false
-sail kmmwt2: mayLoad = false
-llvm kmmwt2: mayStore = false
-sail kmmwt2: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmmwt2.u
 llvm RV32_RV64: kmmwt2.u "rd" "rs1" "rs2"
@@ -1293,12 +1202,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmmwt2.u: mayLoad = false
-sail kmmwt2.u: mayLoad = false
-llvm kmmwt2.u: mayStore = false
-sail kmmwt2.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsda
 llvm RV32_RV64: kmsda "rd" "rs1" "rs2"
@@ -1307,12 +1215,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmsda: mayLoad = false
-sail kmsda: mayLoad = false
-llvm kmsda: mayStore = false
-sail kmsda: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsda32
 llvm RV64: kmsda32 "rd" "rs1" "rs2"
@@ -1321,12 +1228,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmsda32: mayLoad = false
-sail kmsda32: mayLoad = false
-llvm kmsda32: mayStore = false
-sail kmsda32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsr64
 llvm RV32: kmsr64 "rd" "rs1" "rs2"
@@ -1335,12 +1241,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm kmsr64: mayLoad = false
-sail kmsr64: mayLoad = false
-llvm kmsr64: mayStore = false
-sail kmsr64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsr64
 llvm RV64: kmsr64 "rd" "rs1" "rs2"
@@ -1349,12 +1254,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmsr64: mayLoad = false
-sail kmsr64: mayLoad = false
-llvm kmsr64: mayStore = false
-sail kmsr64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsxda
 llvm RV32_RV64: kmsxda "rd" "rs1" "rs2"
@@ -1363,12 +1267,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmsxda: mayLoad = false
-sail kmsxda: mayLoad = false
-llvm kmsxda: mayStore = false
-sail kmsxda: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmsxda32
 llvm RV64: kmsxda32 "rd" "rs1" "rs2"
@@ -1377,12 +1280,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm kmsxda32: mayLoad = false
-sail kmsxda32: mayLoad = false
-llvm kmsxda32: mayStore = false
-sail kmsxda32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmxda
 llvm RV32_RV64: kmxda "rd" "rs1" "rs2"
@@ -1391,12 +1293,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmxda: mayLoad = false
-sail kmxda: mayLoad = false
-llvm kmxda: mayStore = false
-sail kmxda: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kmxda32
 llvm RV64: kmxda32 "rd" "rs1" "rs2"
@@ -1405,12 +1306,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kmxda32: mayLoad = false
-sail kmxda32: mayLoad = false
-llvm kmxda32: mayStore = false
-sail kmxda32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksll16
 llvm RV32_RV64: ksll16 "rd" "rs1" "rs2"
@@ -1419,12 +1319,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksll16: mayLoad = false
-sail ksll16: mayLoad = false
-llvm ksll16: mayStore = false
-sail ksll16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksll32
 llvm RV64: ksll32 "rd" "rs1" "rs2"
@@ -1433,12 +1332,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksll32: mayLoad = false
-sail ksll32: mayLoad = false
-llvm ksll32: mayStore = false
-sail ksll32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksll8
 llvm RV32_RV64: ksll8 "rd" "rs1" "rs2"
@@ -1447,12 +1345,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksll8: mayLoad = false
-sail ksll8: mayLoad = false
-llvm ksll8: mayStore = false
-sail ksll8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslli16
 llvm RV32_RV64: kslli16 "rd" "rs1" "shamt"
@@ -1461,12 +1358,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm kslli16: mayLoad = false
-sail kslli16: mayLoad = false
-llvm kslli16: mayStore = false
-sail kslli16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslli32
 llvm RV64: kslli32 "rd" "rs1" "shamt"
@@ -1475,12 +1371,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm kslli32: mayLoad = false
-sail kslli32: mayLoad = false
-llvm kslli32: mayStore = false
-sail kslli32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslli8
 llvm RV32_RV64: kslli8 "rd" "rs1" "shamt"
@@ -1489,12 +1384,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm kslli8: mayLoad = false
-sail kslli8: mayLoad = false
-llvm kslli8: mayStore = false
-sail kslli8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslliw
 llvm RV32_RV64: kslliw "rd" "rs1" "shamt"
@@ -1503,12 +1397,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm kslliw: mayLoad = false
-sail kslliw: mayLoad = false
-llvm kslliw: mayStore = false
-sail kslliw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksllw
 llvm RV32_RV64: ksllw "rd" "rs1" "rs2"
@@ -1517,12 +1410,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksllw: mayLoad = false
-sail ksllw: mayLoad = false
-llvm ksllw: mayStore = false
-sail ksllw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra16
 llvm RV32_RV64: kslra16 "rd" "rs1" "rs2"
@@ -1531,12 +1423,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra16: mayLoad = false
-sail kslra16: mayLoad = false
-llvm kslra16: mayStore = false
-sail kslra16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra16.u
 llvm RV32_RV64: kslra16.u "rd" "rs1" "rs2"
@@ -1545,12 +1436,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra16.u: mayLoad = false
-sail kslra16.u: mayLoad = false
-llvm kslra16.u: mayStore = false
-sail kslra16.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra32
 llvm RV64: kslra32 "rd" "rs1" "rs2"
@@ -1559,12 +1449,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra32: mayLoad = false
-sail kslra32: mayLoad = false
-llvm kslra32: mayStore = false
-sail kslra32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra32.u
 llvm RV64: kslra32.u "rd" "rs1" "rs2"
@@ -1573,12 +1462,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra32.u: mayLoad = false
-sail kslra32.u: mayLoad = false
-llvm kslra32.u: mayStore = false
-sail kslra32.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra8
 llvm RV32_RV64: kslra8 "rd" "rs1" "rs2"
@@ -1587,12 +1475,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra8: mayLoad = false
-sail kslra8: mayLoad = false
-llvm kslra8: mayStore = false
-sail kslra8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslra8.u
 llvm RV32_RV64: kslra8.u "rd" "rs1" "rs2"
@@ -1601,12 +1488,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslra8.u: mayLoad = false
-sail kslra8.u: mayLoad = false
-llvm kslra8.u: mayStore = false
-sail kslra8.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslraw
 llvm RV32_RV64: kslraw "rd" "rs1" "rs2"
@@ -1615,12 +1501,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslraw: mayLoad = false
-sail kslraw: mayLoad = false
-llvm kslraw: mayStore = false
-sail kslraw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kslraw.u
 llvm RV32_RV64: kslraw.u "rd" "rs1" "rs2"
@@ -1629,12 +1514,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kslraw.u: mayLoad = false
-sail kslraw.u: mayLoad = false
-llvm kslraw.u: mayStore = false
-sail kslraw.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kstas16
 llvm RV32_RV64: kstas16 "rd" "rs1" "rs2"
@@ -1643,12 +1527,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kstas16: mayLoad = false
-sail kstas16: mayLoad = false
-llvm kstas16: mayStore = false
-sail kstas16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kstas32
 llvm RV64: kstas32 "rd" "rs1" "rs2"
@@ -1657,12 +1540,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kstas32: mayLoad = false
-sail kstas32: mayLoad = false
-llvm kstas32: mayStore = false
-sail kstas32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kstsa16
 llvm RV32_RV64: kstsa16 "rd" "rs1" "rs2"
@@ -1671,12 +1553,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kstsa16: mayLoad = false
-sail kstsa16: mayLoad = false
-llvm kstsa16: mayStore = false
-sail kstsa16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kstsa32
 llvm RV64: kstsa32 "rd" "rs1" "rs2"
@@ -1685,12 +1566,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kstsa32: mayLoad = false
-sail kstsa32: mayLoad = false
-llvm kstsa32: mayStore = false
-sail kstsa32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksub16
 llvm RV32_RV64: ksub16 "rd" "rs1" "rs2"
@@ -1699,12 +1579,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksub16: mayLoad = false
-sail ksub16: mayLoad = false
-llvm ksub16: mayStore = false
-sail ksub16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksub32
 llvm RV64: ksub32 "rd" "rs1" "rs2"
@@ -1713,12 +1592,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksub32: mayLoad = false
-sail ksub32: mayLoad = false
-llvm ksub32: mayStore = false
-sail ksub32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksub64
 llvm RV32: ksub64 "rd" "rs1" "rs2"
@@ -1727,12 +1605,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm ksub64: mayLoad = false
-sail ksub64: mayLoad = false
-llvm ksub64: mayStore = false
-sail ksub64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksub64
 llvm RV64: ksub64 "rd" "rs1" "rs2"
@@ -1741,12 +1618,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksub64: mayLoad = false
-sail ksub64: mayLoad = false
-llvm ksub64: mayStore = false
-sail ksub64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksub8
 llvm RV32_RV64: ksub8 "rd" "rs1" "rs2"
@@ -1755,12 +1631,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksub8: mayLoad = false
-sail ksub8: mayLoad = false
-llvm ksub8: mayStore = false
-sail ksub8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksubh
 llvm RV32_RV64: ksubh "rd" "rs1" "rs2"
@@ -1769,12 +1644,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksubh: mayLoad = false
-sail ksubh: mayLoad = false
-llvm ksubh: mayStore = false
-sail ksubh: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ksubw
 llvm RV32_RV64: ksubw "rd" "rs1" "rs2"
@@ -1783,12 +1657,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ksubw: mayLoad = false
-sail ksubw: mayLoad = false
-llvm ksubw: mayStore = false
-sail ksubw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kwmmul
 llvm RV32_RV64: kwmmul "rd" "rs1" "rs2"
@@ -1797,12 +1670,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kwmmul: mayLoad = false
-sail kwmmul: mayLoad = false
-llvm kwmmul: mayStore = false
-sail kwmmul: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: kwmmul.u
 llvm RV32_RV64: kwmmul.u "rd" "rs1" "rs2"
@@ -1811,12 +1683,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm kwmmul.u: mayLoad = false
-sail kwmmul.u: mayLoad = false
-llvm kwmmul.u: mayStore = false
-sail kwmmul.u: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: maddr32
 llvm RV32_RV64: maddr32 "rd" "rs1" "rs2"
@@ -1825,12 +1696,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm maddr32: mayLoad = false
-sail maddr32: mayLoad = false
-llvm maddr32: mayStore = false
-sail maddr32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: maxw
 llvm RV32_RV64: maxw "rd" "rs1" "rs2"
@@ -1839,12 +1708,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm maxw: mayLoad = false
-sail maxw: mayLoad = false
-llvm maxw: mayStore = false
-sail maxw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: minw
 llvm RV32_RV64: minw "rd" "rs1" "rs2"
@@ -1853,12 +1720,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm minw: mayLoad = false
-sail minw: mayLoad = false
-llvm minw: mayStore = false
-sail minw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: msubr32
 llvm RV32_RV64: msubr32 "rd" "rs1" "rs2"
@@ -1867,12 +1732,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm msubr32: mayLoad = false
-sail msubr32: mayLoad = false
-llvm msubr32: mayStore = false
-sail msubr32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: mulr64
 llvm RV32: mulr64 "rd" "rs1" "rs2"
@@ -1881,12 +1744,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm mulr64: mayLoad = false
-sail mulr64: mayLoad = false
-llvm mulr64: mayStore = false
-sail mulr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: mulr64
 llvm RV64: mulr64 "rd" "rs1" "rs2"
@@ -1895,12 +1756,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm mulr64: mayLoad = false
-sail mulr64: mayLoad = false
-llvm mulr64: mayStore = false
-sail mulr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: mulsr64
 llvm RV32: mulsr64 "rd" "rs1" "rs2"
@@ -1909,12 +1768,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm mulsr64: mayLoad = false
-sail mulsr64: mayLoad = false
-llvm mulsr64: mayStore = false
-sail mulsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: mulsr64
 llvm RV64: mulsr64 "rd" "rs1" "rs2"
@@ -1923,12 +1780,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm mulsr64: mayLoad = false
-sail mulsr64: mayLoad = false
-llvm mulsr64: mayStore = false
-sail mulsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pbsad
 llvm RV32_RV64: pbsad "rd" "rs1" "rs2"
@@ -1937,12 +1792,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pbsad: mayLoad = false
-sail pbsad: mayLoad = false
-llvm pbsad: mayStore = false
-sail pbsad: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pbsada
 llvm RV32_RV64: pbsada "rd" "rs1" "rs2"
@@ -1951,12 +1804,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm pbsada: mayLoad = false
-sail pbsada: mayLoad = false
-llvm pbsada: mayStore = false
-sail pbsada: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pkbb16
 llvm RV64: pkbb16 "rd" "rs1" "rs2"
@@ -1965,12 +1816,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pkbb16: mayLoad = false
-sail pkbb16: mayLoad = false
-llvm pkbb16: mayStore = false
-sail pkbb16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pkbt16
 llvm RV32_RV64: pkbt16 "rd" "rs1" "rs2"
@@ -1979,12 +1828,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pkbt16: mayLoad = false
-sail pkbt16: mayLoad = false
-llvm pkbt16: mayStore = false
-sail pkbt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pkbt32
 llvm RV64: pkbt32 "rd" "rs1" "rs2"
@@ -1993,12 +1840,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pkbt32: mayLoad = false
-sail pkbt32: mayLoad = false
-llvm pkbt32: mayStore = false
-sail pkbt32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pktb16
 llvm RV32_RV64: pktb16 "rd" "rs1" "rs2"
@@ -2007,12 +1852,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pktb16: mayLoad = false
-sail pktb16: mayLoad = false
-llvm pktb16: mayStore = false
-sail pktb16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pktb32
 llvm RV64: pktb32 "rd" "rs1" "rs2"
@@ -2021,12 +1864,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pktb32: mayLoad = false
-sail pktb32: mayLoad = false
-llvm pktb32: mayStore = false
-sail pktb32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: pktt16
 llvm RV64: pktt16 "rd" "rs1" "rs2"
@@ -2035,12 +1876,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm pktt16: mayLoad = false
-sail pktt16: mayLoad = false
-llvm pktt16: mayStore = false
-sail pktt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: radd16
 llvm RV32_RV64: radd16 "rd" "rs1" "rs2"
@@ -2049,12 +1888,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm radd16: mayLoad = false
-sail radd16: mayLoad = false
-llvm radd16: mayStore = false
-sail radd16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: radd32
 llvm RV64: radd32 "rd" "rs1" "rs2"
@@ -2063,12 +1900,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm radd32: mayLoad = false
-sail radd32: mayLoad = false
-llvm radd32: mayStore = false
-sail radd32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: radd64
 llvm RV32: radd64 "rd" "rs1" "rs2"
@@ -2077,12 +1912,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm radd64: mayLoad = false
-sail radd64: mayLoad = false
-llvm radd64: mayStore = false
-sail radd64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: radd64
 llvm RV64: radd64 "rd" "rs1" "rs2"
@@ -2091,12 +1924,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm radd64: mayLoad = false
-sail radd64: mayLoad = false
-llvm radd64: mayStore = false
-sail radd64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: radd8
 llvm RV32_RV64: radd8 "rd" "rs1" "rs2"
@@ -2105,12 +1936,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm radd8: mayLoad = false
-sail radd8: mayLoad = false
-llvm radd8: mayStore = false
-sail radd8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: raddw
 llvm RV32_RV64: raddw "rd" "rs1" "rs2"
@@ -2119,12 +1948,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm raddw: mayLoad = false
-sail raddw: mayLoad = false
-llvm raddw: mayStore = false
-sail raddw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rcras16
 llvm RV32_RV64: rcras16 "rd" "rs1" "rs2"
@@ -2133,12 +1960,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rcras16: mayLoad = false
-sail rcras16: mayLoad = false
-llvm rcras16: mayStore = false
-sail rcras16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rcras32
 llvm RV64: rcras32 "rd" "rs1" "rs2"
@@ -2147,12 +1972,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rcras32: mayLoad = false
-sail rcras32: mayLoad = false
-llvm rcras32: mayStore = false
-sail rcras32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rcrsa16
 llvm RV32_RV64: rcrsa16 "rd" "rs1" "rs2"
@@ -2161,12 +1984,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rcrsa16: mayLoad = false
-sail rcrsa16: mayLoad = false
-llvm rcrsa16: mayStore = false
-sail rcrsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rcrsa32
 llvm RV64: rcrsa32 "rd" "rs1" "rs2"
@@ -2175,12 +1996,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rcrsa32: mayLoad = false
-sail rcrsa32: mayLoad = false
-llvm rcrsa32: mayStore = false
-sail rcrsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rstas16
 llvm RV32_RV64: rstas16 "rd" "rs1" "rs2"
@@ -2189,12 +2008,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rstas16: mayLoad = false
-sail rstas16: mayLoad = false
-llvm rstas16: mayStore = false
-sail rstas16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rstas32
 llvm RV64: rstas32 "rd" "rs1" "rs2"
@@ -2203,12 +2020,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rstas32: mayLoad = false
-sail rstas32: mayLoad = false
-llvm rstas32: mayStore = false
-sail rstas32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rstsa16
 llvm RV32_RV64: rstsa16 "rd" "rs1" "rs2"
@@ -2217,12 +2032,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rstsa16: mayLoad = false
-sail rstsa16: mayLoad = false
-llvm rstsa16: mayStore = false
-sail rstsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rstsa32
 llvm RV64: rstsa32 "rd" "rs1" "rs2"
@@ -2231,12 +2044,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rstsa32: mayLoad = false
-sail rstsa32: mayLoad = false
-llvm rstsa32: mayStore = false
-sail rstsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsub16
 llvm RV32_RV64: rsub16 "rd" "rs1" "rs2"
@@ -2245,12 +2056,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rsub16: mayLoad = false
-sail rsub16: mayLoad = false
-llvm rsub16: mayStore = false
-sail rsub16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsub32
 llvm RV64: rsub32 "rd" "rs1" "rs2"
@@ -2259,12 +2068,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rsub32: mayLoad = false
-sail rsub32: mayLoad = false
-llvm rsub32: mayStore = false
-sail rsub32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsub64
 llvm RV32: rsub64 "rd" "rs1" "rs2"
@@ -2273,12 +2080,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm rsub64: mayLoad = false
-sail rsub64: mayLoad = false
-llvm rsub64: mayStore = false
-sail rsub64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsub64
 llvm RV64: rsub64 "rd" "rs1" "rs2"
@@ -2287,12 +2092,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rsub64: mayLoad = false
-sail rsub64: mayLoad = false
-llvm rsub64: mayStore = false
-sail rsub64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsub8
 llvm RV32_RV64: rsub8 "rd" "rs1" "rs2"
@@ -2301,12 +2104,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rsub8: mayLoad = false
-sail rsub8: mayLoad = false
-llvm rsub8: mayStore = false
-sail rsub8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: rsubw
 llvm RV32_RV64: rsubw "rd" "rs1" "rs2"
@@ -2315,12 +2116,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm rsubw: mayLoad = false
-sail rsubw: mayLoad = false
-llvm rsubw: mayStore = false
-sail rsubw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sclip16
 llvm RV32_RV64: sclip16 "rd" "rs1" "shamt"
@@ -2329,12 +2128,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm sclip16: mayLoad = false
-sail sclip16: mayLoad = false
-llvm sclip16: mayStore = false
-sail sclip16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sclip32
 llvm RV32_RV64: sclip32 "rd" "rs1" "shamt"
@@ -2343,12 +2141,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm sclip32: mayLoad = false
-sail sclip32: mayLoad = false
-llvm sclip32: mayStore = false
-sail sclip32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sclip8
 llvm RV32_RV64: sclip8 "rd" "rs1" "shamt"
@@ -2357,12 +2154,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm sclip8: mayLoad = false
-sail sclip8: mayLoad = false
-llvm sclip8: mayStore = false
-sail sclip8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: scmple16
 llvm RV32_RV64: scmple16 "rd" "rs1" "rs2"
@@ -2371,12 +2167,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm scmple16: mayLoad = false
-sail scmple16: mayLoad = false
-llvm scmple16: mayStore = false
-sail scmple16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: scmple8
 llvm RV32_RV64: scmple8 "rd" "rs1" "rs2"
@@ -2385,12 +2179,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm scmple8: mayLoad = false
-sail scmple8: mayLoad = false
-llvm scmple8: mayStore = false
-sail scmple8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: scmplt16
 llvm RV32_RV64: scmplt16 "rd" "rs1" "rs2"
@@ -2399,12 +2191,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm scmplt16: mayLoad = false
-sail scmplt16: mayLoad = false
-llvm scmplt16: mayStore = false
-sail scmplt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: scmplt8
 llvm RV32_RV64: scmplt8 "rd" "rs1" "rs2"
@@ -2413,12 +2203,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm scmplt8: mayLoad = false
-sail scmplt8: mayLoad = false
-llvm scmplt8: mayStore = false
-sail scmplt8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sll16
 llvm RV32_RV64: sll16 "rd" "rs1" "rs2"
@@ -2427,12 +2215,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sll16: mayLoad = false
-sail sll16: mayLoad = false
-llvm sll16: mayStore = false
-sail sll16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sll32
 llvm RV64: sll32 "rd" "rs1" "rs2"
@@ -2441,12 +2227,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sll32: mayLoad = false
-sail sll32: mayLoad = false
-llvm sll32: mayStore = false
-sail sll32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sll8
 llvm RV32_RV64: sll8 "rd" "rs1" "rs2"
@@ -2455,12 +2239,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sll8: mayLoad = false
-sail sll8: mayLoad = false
-llvm sll8: mayStore = false
-sail sll8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: slli16
 llvm RV32_RV64: slli16 "rd" "rs1" "shamt"
@@ -2469,12 +2251,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm slli16: mayLoad = false
-sail slli16: mayLoad = false
-llvm slli16: mayStore = false
-sail slli16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: slli32
 llvm RV64: slli32 "rd" "rs1" "shamt"
@@ -2483,12 +2263,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm slli32: mayLoad = false
-sail slli32: mayLoad = false
-llvm slli32: mayStore = false
-sail slli32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: slli8
 llvm RV32_RV64: slli8 "rd" "rs1" "shamt"
@@ -2497,12 +2275,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm slli8: mayLoad = false
-sail slli8: mayLoad = false
-llvm slli8: mayStore = false
-sail slli8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smal
 llvm RV32: smal "rd" "rs1" "rs2"
@@ -2511,12 +2287,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1 : PairGPR)
 sail ins: (2, rs2) (1, rs1 : PairGPR)
-llvm smal: mayLoad = false
-sail smal: mayLoad = false
-llvm smal: mayStore = false
-sail smal: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smal
 llvm RV64: smal "rd" "rs1" "rs2"
@@ -2525,12 +2299,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smal: mayLoad = false
-sail smal: mayLoad = false
-llvm smal: mayStore = false
-sail smal: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalbb
 llvm RV32: smalbb "rd" "rs1" "rs2"
@@ -2539,12 +2311,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalbb: mayLoad = false
-sail smalbb: mayLoad = false
-llvm smalbb: mayStore = false
-sail smalbb: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalbb
 llvm RV64: smalbb "rd" "rs1" "rs2"
@@ -2553,12 +2323,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalbb: mayLoad = false
-sail smalbb: mayLoad = false
-llvm smalbb: mayStore = false
-sail smalbb: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalbt
 llvm RV32: smalbt "rd" "rs1" "rs2"
@@ -2567,12 +2335,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalbt: mayLoad = false
-sail smalbt: mayLoad = false
-llvm smalbt: mayStore = false
-sail smalbt: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalbt
 llvm RV64: smalbt "rd" "rs1" "rs2"
@@ -2581,12 +2347,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalbt: mayLoad = false
-sail smalbt: mayLoad = false
-llvm smalbt: mayStore = false
-sail smalbt: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalda
 llvm RV32: smalda "rd" "rs1" "rs2"
@@ -2595,12 +2359,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalda: mayLoad = false
-sail smalda: mayLoad = false
-llvm smalda: mayStore = false
-sail smalda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalda
 llvm RV64: smalda "rd" "rs1" "rs2"
@@ -2609,12 +2371,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalda: mayLoad = false
-sail smalda: mayLoad = false
-llvm smalda: mayStore = false
-sail smalda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaldrs
 llvm RV32: smaldrs "rd" "rs1" "rs2"
@@ -2623,12 +2383,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smaldrs: mayLoad = false
-sail smaldrs: mayLoad = false
-llvm smaldrs: mayStore = false
-sail smaldrs: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaldrs
 llvm RV64: smaldrs "rd" "rs1" "rs2"
@@ -2637,12 +2395,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smaldrs: mayLoad = false
-sail smaldrs: mayLoad = false
-llvm smaldrs: mayStore = false
-sail smaldrs: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalds
 llvm RV32: smalds "rd" "rs1" "rs2"
@@ -2651,12 +2407,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalds: mayLoad = false
-sail smalds: mayLoad = false
-llvm smalds: mayStore = false
-sail smalds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalds
 llvm RV64: smalds "rd" "rs1" "rs2"
@@ -2665,12 +2419,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalds: mayLoad = false
-sail smalds: mayLoad = false
-llvm smalds: mayStore = false
-sail smalds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaltt
 llvm RV32: smaltt "rd" "rs1" "rs2"
@@ -2679,12 +2431,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smaltt: mayLoad = false
-sail smaltt: mayLoad = false
-llvm smaltt: mayStore = false
-sail smaltt: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaltt
 llvm RV64: smaltt "rd" "rs1" "rs2"
@@ -2693,12 +2443,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smaltt: mayLoad = false
-sail smaltt: mayLoad = false
-llvm smaltt: mayStore = false
-sail smaltt: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalxda
 llvm RV32: smalxda "rd" "rs1" "rs2"
@@ -2707,12 +2455,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalxda: mayLoad = false
-sail smalxda: mayLoad = false
-llvm smalxda: mayStore = false
-sail smalxda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalxda
 llvm RV64: smalxda "rd" "rs1" "rs2"
@@ -2721,12 +2467,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalxda: mayLoad = false
-sail smalxda: mayLoad = false
-llvm smalxda: mayStore = false
-sail smalxda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalxds
 llvm RV32: smalxds "rd" "rs1" "rs2"
@@ -2735,12 +2479,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smalxds: mayLoad = false
-sail smalxds: mayLoad = false
-llvm smalxds: mayStore = false
-sail smalxds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smalxds
 llvm RV64: smalxds "rd" "rs1" "rs2"
@@ -2749,12 +2491,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smalxds: mayLoad = false
-sail smalxds: mayLoad = false
-llvm smalxds: mayStore = false
-sail smalxds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaqa
 llvm RV32_RV64: smaqa "rd" "rs1" "rs2"
@@ -2763,12 +2503,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smaqa: mayLoad = false
-sail smaqa: mayLoad = false
-llvm smaqa: mayStore = false
-sail smaqa: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smaqa.su
 llvm RV32_RV64: smaqa.su "rd" "rs1" "rs2"
@@ -2777,12 +2515,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smaqa.su: mayLoad = false
-sail smaqa.su: mayLoad = false
-llvm smaqa.su: mayStore = false
-sail smaqa.su: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smar64
 llvm RV32: smar64 "rd" "rs1" "rs2"
@@ -2791,12 +2527,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smar64: mayLoad = false
-sail smar64: mayLoad = false
-llvm smar64: mayStore = false
-sail smar64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smar64
 llvm RV64: smar64 "rd" "rs1" "rs2"
@@ -2805,12 +2539,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smar64: mayLoad = false
-sail smar64: mayLoad = false
-llvm smar64: mayStore = false
-sail smar64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smax16
 llvm RV32_RV64: smax16 "rd" "rs1" "rs2"
@@ -2819,12 +2551,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smax16: mayLoad = false
-sail smax16: mayLoad = false
-llvm smax16: mayStore = false
-sail smax16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smax32
 llvm RV64: smax32 "rd" "rs1" "rs2"
@@ -2833,12 +2563,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smax32: mayLoad = false
-sail smax32: mayLoad = false
-llvm smax32: mayStore = false
-sail smax32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smax8
 llvm RV32_RV64: smax8 "rd" "rs1" "rs2"
@@ -2847,12 +2575,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smax8: mayLoad = false
-sail smax8: mayLoad = false
-llvm smax8: mayStore = false
-sail smax8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smbb16
 llvm RV32_RV64: smbb16 "rd" "rs1" "rs2"
@@ -2861,12 +2587,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smbb16: mayLoad = false
-sail smbb16: mayLoad = false
-llvm smbb16: mayStore = false
-sail smbb16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smbt16
 llvm RV32_RV64: smbt16 "rd" "rs1" "rs2"
@@ -2875,12 +2599,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smbt16: mayLoad = false
-sail smbt16: mayLoad = false
-llvm smbt16: mayStore = false
-sail smbt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smbt32
 llvm RV64: smbt32 "rd" "rs1" "rs2"
@@ -2889,12 +2611,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smbt32: mayLoad = false
-sail smbt32: mayLoad = false
-llvm smbt32: mayStore = false
-sail smbt32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smdrs
 llvm RV32_RV64: smdrs "rd" "rs1" "rs2"
@@ -2903,12 +2623,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smdrs: mayLoad = false
-sail smdrs: mayLoad = false
-llvm smdrs: mayStore = false
-sail smdrs: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smdrs32
 llvm RV64: smdrs32 "rd" "rs1" "rs2"
@@ -2917,12 +2635,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smdrs32: mayLoad = false
-sail smdrs32: mayLoad = false
-llvm smdrs32: mayStore = false
-sail smdrs32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smds
 llvm RV32_RV64: smds "rd" "rs1" "rs2"
@@ -2931,12 +2647,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smds: mayLoad = false
-sail smds: mayLoad = false
-llvm smds: mayStore = false
-sail smds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smds32
 llvm RV64: smds32 "rd" "rs1" "rs2"
@@ -2945,12 +2659,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smds32: mayLoad = false
-sail smds32: mayLoad = false
-llvm smds32: mayStore = false
-sail smds32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smin16
 llvm RV32_RV64: smin16 "rd" "rs1" "rs2"
@@ -2959,12 +2671,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smin16: mayLoad = false
-sail smin16: mayLoad = false
-llvm smin16: mayStore = false
-sail smin16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smin32
 llvm RV64: smin32 "rd" "rs1" "rs2"
@@ -2973,12 +2683,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smin32: mayLoad = false
-sail smin32: mayLoad = false
-llvm smin32: mayStore = false
-sail smin32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smin8
 llvm RV32_RV64: smin8 "rd" "rs1" "rs2"
@@ -2987,12 +2695,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smin8: mayLoad = false
-sail smin8: mayLoad = false
-llvm smin8: mayStore = false
-sail smin8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmul
 llvm RV32_RV64: smmul "rd" "rs1" "rs2"
@@ -3001,12 +2707,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmul: mayLoad = false
-sail smmul: mayLoad = false
-llvm smmul: mayStore = false
-sail smmul: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmul.u
 llvm RV32_RV64: smmul.u "rd" "rs1" "rs2"
@@ -3015,12 +2719,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmul.u: mayLoad = false
-sail smmul.u: mayLoad = false
-llvm smmul.u: mayStore = false
-sail smmul.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmwb
 llvm RV32_RV64: smmwb "rd" "rs1" "rs2"
@@ -3029,12 +2731,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmwb: mayLoad = false
-sail smmwb: mayLoad = false
-llvm smmwb: mayStore = false
-sail smmwb: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmwb.u
 llvm RV32_RV64: smmwb.u "rd" "rs1" "rs2"
@@ -3043,12 +2743,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmwb.u: mayLoad = false
-sail smmwb.u: mayLoad = false
-llvm smmwb.u: mayStore = false
-sail smmwb.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmwt
 llvm RV32_RV64: smmwt "rd" "rs1" "rs2"
@@ -3057,12 +2755,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmwt: mayLoad = false
-sail smmwt: mayLoad = false
-llvm smmwt: mayStore = false
-sail smmwt: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smmwt.u
 llvm RV32_RV64: smmwt.u "rd" "rs1" "rs2"
@@ -3071,12 +2767,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smmwt.u: mayLoad = false
-sail smmwt.u: mayLoad = false
-llvm smmwt.u: mayStore = false
-sail smmwt.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smslda
 llvm RV32: smslda "rd" "rs1" "rs2"
@@ -3085,12 +2779,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smslda: mayLoad = false
-sail smslda: mayLoad = false
-llvm smslda: mayStore = false
-sail smslda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smslda
 llvm RV64: smslda "rd" "rs1" "rs2"
@@ -3099,12 +2791,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smslda: mayLoad = false
-sail smslda: mayLoad = false
-llvm smslda: mayStore = false
-sail smslda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smslxda
 llvm RV32: smslxda "rd" "rs1" "rs2"
@@ -3113,12 +2803,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smslxda: mayLoad = false
-sail smslxda: mayLoad = false
-llvm smslxda: mayStore = false
-sail smslxda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smslxda
 llvm RV64: smslxda "rd" "rs1" "rs2"
@@ -3127,12 +2815,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smslxda: mayLoad = false
-sail smslxda: mayLoad = false
-llvm smslxda: mayStore = false
-sail smslxda: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smsr64
 llvm RV32: smsr64 "rd" "rs1" "rs2"
@@ -3141,12 +2827,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm smsr64: mayLoad = false
-sail smsr64: mayLoad = false
-llvm smsr64: mayStore = false
-sail smsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smsr64
 llvm RV64: smsr64 "rd" "rs1" "rs2"
@@ -3155,12 +2839,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm smsr64: mayLoad = false
-sail smsr64: mayLoad = false
-llvm smsr64: mayStore = false
-sail smsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smtt16
 llvm RV32_RV64: smtt16 "rd" "rs1" "rs2"
@@ -3169,12 +2851,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smtt16: mayLoad = false
-sail smtt16: mayLoad = false
-llvm smtt16: mayStore = false
-sail smtt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smtt32
 llvm RV64: smtt32 "rd" "rs1" "rs2"
@@ -3183,12 +2863,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smtt32: mayLoad = false
-sail smtt32: mayLoad = false
-llvm smtt32: mayStore = false
-sail smtt32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smul16
 llvm RV32: smul16 "rd" "rs1" "rs2"
@@ -3197,12 +2875,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smul16: mayLoad = false
-sail smul16: mayLoad = false
-llvm smul16: mayStore = false
-sail smul16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smul16
 llvm RV64: smul16 "rd" "rs1" "rs2"
@@ -3211,12 +2887,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smul16: mayLoad = false
-sail smul16: mayLoad = false
-llvm smul16: mayStore = false
-sail smul16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smul8
 llvm RV32: smul8 "rd" "rs1" "rs2"
@@ -3225,12 +2899,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smul8: mayLoad = false
-sail smul8: mayLoad = false
-llvm smul8: mayStore = false
-sail smul8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smul8
 llvm RV64: smul8 "rd" "rs1" "rs2"
@@ -3239,12 +2911,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smul8: mayLoad = false
-sail smul8: mayLoad = false
-llvm smul8: mayStore = false
-sail smul8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smulx16
 llvm RV32: smulx16 "rd" "rs1" "rs2"
@@ -3253,12 +2923,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smulx16: mayLoad = false
-sail smulx16: mayLoad = false
-llvm smulx16: mayStore = false
-sail smulx16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smulx16
 llvm RV64: smulx16 "rd" "rs1" "rs2"
@@ -3267,12 +2935,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smulx16: mayLoad = false
-sail smulx16: mayLoad = false
-llvm smulx16: mayStore = false
-sail smulx16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smulx8
 llvm RV32: smulx8 "rd" "rs1" "rs2"
@@ -3281,12 +2947,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smulx8: mayLoad = false
-sail smulx8: mayLoad = false
-llvm smulx8: mayStore = false
-sail smulx8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smulx8
 llvm RV64: smulx8 "rd" "rs1" "rs2"
@@ -3295,12 +2959,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smulx8: mayLoad = false
-sail smulx8: mayLoad = false
-llvm smulx8: mayStore = false
-sail smulx8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smxds
 llvm RV32_RV64: smxds "rd" "rs1" "rs2"
@@ -3309,12 +2971,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smxds: mayLoad = false
-sail smxds: mayLoad = false
-llvm smxds: mayStore = false
-sail smxds: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: smxds32
 llvm RV64: smxds32 "rd" "rs1" "rs2"
@@ -3323,12 +2983,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm smxds32: mayLoad = false
-sail smxds32: mayLoad = false
-llvm smxds32: mayStore = false
-sail smxds32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra.u
 llvm RV32_RV64: sra.u "rd" "rs1" "rs2"
@@ -3337,12 +2995,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra.u: mayLoad = false
-sail sra.u: mayLoad = false
-llvm sra.u: mayStore = false
-sail sra.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra16
 llvm RV32_RV64: sra16 "rd" "rs1" "rs2"
@@ -3351,12 +3007,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra16: mayLoad = false
-sail sra16: mayLoad = false
-llvm sra16: mayStore = false
-sail sra16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra16.u
 llvm RV32_RV64: sra16.u "rd" "rs1" "rs2"
@@ -3365,12 +3019,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra16.u: mayLoad = false
-sail sra16.u: mayLoad = false
-llvm sra16.u: mayStore = false
-sail sra16.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra32
 llvm RV64: sra32 "rd" "rs1" "rs2"
@@ -3379,12 +3031,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra32: mayLoad = false
-sail sra32: mayLoad = false
-llvm sra32: mayStore = false
-sail sra32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra32.u
 llvm RV64: sra32.u "rd" "rs1" "rs2"
@@ -3393,12 +3043,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra32.u: mayLoad = false
-sail sra32.u: mayLoad = false
-llvm sra32.u: mayStore = false
-sail sra32.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra8
 llvm RV32_RV64: sra8 "rd" "rs1" "rs2"
@@ -3407,12 +3055,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra8: mayLoad = false
-sail sra8: mayLoad = false
-llvm sra8: mayStore = false
-sail sra8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sra8.u
 llvm RV32_RV64: sra8.u "rd" "rs1" "rs2"
@@ -3421,12 +3067,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sra8.u: mayLoad = false
-sail sra8.u: mayLoad = false
-llvm sra8.u: mayStore = false
-sail sra8.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai.u
 llvm RV32_RV64: srai.u "rd" "rs1" "shamt"
@@ -3435,12 +3079,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm6) (1, rs1)
-llvm srai.u: mayLoad = false
-sail srai.u: mayLoad = false
-llvm srai.u: mayStore = false
-sail srai.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai16
 llvm RV32_RV64: srai16 "rd" "rs1" "shamt"
@@ -3449,12 +3091,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm srai16: mayLoad = false
-sail srai16: mayLoad = false
-llvm srai16: mayStore = false
-sail srai16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai16.u
 llvm RV32_RV64: srai16.u "rd" "rs1" "shamt"
@@ -3463,12 +3103,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm srai16.u: mayLoad = false
-sail srai16.u: mayLoad = false
-llvm srai16.u: mayStore = false
-sail srai16.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai32
 llvm RV64: srai32 "rd" "rs1" "shamt"
@@ -3477,12 +3115,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm srai32: mayLoad = false
-sail srai32: mayLoad = false
-llvm srai32: mayStore = false
-sail srai32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai32.u
 llvm RV64: srai32.u "rd" "rs1" "shamt"
@@ -3491,12 +3127,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm srai32.u: mayLoad = false
-sail srai32.u: mayLoad = false
-llvm srai32.u: mayStore = false
-sail srai32.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai8
 llvm RV32_RV64: srai8 "rd" "rs1" "shamt"
@@ -3505,12 +3139,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm srai8: mayLoad = false
-sail srai8: mayLoad = false
-llvm srai8: mayStore = false
-sail srai8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srai8.u
 llvm RV32_RV64: srai8.u "rd" "rs1" "shamt"
@@ -3519,12 +3151,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm srai8.u: mayLoad = false
-sail srai8.u: mayLoad = false
-llvm srai8.u: mayStore = false
-sail srai8.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sraiw.u
 llvm RV64: sraiw.u "rd" "rs1" "shamt"
@@ -3533,12 +3163,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm sraiw.u: mayLoad = false
-sail sraiw.u: mayLoad = false
-llvm sraiw.u: mayStore = false
-sail sraiw.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl16
 llvm RV32_RV64: srl16 "rd" "rs1" "rs2"
@@ -3547,12 +3175,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl16: mayLoad = false
-sail srl16: mayLoad = false
-llvm srl16: mayStore = false
-sail srl16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl16.u
 llvm RV32_RV64: srl16.u "rd" "rs1" "rs2"
@@ -3561,12 +3187,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl16.u: mayLoad = false
-sail srl16.u: mayLoad = false
-llvm srl16.u: mayStore = false
-sail srl16.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl32
 llvm RV64: srl32 "rd" "rs1" "rs2"
@@ -3575,12 +3199,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl32: mayLoad = false
-sail srl32: mayLoad = false
-llvm srl32: mayStore = false
-sail srl32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl32.u
 llvm RV64: srl32.u "rd" "rs1" "rs2"
@@ -3589,12 +3211,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl32.u: mayLoad = false
-sail srl32.u: mayLoad = false
-llvm srl32.u: mayStore = false
-sail srl32.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl8
 llvm RV32_RV64: srl8 "rd" "rs1" "rs2"
@@ -3603,12 +3223,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl8: mayLoad = false
-sail srl8: mayLoad = false
-llvm srl8: mayStore = false
-sail srl8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srl8.u
 llvm RV32_RV64: srl8.u "rd" "rs1" "rs2"
@@ -3617,12 +3235,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm srl8.u: mayLoad = false
-sail srl8.u: mayLoad = false
-llvm srl8.u: mayStore = false
-sail srl8.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli16
 llvm RV32_RV64: srli16 "rd" "rs1" "shamt"
@@ -3631,12 +3247,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm srli16: mayLoad = false
-sail srli16: mayLoad = false
-llvm srli16: mayStore = false
-sail srli16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli16.u
 llvm RV32_RV64: srli16.u "rd" "rs1" "shamt"
@@ -3645,12 +3259,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm srli16.u: mayLoad = false
-sail srli16.u: mayLoad = false
-llvm srli16.u: mayStore = false
-sail srli16.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli32
 llvm RV64: srli32 "rd" "rs1" "shamt"
@@ -3659,12 +3271,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm srli32: mayLoad = false
-sail srli32: mayLoad = false
-llvm srli32: mayStore = false
-sail srli32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli32.u
 llvm RV64: srli32.u "rd" "rs1" "shamt"
@@ -3673,12 +3283,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm srli32.u: mayLoad = false
-sail srli32.u: mayLoad = false
-llvm srli32.u: mayStore = false
-sail srli32.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli8
 llvm RV32_RV64: srli8 "rd" "rs1" "shamt"
@@ -3687,12 +3295,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm srli8: mayLoad = false
-sail srli8: mayLoad = false
-llvm srli8: mayStore = false
-sail srli8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: srli8.u
 llvm RV32_RV64: srli8.u "rd" "rs1" "shamt"
@@ -3701,12 +3307,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm srli8.u: mayLoad = false
-sail srli8.u: mayLoad = false
-llvm srli8.u: mayStore = false
-sail srli8.u: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: stas16
 llvm RV32_RV64: stas16 "rd" "rs1" "rs2"
@@ -3715,12 +3319,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm stas16: mayLoad = false
-sail stas16: mayLoad = false
-llvm stas16: mayStore = false
-sail stas16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: stas32
 llvm RV64: stas32 "rd" "rs1" "rs2"
@@ -3729,12 +3331,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm stas32: mayLoad = false
-sail stas32: mayLoad = false
-llvm stas32: mayStore = false
-sail stas32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: stsa16
 llvm RV32_RV64: stsa16 "rd" "rs1" "rs2"
@@ -3743,12 +3343,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm stsa16: mayLoad = false
-sail stsa16: mayLoad = false
-llvm stsa16: mayStore = false
-sail stsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: stsa32
 llvm RV64: stsa32 "rd" "rs1" "rs2"
@@ -3757,12 +3355,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm stsa32: mayLoad = false
-sail stsa32: mayLoad = false
-llvm stsa32: mayStore = false
-sail stsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sub16
 llvm RV32_RV64: sub16 "rd" "rs1" "rs2"
@@ -3771,12 +3367,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sub16: mayLoad = false
-sail sub16: mayLoad = false
-llvm sub16: mayStore = false
-sail sub16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sub32
 llvm RV64: sub32 "rd" "rs1" "rs2"
@@ -3785,12 +3379,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sub32: mayLoad = false
-sail sub32: mayLoad = false
-llvm sub32: mayStore = false
-sail sub32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sub64
 llvm RV32: sub64 "rd" "rs1" "rs2"
@@ -3799,12 +3391,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm sub64: mayLoad = false
-sail sub64: mayLoad = false
-llvm sub64: mayStore = false
-sail sub64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sub8
 llvm RV32_RV64: sub8 "rd" "rs1" "rs2"
@@ -3813,12 +3403,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm sub8: mayLoad = false
-sail sub8: mayLoad = false
-llvm sub8: mayStore = false
-sail sub8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sunpkd810
 llvm RV32_RV64: sunpkd810 "rd" "rs1"
@@ -3827,12 +3415,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm sunpkd810: mayLoad = false
-sail sunpkd810: mayLoad = false
-llvm sunpkd810: mayStore = false
-sail sunpkd810: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sunpkd820
 llvm RV32_RV64: sunpkd820 "rd" "rs1"
@@ -3841,12 +3427,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm sunpkd820: mayLoad = false
-sail sunpkd820: mayLoad = false
-llvm sunpkd820: mayStore = false
-sail sunpkd820: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sunpkd830
 llvm RV32_RV64: sunpkd830 "rd" "rs1"
@@ -3855,12 +3439,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm sunpkd830: mayLoad = false
-sail sunpkd830: mayLoad = false
-llvm sunpkd830: mayStore = false
-sail sunpkd830: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sunpkd831
 llvm RV32_RV64: sunpkd831 "rd" "rs1"
@@ -3869,12 +3451,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm sunpkd831: mayLoad = false
-sail sunpkd831: mayLoad = false
-llvm sunpkd831: mayStore = false
-sail sunpkd831: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: sunpkd832
 llvm RV32_RV64: sunpkd832 "rd" "rs1"
@@ -3883,12 +3463,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm sunpkd832: mayLoad = false
-sail sunpkd832: mayLoad = false
-llvm sunpkd832: mayStore = false
-sail sunpkd832: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: swap8
 llvm RV32_RV64: swap8 "rd" "rs1"
@@ -3897,12 +3475,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm swap8: mayLoad = false
-sail swap8: mayLoad = false
-llvm swap8: mayStore = false
-sail swap8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uclip16
 llvm RV32_RV64: uclip16 "rd" "rs1" "shamt"
@@ -3911,12 +3487,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm4) (1, rs1)
-llvm uclip16: mayLoad = false
-sail uclip16: mayLoad = false
-llvm uclip16: mayStore = false
-sail uclip16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uclip32
 llvm RV32_RV64: uclip32 "rd" "rs1" "shamt"
@@ -3925,12 +3500,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm uclip32: mayLoad = false
-sail uclip32: mayLoad = false
-llvm uclip32: mayStore = false
-sail uclip32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uclip8
 llvm RV32_RV64: uclip8 "rd" "rs1" "shamt"
@@ -3939,12 +3513,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm3) (1, rs1)
-llvm uclip8: mayLoad = false
-sail uclip8: mayLoad = false
-llvm uclip8: mayStore = false
-sail uclip8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ucmple16
 llvm RV32_RV64: ucmple16 "rd" "rs1" "rs2"
@@ -3953,12 +3526,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ucmple16: mayLoad = false
-sail ucmple16: mayLoad = false
-llvm ucmple16: mayStore = false
-sail ucmple16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ucmple8
 llvm RV32_RV64: ucmple8 "rd" "rs1" "rs2"
@@ -3967,12 +3538,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ucmple8: mayLoad = false
-sail ucmple8: mayLoad = false
-llvm ucmple8: mayStore = false
-sail ucmple8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ucmplt16
 llvm RV32_RV64: ucmplt16 "rd" "rs1" "rs2"
@@ -3981,12 +3550,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ucmplt16: mayLoad = false
-sail ucmplt16: mayLoad = false
-llvm ucmplt16: mayStore = false
-sail ucmplt16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ucmplt8
 llvm RV32_RV64: ucmplt8 "rd" "rs1" "rs2"
@@ -3995,12 +3562,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ucmplt8: mayLoad = false
-sail ucmplt8: mayLoad = false
-llvm ucmplt8: mayStore = false
-sail ucmplt8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukadd16
 llvm RV32_RV64: ukadd16 "rd" "rs1" "rs2"
@@ -4009,12 +3574,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukadd16: mayLoad = false
-sail ukadd16: mayLoad = false
-llvm ukadd16: mayStore = false
-sail ukadd16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukadd32
 llvm RV64: ukadd32 "rd" "rs1" "rs2"
@@ -4023,12 +3587,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukadd32: mayLoad = false
-sail ukadd32: mayLoad = false
-llvm ukadd32: mayStore = false
-sail ukadd32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukadd64
 llvm RV32: ukadd64 "rd" "rs1" "rs2"
@@ -4037,12 +3600,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm ukadd64: mayLoad = false
-sail ukadd64: mayLoad = false
-llvm ukadd64: mayStore = false
-sail ukadd64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukadd64
 llvm RV64: ukadd64 "rd" "rs1" "rs2"
@@ -4051,12 +3613,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukadd64: mayLoad = false
-sail ukadd64: mayLoad = false
-llvm ukadd64: mayStore = false
-sail ukadd64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukadd8
 llvm RV32_RV64: ukadd8 "rd" "rs1" "rs2"
@@ -4065,12 +3626,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukadd8: mayLoad = false
-sail ukadd8: mayLoad = false
-llvm ukadd8: mayStore = false
-sail ukadd8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukaddh
 llvm RV32_RV64: ukaddh "rd" "rs1" "rs2"
@@ -4079,12 +3639,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukaddh: mayLoad = false
-sail ukaddh: mayLoad = false
-llvm ukaddh: mayStore = false
-sail ukaddh: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukaddw
 llvm RV32_RV64: ukaddw "rd" "rs1" "rs2"
@@ -4093,12 +3652,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukaddw: mayLoad = false
-sail ukaddw: mayLoad = false
-llvm ukaddw: mayStore = false
-sail ukaddw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukcras16
 llvm RV32_RV64: ukcras16 "rd" "rs1" "rs2"
@@ -4107,12 +3665,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukcras16: mayLoad = false
-sail ukcras16: mayLoad = false
-llvm ukcras16: mayStore = false
-sail ukcras16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukcras32
 llvm RV64: ukcras32 "rd" "rs1" "rs2"
@@ -4121,12 +3678,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukcras32: mayLoad = false
-sail ukcras32: mayLoad = false
-llvm ukcras32: mayStore = false
-sail ukcras32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukcrsa16
 llvm RV32_RV64: ukcrsa16 "rd" "rs1" "rs2"
@@ -4135,12 +3691,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukcrsa16: mayLoad = false
-sail ukcrsa16: mayLoad = false
-llvm ukcrsa16: mayStore = false
-sail ukcrsa16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukcrsa32
 llvm RV64: ukcrsa32 "rd" "rs1" "rs2"
@@ -4149,12 +3704,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukcrsa32: mayLoad = false
-sail ukcrsa32: mayLoad = false
-llvm ukcrsa32: mayStore = false
-sail ukcrsa32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukmar64
 llvm RV32: ukmar64 "rd" "rs1" "rs2"
@@ -4163,12 +3717,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm ukmar64: mayLoad = false
-sail ukmar64: mayLoad = false
-llvm ukmar64: mayStore = false
-sail ukmar64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukmar64
 llvm RV64: ukmar64 "rd" "rs1" "rs2"
@@ -4177,12 +3730,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm ukmar64: mayLoad = false
-sail ukmar64: mayLoad = false
-llvm ukmar64: mayStore = false
-sail ukmar64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukmsr64
 llvm RV32: ukmsr64 "rd" "rs1" "rs2"
@@ -4191,12 +3743,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm ukmsr64: mayLoad = false
-sail ukmsr64: mayLoad = false
-llvm ukmsr64: mayStore = false
-sail ukmsr64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukmsr64
 llvm RV64: ukmsr64 "rd" "rs1" "rs2"
@@ -4205,12 +3756,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm ukmsr64: mayLoad = false
-sail ukmsr64: mayLoad = false
-llvm ukmsr64: mayStore = false
-sail ukmsr64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukstas16
 llvm RV32_RV64: ukstas16 "rd" "rs1" "rs2"
@@ -4219,12 +3769,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukstas16: mayLoad = false
-sail ukstas16: mayLoad = false
-llvm ukstas16: mayStore = false
-sail ukstas16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukstas32
 llvm RV64: ukstas32 "rd" "rs1" "rs2"
@@ -4233,12 +3782,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukstas32: mayLoad = false
-sail ukstas32: mayLoad = false
-llvm ukstas32: mayStore = false
-sail ukstas32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukstsa16
 llvm RV32_RV64: ukstsa16 "rd" "rs1" "rs2"
@@ -4247,12 +3795,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukstsa16: mayLoad = false
-sail ukstsa16: mayLoad = false
-llvm ukstsa16: mayStore = false
-sail ukstsa16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ukstsa32
 llvm RV64: ukstsa32 "rd" "rs1" "rs2"
@@ -4261,12 +3808,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ukstsa32: mayLoad = false
-sail ukstsa32: mayLoad = false
-llvm ukstsa32: mayStore = false
-sail ukstsa32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksub16
 llvm RV32_RV64: uksub16 "rd" "rs1" "rs2"
@@ -4275,12 +3821,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksub16: mayLoad = false
-sail uksub16: mayLoad = false
-llvm uksub16: mayStore = false
-sail uksub16: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksub32
 llvm RV64: uksub32 "rd" "rs1" "rs2"
@@ -4289,12 +3834,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksub32: mayLoad = false
-sail uksub32: mayLoad = false
-llvm uksub32: mayStore = false
-sail uksub32: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksub64
 llvm RV32: uksub64 "rd" "rs1" "rs2"
@@ -4303,12 +3847,11 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm uksub64: mayLoad = false
-sail uksub64: mayLoad = false
-llvm uksub64: mayStore = false
-sail uksub64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksub64
 llvm RV64: uksub64 "rd" "rs1" "rs2"
@@ -4317,12 +3860,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksub64: mayLoad = false
-sail uksub64: mayLoad = false
-llvm uksub64: mayStore = false
-sail uksub64: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksub8
 llvm RV32_RV64: uksub8 "rd" "rs1" "rs2"
@@ -4331,12 +3873,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksub8: mayLoad = false
-sail uksub8: mayLoad = false
-llvm uksub8: mayStore = false
-sail uksub8: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksubh
 llvm RV32_RV64: uksubh "rd" "rs1" "rs2"
@@ -4345,12 +3886,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksubh: mayLoad = false
-sail uksubh: mayLoad = false
-llvm uksubh: mayStore = false
-sail uksubh: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uksubw
 llvm RV32_RV64: uksubw "rd" "rs1" "rs2"
@@ -4359,12 +3899,11 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uksubw: mayLoad = false
-sail uksubw: mayLoad = false
-llvm uksubw: mayStore = false
-sail uksubw: mayStore = false
+Different number of outs csr
 sail outs csr: vxsat
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umaqa
 llvm RV32_RV64: umaqa "rd" "rs1" "rs2"
@@ -4373,12 +3912,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm umaqa: mayLoad = false
-sail umaqa: mayLoad = false
-llvm umaqa: mayStore = false
-sail umaqa: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umar64
 llvm RV32: umar64 "rd" "rs1" "rs2"
@@ -4387,12 +3924,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm umar64: mayLoad = false
-sail umar64: mayLoad = false
-llvm umar64: mayStore = false
-sail umar64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umar64
 llvm RV64: umar64 "rd" "rs1" "rs2"
@@ -4401,12 +3936,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm umar64: mayLoad = false
-sail umar64: mayLoad = false
-llvm umar64: mayStore = false
-sail umar64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umax16
 llvm RV32_RV64: umax16 "rd" "rs1" "rs2"
@@ -4415,12 +3948,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umax16: mayLoad = false
-sail umax16: mayLoad = false
-llvm umax16: mayStore = false
-sail umax16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umax32
 llvm RV64: umax32 "rd" "rs1" "rs2"
@@ -4429,12 +3960,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umax32: mayLoad = false
-sail umax32: mayLoad = false
-llvm umax32: mayStore = false
-sail umax32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umax8
 llvm RV32_RV64: umax8 "rd" "rs1" "rs2"
@@ -4443,12 +3972,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umax8: mayLoad = false
-sail umax8: mayLoad = false
-llvm umax8: mayStore = false
-sail umax8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umin16
 llvm RV32_RV64: umin16 "rd" "rs1" "rs2"
@@ -4457,12 +3984,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umin16: mayLoad = false
-sail umin16: mayLoad = false
-llvm umin16: mayStore = false
-sail umin16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umin32
 llvm RV64: umin32 "rd" "rs1" "rs2"
@@ -4471,12 +3996,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umin32: mayLoad = false
-sail umin32: mayLoad = false
-llvm umin32: mayStore = false
-sail umin32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umin8
 llvm RV32_RV64: umin8 "rd" "rs1" "rs2"
@@ -4485,12 +4008,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umin8: mayLoad = false
-sail umin8: mayLoad = false
-llvm umin8: mayStore = false
-sail umin8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umsr64
 llvm RV32: umsr64 "rd" "rs1" "rs2"
@@ -4499,12 +4020,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
 sail ins: (2, rs2) (1, rs1) (0, rd : PairGPR)
-llvm umsr64: mayLoad = false
-sail umsr64: mayLoad = false
-llvm umsr64: mayStore = false
-sail umsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umsr64
 llvm RV64: umsr64 "rd" "rs1" "rs2"
@@ -4513,12 +4032,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1) (0, rd)
 sail ins: (2, rs2) (1, rs1) (0, rd)
-llvm umsr64: mayLoad = false
-sail umsr64: mayLoad = false
-llvm umsr64: mayStore = false
-sail umsr64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umul16
 llvm RV32: umul16 "rd" "rs1" "rs2"
@@ -4527,12 +4044,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umul16: mayLoad = false
-sail umul16: mayLoad = false
-llvm umul16: mayStore = false
-sail umul16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umul16
 llvm RV64: umul16 "rd" "rs1" "rs2"
@@ -4541,12 +4056,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umul16: mayLoad = false
-sail umul16: mayLoad = false
-llvm umul16: mayStore = false
-sail umul16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umul8
 llvm RV32: umul8 "rd" "rs1" "rs2"
@@ -4555,12 +4068,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umul8: mayLoad = false
-sail umul8: mayLoad = false
-llvm umul8: mayStore = false
-sail umul8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umul8
 llvm RV64: umul8 "rd" "rs1" "rs2"
@@ -4569,12 +4080,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umul8: mayLoad = false
-sail umul8: mayLoad = false
-llvm umul8: mayStore = false
-sail umul8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umulx16
 llvm RV32: umulx16 "rd" "rs1" "rs2"
@@ -4583,12 +4092,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umulx16: mayLoad = false
-sail umulx16: mayLoad = false
-llvm umulx16: mayStore = false
-sail umulx16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umulx16
 llvm RV64: umulx16 "rd" "rs1" "rs2"
@@ -4597,12 +4104,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umulx16: mayLoad = false
-sail umulx16: mayLoad = false
-llvm umulx16: mayStore = false
-sail umulx16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umulx8
 llvm RV32: umulx8 "rd" "rs1" "rs2"
@@ -4611,12 +4116,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umulx8: mayLoad = false
-sail umulx8: mayLoad = false
-llvm umulx8: mayStore = false
-sail umulx8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: umulx8
 llvm RV64: umulx8 "rd" "rs1" "rs2"
@@ -4625,12 +4128,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm umulx8: mayLoad = false
-sail umulx8: mayLoad = false
-llvm umulx8: mayStore = false
-sail umulx8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uradd16
 llvm RV32_RV64: uradd16 "rd" "rs1" "rs2"
@@ -4639,12 +4140,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uradd16: mayLoad = false
-sail uradd16: mayLoad = false
-llvm uradd16: mayStore = false
-sail uradd16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uradd32
 llvm RV64: uradd32 "rd" "rs1" "rs2"
@@ -4653,12 +4152,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uradd32: mayLoad = false
-sail uradd32: mayLoad = false
-llvm uradd32: mayStore = false
-sail uradd32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uradd64
 llvm RV32: uradd64 "rd" "rs1" "rs2"
@@ -4667,12 +4164,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm uradd64: mayLoad = false
-sail uradd64: mayLoad = false
-llvm uradd64: mayStore = false
-sail uradd64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uradd64
 llvm RV64: uradd64 "rd" "rs1" "rs2"
@@ -4681,12 +4176,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uradd64: mayLoad = false
-sail uradd64: mayLoad = false
-llvm uradd64: mayStore = false
-sail uradd64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uradd8
 llvm RV32_RV64: uradd8 "rd" "rs1" "rs2"
@@ -4695,12 +4188,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uradd8: mayLoad = false
-sail uradd8: mayLoad = false
-llvm uradd8: mayStore = false
-sail uradd8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: uraddw
 llvm RV32_RV64: uraddw "rd" "rs1" "rs2"
@@ -4709,12 +4200,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm uraddw: mayLoad = false
-sail uraddw: mayLoad = false
-llvm uraddw: mayStore = false
-sail uraddw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urcras16
 llvm RV32_RV64: urcras16 "rd" "rs1" "rs2"
@@ -4723,12 +4212,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urcras16: mayLoad = false
-sail urcras16: mayLoad = false
-llvm urcras16: mayStore = false
-sail urcras16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urcras32
 llvm RV64: urcras32 "rd" "rs1" "rs2"
@@ -4737,12 +4224,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urcras32: mayLoad = false
-sail urcras32: mayLoad = false
-llvm urcras32: mayStore = false
-sail urcras32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urcrsa16
 llvm RV32_RV64: urcrsa16 "rd" "rs1" "rs2"
@@ -4751,12 +4236,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urcrsa16: mayLoad = false
-sail urcrsa16: mayLoad = false
-llvm urcrsa16: mayStore = false
-sail urcrsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urcrsa32
 llvm RV64: urcrsa32 "rd" "rs1" "rs2"
@@ -4765,12 +4248,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urcrsa32: mayLoad = false
-sail urcrsa32: mayLoad = false
-llvm urcrsa32: mayStore = false
-sail urcrsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urstas16
 llvm RV32_RV64: urstas16 "rd" "rs1" "rs2"
@@ -4779,12 +4260,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urstas16: mayLoad = false
-sail urstas16: mayLoad = false
-llvm urstas16: mayStore = false
-sail urstas16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urstas32
 llvm RV64: urstas32 "rd" "rs1" "rs2"
@@ -4793,12 +4272,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urstas32: mayLoad = false
-sail urstas32: mayLoad = false
-llvm urstas32: mayStore = false
-sail urstas32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urstsa16
 llvm RV32_RV64: urstsa16 "rd" "rs1" "rs2"
@@ -4807,12 +4284,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urstsa16: mayLoad = false
-sail urstsa16: mayLoad = false
-llvm urstsa16: mayStore = false
-sail urstsa16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: urstsa32
 llvm RV64: urstsa32 "rd" "rs1" "rs2"
@@ -4821,12 +4296,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm urstsa32: mayLoad = false
-sail urstsa32: mayLoad = false
-llvm urstsa32: mayStore = false
-sail urstsa32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursub16
 llvm RV32_RV64: ursub16 "rd" "rs1" "rs2"
@@ -4835,12 +4308,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ursub16: mayLoad = false
-sail ursub16: mayLoad = false
-llvm ursub16: mayStore = false
-sail ursub16: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursub32
 llvm RV64: ursub32 "rd" "rs1" "rs2"
@@ -4849,12 +4320,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ursub32: mayLoad = false
-sail ursub32: mayLoad = false
-llvm ursub32: mayStore = false
-sail ursub32: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursub64
 llvm RV32: ursub64 "rd" "rs1" "rs2"
@@ -4863,12 +4332,10 @@ llvm outs: (0, rd : PairGPR)
 sail outs: (0, rd : PairGPR)
 llvm ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
 sail ins: (2, rs2 : PairGPR) (1, rs1 : PairGPR)
-llvm ursub64: mayLoad = false
-sail ursub64: mayLoad = false
-llvm ursub64: mayStore = false
-sail ursub64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursub64
 llvm RV64: ursub64 "rd" "rs1" "rs2"
@@ -4877,12 +4344,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ursub64: mayLoad = false
-sail ursub64: mayLoad = false
-llvm ursub64: mayStore = false
-sail ursub64: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursub8
 llvm RV32_RV64: ursub8 "rd" "rs1" "rs2"
@@ -4891,12 +4356,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ursub8: mayLoad = false
-sail ursub8: mayLoad = false
-llvm ursub8: mayStore = false
-sail ursub8: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: ursubw
 llvm RV32_RV64: ursubw "rd" "rs1" "rs2"
@@ -4905,12 +4368,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm ursubw: mayLoad = false
-sail ursubw: mayLoad = false
-llvm ursubw: mayStore = false
-sail ursubw: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: wext
 llvm RV32: wext "rd" "rs1" "rs2"
@@ -4919,12 +4380,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1 : PairGPR)
 sail ins: (2, rs2) (1, rs1 : PairGPR)
-llvm wext: mayLoad = false
-sail wext: mayLoad = false
-llvm wext: mayStore = false
-sail wext: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: wext
 llvm RV64: wext "rd" "rs1" "rs2"
@@ -4933,12 +4392,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, rs2) (1, rs1)
 sail ins: (2, rs2) (1, rs1)
-llvm wext: mayLoad = false
-sail wext: mayLoad = false
-llvm wext: mayStore = false
-sail wext: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: wexti
 llvm RV32: wexti "rd" "rs1" "shamt"
@@ -4947,12 +4404,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1 : PairGPR)
 sail ins: (2, imm5) (1, rs1 : PairGPR)
-llvm wexti: mayLoad = false
-sail wexti: mayLoad = false
-llvm wexti: mayStore = false
-sail wexti: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: wexti
 llvm RV64: wexti "rd" "rs1" "shamt"
@@ -4961,12 +4416,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (2, shamt) (1, rs1)
 sail ins: (2, imm5) (1, rs1)
-llvm wexti: mayLoad = false
-sail wexti: mayLoad = false
-llvm wexti: mayStore = false
-sail wexti: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: zunpkd810
 llvm RV32_RV64: zunpkd810 "rd" "rs1"
@@ -4975,12 +4428,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm zunpkd810: mayLoad = false
-sail zunpkd810: mayLoad = false
-llvm zunpkd810: mayStore = false
-sail zunpkd810: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: zunpkd820
 llvm RV32_RV64: zunpkd820 "rd" "rs1"
@@ -4989,12 +4440,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm zunpkd820: mayLoad = false
-sail zunpkd820: mayLoad = false
-llvm zunpkd820: mayStore = false
-sail zunpkd820: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: zunpkd830
 llvm RV32_RV64: zunpkd830 "rd" "rs1"
@@ -5003,12 +4452,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm zunpkd830: mayLoad = false
-sail zunpkd830: mayLoad = false
-llvm zunpkd830: mayStore = false
-sail zunpkd830: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: zunpkd831
 llvm RV32_RV64: zunpkd831 "rd" "rs1"
@@ -5017,12 +4464,10 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm zunpkd831: mayLoad = false
-sail zunpkd831: mayLoad = false
-llvm zunpkd831: mayStore = false
-sail zunpkd831: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Report: zunpkd832
 llvm RV32_RV64: zunpkd832 "rd" "rs1"
@@ -5031,11 +4476,9 @@ llvm outs: (0, rd)
 sail outs: (0, rd)
 llvm ins: (1, rs1)
 sail ins: (1, rs1)
-llvm zunpkd832: mayLoad = false
-sail zunpkd832: mayLoad = false
-llvm zunpkd832: mayStore = false
-sail zunpkd832: mayStore = false
 sail outs csr: 
+llvm outs csr: 
 sail ins csr: 
+llvm ins csr: 
 
 Not found in sail: rev

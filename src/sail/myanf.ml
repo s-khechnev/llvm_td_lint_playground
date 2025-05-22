@@ -83,8 +83,7 @@ let rec anf (E_aux (e_aux, exp_annot) as exp : tannot exp) =
       let wrap =
         List.fold_left (fun f g x -> f (g x)) (fun x -> x) (List.map snd avals)
       in
-      wrap
-        (mk_exp (E_typ (typ_of exp, mk_exp (E_app (id, List.map fst avals)))))
+      wrap (mk_exp (E_app (id, List.map fst avals)))
   | E_throw exn_exp ->
       let aexp = anf exn_exp in
       let aval, wrap = to_const_e aexp in

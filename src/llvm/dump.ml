@@ -120,7 +120,28 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
     let f s = List.assoc s j |> from_int |> int_to_bool in
     (f "mayLoad", f "mayStore")
   in
-  (mnemonic, operands, out_operands, in_operands, arch, mayLoad, mayStore)
+  let extract_csr j =
+    j |> from_list
+    |> List.filter_map (function
+         | `Assoc [ ("def", `String s); _; _ ] ->
+             if is_gpr s then None else Some (String.lowercase_ascii s)
+         | other ->
+             Format.printf "Unsupported case: %a\n"
+               (Yojson.Safe.pretty_print ~std:false)
+               other;
+             assert false)
+  in
+  let in_csrs = extract_csr (List.assoc "Uses" j) in
+  let out_csrs = extract_csr (List.assoc "Defs" j) in
+  ( mnemonic,
+    operands,
+    out_operands,
+    in_operands,
+    arch,
+    mayLoad,
+    mayStore,
+    out_csrs,
+    in_csrs )
 
 let is_good_data = function
   | `Assoc xs ->
@@ -199,10 +220,17 @@ let dump_llvm () =
                      (from_assoc j))
               in
               let xs = from_assoc j in
-              let mnemonic, operands, outs, ins, arch, mayLoad, mayStore =
+              let ( mnemonic,
+                    operands,
+                    outs,
+                    ins,
+                    arch,
+                    mayLoad,
+                    mayStore,
+                    ins_csr,
+                    outs_csr ) =
                 extract_info xs
               in
-              let ins_csr, outs_csr = ([], []) in
               Utils.printf_add_instr ppf
                 {
                   mnemonic;
