@@ -1,3 +1,5 @@
+enum clause extension = Test
+
 scattered union ast
 
 val execute : ast -> Retired

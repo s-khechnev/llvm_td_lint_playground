@@ -2,6 +2,8 @@ enum my_enum = { E_value1, E_value2 }
 
 enum already_speced = { S_value1, S_value2 }
 
+enum clause extension = Test
+
 scattered union ast
 
 val execute : ast -> Retired

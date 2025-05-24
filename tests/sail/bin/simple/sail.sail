@@ -1,3 +1,5 @@
+enum clause extension = Test
+
 scattered union ast
 
 val execute : ast -> Retired
@@ -14,33 +16,44 @@ scattered mapping encdec_compressed
 
 ///
 
-union clause ast = UTYPE : (bits(20), regidx, uop)
+union clause ast = SHIFTIOP : (bits(6), regidx, regidx, sop)
 
-mapping encdec_uop : uop <-> bits(7) = {
-  RISCV_LUI   <-> 0b0110111,
-  RISCV_AUIPC <-> 0b0010111
+mapping encdec_sop : sop <-> bits(3) = {
+  RISCV_SLLI <-> 0b001,
+  RISCV_SRLI <-> 0b101,
+  RISCV_SRAI <-> 0b101
 }
 
-mapping clause encdec = UTYPE(imm, rd, op)
-  <-> imm @ rd @ encdec_uop(op)
+mapping clause encdec = SHIFTIOP(shamt, rs1, rd, RISCV_SLLI) <-> 0b000000 @ shamt @ rs1 @ 0b001 @ rd @ 0b0010011 if sizeof(xlen) == 64 | shamt[5] == bitzero
+mapping clause encdec = SHIFTIOP(shamt, rs1, rd, RISCV_SRLI) <-> 0b000000 @ shamt @ rs1 @ 0b101 @ rd @ 0b0010011 if sizeof(xlen) == 64 | shamt[5] == bitzero
+mapping clause encdec = SHIFTIOP(shamt, rs1, rd, RISCV_SRAI) <-> 0b010000 @ shamt @ rs1 @ 0b101 @ rd @ 0b0010011 if sizeof(xlen) == 64 | shamt[5] == bitzero
 
-function clause execute UTYPE(imm, rd, op) = {
-  let off : xlenbits = sign_extend(imm @ 0x000);
-  let ret : xlenbits = match op {
-    RISCV_LUI   => off,
-    RISCV_AUIPC => get_arch_pc() + off
+function clause execute (SHIFTIOP(shamt, rs1, rd, op)) = {
+  let rs1_val = X(rs1);
+  /* the decoder guard should ensure that shamt[5] = 0 for RV32 */
+  let result : xlenbits = match op {
+    RISCV_SLLI => if   sizeof(xlen) == 32
+                  then rs1_val << shamt[4..0]
+                  else rs1_val << shamt,
+    RISCV_SRLI => if   sizeof(xlen) == 32
+                  then rs1_val >> shamt[4..0]
+                  else rs1_val >> shamt,
+    RISCV_SRAI => if   sizeof(xlen) == 32
+                  then shift_right_arith32(rs1_val, shamt[4..0])
+                  else shift_right_arith64(rs1_val, shamt)
   };
-  X(rd) = ret;
+  X(rd) = result;
   RETIRE_SUCCESS
 }
 
-mapping utype_mnemonic : uop <-> string = {
-  RISCV_LUI   <-> "lui",
-  RISCV_AUIPC <-> "auipc"
+mapping shiftiop_mnemonic : sop <-> string = {
+  RISCV_SLLI <-> "slli",
+  RISCV_SRLI <-> "srli",
+  RISCV_SRAI <-> "srai"
 }
 
-mapping clause assembly = UTYPE(imm, rd, op)
-  <-> utype_mnemonic(op) ^ spc() ^ reg_name(rd) ^ sep() ^ hex_bits_signed_20(imm)
+mapping clause assembly = SHIFTIOP(shamt, rs1, rd, op)
+  <-> shiftiop_mnemonic(op) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_6(shamt)
 
 ///
 
