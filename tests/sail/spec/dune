@@ -1,0 +1,6 @@
+(executable
+ (name spec_tester)
+ (libraries checker.analysis_tools checker.sail_ast_tools libsail))
+
+(cram
+ (deps ./spec_tester.exe ./funcs.sail))

@@ -32,6 +32,12 @@ type t = {
   outs : string list;
 }
 
+let equal i1 i2 =
+  i1.mnemonic = i2.mnemonic
+  && List.equal String.equal i1.operands i2.operands
+  && List.equal String.equal i1.ins i2.ins
+  && List.equal String.equal i1.outs i2.outs
+
 module InstrTable = Hashtbl.Make (struct
   type t = Arch.t * string
 

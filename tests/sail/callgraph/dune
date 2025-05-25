@@ -1,0 +1,6 @@
+(executable
+ (name callgraph_tester)
+ (libraries checker.analysis_tools checker.sail_ast_tools libsail))
+
+(cram
+ (deps ./callgraph_tester.exe ./funcs1.sail ./funcs2.sail))

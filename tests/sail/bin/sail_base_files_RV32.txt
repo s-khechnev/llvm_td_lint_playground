@@ -1,0 +1,7 @@
+../../../../sail-riscv/model/prelude.sail
+../../../../sail-riscv/model/riscv_xlen32.sail
+../../../../sail-riscv/model/riscv_types_common.sail
+../../../../sail-riscv/model/riscv_types_ext.sail
+../../../../sail-riscv/model/riscv_types.sail
+../../../../sail-riscv/model/riscv_reg_type.sail
+../../../../sail-riscv/model/riscv_regs.sail

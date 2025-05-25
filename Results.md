@@ -42,12 +42,6 @@ Sail-riscv - 05b845c91d1c1db7b361fc8d06e815b54ca0b07a (v0.5)
 
 2. [c.jr](https://msyksphinz-self.github.io/riscv-isadoc/html/rvc.html#c-jr) &mdash; [LLVM](https://github.com/llvm/llvm-project/blob/b65e0947cade9bd39036a7700b54c1df4ec00756/llvm/lib/Target/RISCV/RISCVInstrInfoC.td#L540), [sail1](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_insts_zca.sail#L501), [sail2](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_jalr_rmem.sail#L11)
 
-### RA является неявным out регистром в SAIL для инструкций:
-
-1. [c.jal](https://msyksphinz-self.github.io/riscv-isadoc/html/rvc.html#c-jal) &mdash; [LLVM](https://github.com/llvm/llvm-project/blob/b65e0947cade9bd39036a7700b54c1df4ec00756/llvm/lib/Target/RISCV/RISCVInstrInfoC.td#L422), [sail1](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_insts_zca.sail#L145), [sail2](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_insts_base.sail#L61)
-
-2. [c.jalr](https://msyksphinz-self.github.io/riscv-isadoc/html/rvc.html#c-jalr) &mdash; [LLVM](https://github.com/llvm/llvm-project/blob/b65e0947cade9bd39036a7700b54c1df4ec00756/llvm/lib/Target/RISCV/RISCVInstrInfoC.td#L558), [sail1](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_insts_zca.sail#L517), [sail2](https://github.com/riscv/sail-riscv/blob/2dfc4ff9f2bed3dcd0a3e8748211c99099e70ab7/model/riscv_jalr_rmem.sail#L11)
-
 ### RVV 
 
 #### В Sail vd - in регистр:
