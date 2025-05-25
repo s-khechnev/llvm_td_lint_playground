@@ -1,26 +1,47 @@
-# llvm_td_lint_playground
+[![Build and Test Master in docker](https://github.com/Kakadu/llvm_vs_sail/actions/workflows/master.yml/badge.svg)](https://github.com/Kakadu/llvm_vs_sail/actions/workflows/master.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Coverage Status](https://coveralls.io/repos/github/Kakadu/llvm_vs_sail/badge.svg?branch=p_ext)](https://coveralls.io/github/Kakadu/llvm_vs_sail?branch=p_ext)
+
+# LLVM vs Sail
 
 
+## Overview
 
+This project is a static analyzer that compares RISC-V ISA specifications in [LLVM](https://github.com/llvm/llvm-project) and [sail-riscv](https://github.com/riscv/sail-riscv).
 
+### The static analyzer can compare:
+1. inputs/outputs operands of instructions
+2. [mayLoad](https://github.com/llvm/llvm-project/blob/24bd4e59b9e2901f8797484e7a231178d91807aa/llvm/include/llvm/Target/Target.td#L647)/[mayStore](https://github.com/llvm/llvm-project/blob/24bd4e59b9e2901f8797484e7a231178d91807aa/llvm/include/llvm/Target/Target.td#L648)
 
-### TODO
+### Getting started
+1. Required packages
+```
+libgmp-dev zlib1g-dev z3 jq
+```
 
-1) Нужно написать анализ алиасов, иначе детекция выходных/выходных нормально работать не будет. (пример -- исполнение F_BIN_RM_TYPE_H в SAIL)
-2) Некоторые out регистры (SP) не являются явными аргументами в SAIL. (Пример --- [c.addi16sp](https://msyksphinz-self.github.io/riscv-isadoc/html/rvc.html#c-addi16sp) в [SAIL](https://github.com/riscv/sail-riscv/blob/05b845c91d1c1db7b361fc8d06e815b54ca0b07a/model/riscv_insts_zca.sail#L196) и [LLVM](https://github.com/llvm/llvm-project/blob/release/18.x/llvm/lib/Target/RISCV/RISCVInstrInfoC.td#L435)). Если это только c SP такое будет -- можно накостылять, что-нибудь, но в общем случае мне не очень понятно.
-3) В SAIL не нашел реализаций некоторых инструкций: amoadd.d, amocas, divu (неожиданно), cbo*, [XCV](https://github.com/llvm/llvm-project/blob/release/18.x/llvm/lib/Target/RISCV/RISCVInstrInfoXCV.td) (что-то вендор-специфичное?).
+2. Dependencies
+```
+opam pin add ./ -n
+opam install . --deps-only --with-test --with-doc
+```
 
-    Это не полный список. Поделка пока жевала инструкции по алфавиту только от A до F.
-4) Могут возникнуть некоторые проблемы, если в LLVM и SAIL названия аргументов не соответствуют друг другу.
+3. Building
+```
+dune build
+```
+This will generate a `src/report.txt` file containing all the properties of the matched instructions.
 
-    Явного расхождения пока не найдено, есть нечто похожее, когда в дампе LLVM отдельно разные in и out аргументы, с констрейнтом `$rs1 = $rs1_wb`. Всегда ли они будут соблюдать такие же имена как в SAIL? Можно ли считать, что искать в SAIL стоит левый операнд (здесь `$rs1`) в общем случае --- должно показать будущее.
+Reports are available for:  
+- **LLVM v19** and [sail-riscv](https://github.com/riscv/sail-riscv/tree/05b845c91d1c1db7b361fc8d06e815b54ca0b07a): [view here](https://kakadu.github.io/llvm_vs_sail/master/report.txt)
+- **P-extension (v0.9.11-draft-20211209)** in LLVM and [sail-riscv-p](https://github.com/umcann123/sail-riscv-p): [view here](https://kakadu.github.io/llvm_vs_sail/p_ext/report.txt)
 
-### misc
+4. Running tests
+```
+dune runtest
+```
 
-````
-function jsonify_tblgen {
-        (cd /home/kakadu/work/llvm/llvm-19-build && \
-        ./bin/llvm-tblgen  -I ../llvm-git/llvm/lib/Target/$1 -I../build-llvm18/include -I../llvm-git/llvm/include -I ../llvm-git/llvm/lib/Target ../llvm-git/llvm/lib/Target/$1/$1.td --dump-json | python -m json.tool  > $2)
-}
-
-````
+5. Test coverage
+```
+make coverage
+xdg-open _coverage/index.html
+```
