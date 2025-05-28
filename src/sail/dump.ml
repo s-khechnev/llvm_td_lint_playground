@@ -175,6 +175,103 @@ let rewrite_for_analyze_encdecs ast =
   in
   rewrite_ast_base rewriters ast
 
+let remove_unused_let_binds body =
+  let rec remove_unused_let_binds' body =
+    let pat_ids = ref [] in
+    let collect_let_pats =
+      {
+        default_iterator with
+        exp =
+          (fun self (E_aux (e, _) as exp) ->
+            let () =
+              match e with
+              | E_let
+                  ( LB_aux
+                      (LB_val (P_aux (P_id (Id_aux (Id pat_id, _)), _), _), _),
+                    tail_exp )
+              | E_let
+                  ( LB_aux
+                      ( LB_val
+                          ( P_aux
+                              ( P_typ
+                                  (_, P_aux (P_id (Id_aux (Id pat_id, _)), _)),
+                                _ ),
+                            _ ),
+                        _ ),
+                    tail_exp ) ->
+                  pat_ids := (pat_id, tail_exp) :: !pat_ids
+              | _ -> ()
+            in
+            default_iterator.exp self exp);
+      }
+    in
+    collect_let_pats.exp collect_let_pats body;
+
+    let used = ref [] in
+    let collect_uses pat_id =
+      {
+        default_iterator with
+        exp =
+          (fun self (E_aux (e, _) as exp) ->
+            let () =
+              match e with
+              | E_id (Id_aux (Id id, _)) when pat_id = id ->
+                  used := pat_id :: !used
+              | _ -> ()
+            in
+            default_iterator.exp self exp);
+      }
+    in
+    List.iter
+      (fun (pat_id, e) ->
+        let check = collect_uses pat_id in
+        check.exp check e)
+      !pat_ids;
+    let used = Utils.rm_duplicates !used in
+
+    let is_used_id id = List.mem id used in
+    let not_used_ids =
+      List.filter (fun (id, _) -> not (is_used_id id)) !pat_ids
+    in
+
+    let cnt_rw = ref 0 in
+    let open Rewriter in
+    let rw_e e_aux annot =
+      match e_aux with
+      | E_let
+          (LB_aux (LB_val (P_aux (P_id (Id_aux (Id pat_id, _)), _), _), _), tail)
+      | E_let
+          ( LB_aux
+              ( LB_val
+                  ( P_aux (P_typ (_, P_aux (P_id (Id_aux (Id pat_id, _)), _)), _),
+                    _ ),
+                _ ),
+            tail )
+        when not (is_used_id pat_id) ->
+          incr cnt_rw;
+          tail
+      | _ -> E_aux (e_aux, annot)
+    in
+    let rewrites =
+      {
+        rewriters_base with
+        rewrite_exp =
+          (fun _ ->
+            fold_exp
+              {
+                id_exp_alg with
+                e_aux = (fun (e_aux, annot) -> rw_e e_aux annot);
+              });
+      }
+    in
+    let new_body = rewrite_exp rewrites body in
+
+    if !cnt_rw <> 0 && !cnt_rw = List.length not_used_ids then
+      remove_unused_let_binds' new_body
+    else new_body
+  in
+  remove_unused_let_binds' body
+
 (* funcs that depend on xlen *)
 let depend_xlen_funcs = FuncTable.create 1000
 
@@ -269,8 +366,9 @@ let dump_execute ast env effect_info =
                     let pargs = pat_to_lst parg in
                     let str_args = pats_to_strs pargs in
                     let pargsi = List.mapi (fun i p -> (i, p)) pargs in
-                    let () =
+                    let add_usual () =
                       let func = Func.F_usual id in
+                      let fbody = remove_unused_let_binds fbody in
                       FuncTable.add funcs func (str_args, fbody)
                     in
                     match
@@ -279,12 +377,16 @@ let dump_execute ast env effect_info =
                     | [], [] ->
                         let func = Func.F_usual id in
                         let fbody = empty_const_prop func fbody in
+                        let fbody = remove_unused_let_binds fbody in
                         FuncTable.add funcs func (str_args, fbody)
                     | speced_args, [] ->
+                        add_usual ();
                         let func = Func.F_specialized (id, speced_args) in
                         let fbody = empty_const_prop func fbody in
+                        let fbody = remove_unused_let_binds fbody in
                         FuncTable.add funcs func (str_args, fbody)
                     | already_speced_args, args_to_spec ->
+                        add_usual ();
                         let ref_vars =
                           Constant_propagation.referenced_vars fbody
                         in
@@ -312,6 +414,9 @@ let dump_execute ast env effect_info =
                                      FuncTable.add depend_xlen_funcs func ())
                                    ref_vars (substs, KBindings.empty)
                                    Bindings.empty fbody
+                               in
+                               let speced_fbody =
+                                 remove_unused_let_binds speced_fbody
                                in
                                FuncTable.add funcs func (str_args, speced_fbody))
                     )
