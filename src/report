@@ -7131,12 +7131,10 @@ sail vfmv.f.s: mayStore = false
 Report: vfmv.s.f
 llvm RV32_RV64: vfmv.s.f "vd" "rs1"
 sail RV32: vfmv.s.f "vd" "rs1"
-sail: v0 - implicit in
-Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, rs1) (0, vd)
-sail ins: (1, rs1) (0, vd) (-1, v0)
+sail ins: (1, rs1) (0, vd)
 llvm vfmv.s.f: mayLoad = false
 sail vfmv.s.f: mayLoad = false
 llvm vfmv.s.f: mayStore = false
@@ -7145,12 +7143,11 @@ sail vfmv.s.f: mayStore = false
 Report: vfmv.v.f
 llvm RV32_RV64: vfmv.v.f "vd" "rs1"
 sail RV32: vfmv.v.f "vd" "rs1"
-sail: v0 - implicit in
 Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, rs1)
-sail ins: (1, rs1) (0, vd) (-1, v0)
+sail ins: (1, rs1) (0, vd)
 llvm vfmv.v.f: mayLoad = false
 sail vfmv.v.f: mayLoad = false
 llvm vfmv.v.f: mayStore = false
@@ -11297,12 +11294,10 @@ sail vmulhu.vx: mayStore = false
 Report: vmv.s.x
 llvm RV32_RV64: vmv.s.x "vd" "rs1"
 sail RV32: vmv.s.x "vd" "rs1"
-sail: v0 - implicit in
-Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, rs1) (0, vd)
-sail ins: (1, rs1) (0, vd) (-1, v0)
+sail ins: (1, rs1) (0, vd)
 llvm vmv.s.x: mayLoad = false
 sail vmv.s.x: mayLoad = false
 llvm vmv.s.x: mayStore = false
@@ -11311,12 +11306,11 @@ sail vmv.s.x: mayStore = false
 Report: vmv.v.i
 llvm RV32_RV64: vmv.v.i "vd" "imm"
 sail RV32: vmv.v.i "vd" "simm"
-sail: v0 - implicit in
 Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, imm)
-sail ins: (1, simm) (0, vd) (-1, v0)
+sail ins: (1, simm) (0, vd)
 llvm vmv.v.i: mayLoad = false
 sail vmv.v.i: mayLoad = false
 llvm vmv.v.i: mayStore = false
@@ -11325,12 +11319,11 @@ sail vmv.v.i: mayStore = false
 Report: vmv.v.v
 llvm RV32_RV64: vmv.v.v "vd" "vs1"
 sail RV32: vmv.v.v "vd" "vs1"
-sail: v0 - implicit in
 Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, vs1)
-sail ins: (1, vs1) (0, vd) (-1, v0)
+sail ins: (1, vs1) (0, vd)
 llvm vmv.v.v: mayLoad = false
 sail vmv.v.v: mayLoad = false
 llvm vmv.v.v: mayStore = false
@@ -11339,12 +11332,11 @@ sail vmv.v.v: mayStore = false
 Report: vmv.v.x
 llvm RV32_RV64: vmv.v.x "vd" "rs1"
 sail RV32: vmv.v.x "vd" "rs1"
-sail: v0 - implicit in
 Different number of inputs
 llvm outs: (0, vd)
 sail outs: (0, vd)
 llvm ins: (1, rs1)
-sail ins: (1, rs1) (0, vd) (-1, v0)
+sail ins: (1, rs1) (0, vd)
 llvm vmv.v.x: mayLoad = false
 sail vmv.v.x: mayLoad = false
 llvm vmv.v.x: mayStore = false

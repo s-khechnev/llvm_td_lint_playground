@@ -227,12 +227,6 @@ let remove_unused_let_binds body =
         let check = collect_uses pat_id in
         check.exp check e)
       !pat_ids;
-    let used = Utils.rm_duplicates !used in
-
-    let is_used_id id = List.mem id used in
-    let not_used_ids =
-      List.filter (fun (id, _) -> not (is_used_id id)) !pat_ids
-    in
 
     let cnt_rw = ref 0 in
     let open Rewriter in
@@ -247,7 +241,7 @@ let remove_unused_let_binds body =
                     _ ),
                 _ ),
             tail )
-        when not (is_used_id pat_id) ->
+        when not (List.mem pat_id !used) ->
           incr cnt_rw;
           tail
       | _ -> E_aux (e_aux, annot)
@@ -264,11 +258,12 @@ let remove_unused_let_binds body =
               });
       }
     in
-    let new_body = rewrite_exp rewrites body in
+    let new_body =
+      let (E_aux (aux, annot)) = body in
+      rewrite_exp rewrites (rw_e aux annot)
+    in
 
-    if !cnt_rw <> 0 && !cnt_rw = List.length not_used_ids then
-      remove_unused_let_binds' new_body
-    else new_body
+    if !cnt_rw <> 0 then remove_unused_let_binds' new_body else new_body
   in
   remove_unused_let_binds' body
 
@@ -438,8 +433,11 @@ let dump_execute ast env effect_info =
 
   let t = profile_start () in
   let g =
-    Call_graph.generate funcs myconst_prop (fun id ->
-        FuncTable.add depend_xlen_funcs id ())
+    Call_graph.generate funcs
+      (fun f vars substs assignes exp ->
+        let speced_body, bs = myconst_prop f vars substs assignes exp in
+        (remove_unused_let_binds speced_body, bs))
+      (fun id -> FuncTable.add depend_xlen_funcs id ())
   in
   profile_end "call graph generation" t;
 
