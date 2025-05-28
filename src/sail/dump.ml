@@ -317,11 +317,10 @@ let dump_execute ast env effect_info =
                     )
                 | FCL_aux
                     ( FCL_funcl
-                        ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
+                        ( Id_aux (Id id, Range _),
                           Pat_aux (Pat_exp (parg, body), _) ),
                       _ )
-                  when Str.string_match (Str.regexp ".*sail-riscv.*") path 0
-                       && id <> "internal_error" ->
+                  when id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
                     let func = Func.F_usual id in
                     FuncTable.add funcs func (args, empty_const_prop func body)

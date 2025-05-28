@@ -5,3 +5,5 @@
 ../../../../sail-riscv/model/riscv_types.sail
 ../../../../sail-riscv/model/riscv_reg_type.sail
 ../../../../sail-riscv/model/riscv_regs.sail
+../../../../sail-riscv/model/prelude_mem_metadata.sail
+../../../../sail-riscv/model/prelude_mem.sail
