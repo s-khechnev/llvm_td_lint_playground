@@ -53,6 +53,29 @@ let get_info (ast : 'a Ast_defs.ast) =
            | _ -> None)
          defs
   in
+  (* analyze the instructions only from p ext *)
+  let assemblies =
+    List.filter
+      (function
+        | MCL_aux (_, ({ doc_comment = _; attrs = _; loc }, _)) ->
+            let is_from_pext ({ pos_fname; _ } : Lexing.position) =
+              let str_match rgx_str =
+                Str.string_match (Str.regexp rgx_str) pos_fname 0
+              in
+              (* for tests *)
+              str_match ".*sail.sail.*" || str_match ".*pext.*"
+            in
+            let rec f loc =
+              match loc with
+              | Range (pos1, pos2) -> is_from_pext pos1 || is_from_pext pos2
+              | Unique (_, l) | Generated l -> f l
+              | Hint (_, l1, l2) -> f l1 || f l2
+              | _ -> false
+            in
+            f loc)
+      assemblies
+  in
+
   let collect_mnemonics substs =
     let handle_str str =
       (* typo *)

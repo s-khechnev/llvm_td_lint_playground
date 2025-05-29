@@ -4482,3 +4482,4 @@ sail ins csr:
 llvm ins csr: 
 
 Not found in sail: rev
+Not found in llvm: pkbb32 pktt32 clo16 clo8 clo32

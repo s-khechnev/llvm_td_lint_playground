@@ -181,4 +181,19 @@ let () =
 
   printfn "Not found in sail: %s"
     (String.concat " "
-       (List.map (fun (_, i) -> Format.sprintf "%s" i) !not_found_in_sail))
+       (List.map (fun (_, i) -> Format.sprintf "%s" i) !not_found_in_sail));
+
+  let get_not_found_in_llvm sail_info =
+    InstrTable.fold
+      (fun ((_, m) as k) _ acc ->
+        if InstrTable.mem Llvm_info.llvm_info (RV32_RV64, m) then acc
+        else k :: acc)
+      sail_info []
+  in
+  let not_found_in_llvm =
+    get_not_found_in_llvm Sail_info_RV32.sail_info
+    @ get_not_found_in_llvm Sail_info_RV64.sail_info
+    |> List.map (fun (_, i) -> i)
+    |> rm_duplicates
+  in
+  printfn "Not found in llvm: %s" (String.concat " " not_found_in_llvm)
