@@ -1,5 +1,3 @@
-enum clause extension = Test
-
 scattered union ast
 
 val execute : ast -> Retired
@@ -23,14 +21,14 @@ mapping clause encdec = ADDI(imm, rs1, rd)
 
 function clause execute ADDI(imm, rs1, rd) = {
   let rs1_val = X(rs1);
-  let immext : xlenbits = sign_extend(imm);
+  let immext : xlenbits = EXTS(imm);
   let result : xlenbits = rs1_val + immext;
   X(rd) = result;
   RETIRE_SUCCESS
 }
 
 mapping clause assembly = ADDI(imm, rs1, rd)
-  <-> "addi" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_signed_12(imm)
+  <-> "addi" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_12(imm)
 
 union clause ast = ITYPE : (bits(12), regidx, regidx, iop)
 
@@ -48,11 +46,11 @@ mapping clause encdec = ITYPE(imm, rs1, rd, op)
 
 function clause execute (ITYPE (imm, rs1, rd, op)) = {
   let rs1_val = X(rs1);
-  let immext : xlenbits = sign_extend(imm);
+  let immext : xlenbits = EXTS(imm);
   let result : xlenbits = match op {
     RISCV_ADDI  => rs1_val + immext,
-    RISCV_SLTI  => zero_extend(bool_to_bits(rs1_val <_s immext)),
-    RISCV_SLTIU => zero_extend(bool_to_bits(rs1_val <_u immext)),
+    RISCV_SLTI  => EXTZ(bool_to_bits(rs1_val <_s immext)),
+    RISCV_SLTIU => EXTZ(bool_to_bits(rs1_val <_u immext)),
     RISCV_ANDI  => rs1_val & immext,
     RISCV_ORI   => rs1_val | immext,
     RISCV_XORI  => rs1_val ^ immext
@@ -71,7 +69,7 @@ mapping itype_mnemonic : iop <-> string = {
 }
 
 mapping clause assembly = ITYPE(imm, rs1, rd, op)
-  <-> itype_mnemonic(op) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_signed_12(imm)
+  <-> itype_mnemonic(op) ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_12(imm)
 
 
 ///

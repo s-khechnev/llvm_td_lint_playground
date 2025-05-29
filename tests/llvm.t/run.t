@@ -7,17 +7,17 @@
   
   let llvm_info =
     let ans = InstrTable.create 1000 in
-    InstrTable.add ans (RV32_RV64, "epmty_ins") { mnemonic="epmty_ins"; arch=RV32_RV64; operands=[]; ins=["sp"]; outs=["rd"; "sp"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32_RV64, "add") { mnemonic="add"; arch=RV32_RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32_RV64, "addi") { mnemonic="addi"; arch=RV32_RV64; operands=["rd"; "rs1"; "imm12"]; ins=["rs1"; "imm12"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV64, "addiw") { mnemonic="addiw"; arch=RV64; operands=["rd"; "rs1"; "imm12"]; ins=["rs1"; "imm12"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV64, "addw") { mnemonic="addw"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV64, "add.uw") { mnemonic="add.uw"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32, "aes32dsi") { mnemonic="aes32dsi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=["rs1"; "rs2"; "bs"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32, "aes32dsmi") { mnemonic="aes32dsmi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=["rs1"; "rs2"; "bs"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32, "aes32esi") { mnemonic="aes32esi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=["rs1"; "rs2"; "bs"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV64, "aes64ds") { mnemonic="aes64ds"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV64, "aes64dsm") { mnemonic="aes64dsm"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
-    InstrTable.add ans (RV32_RV64, "amoadd.b") { mnemonic="amoadd.b"; arch=RV32_RV64; operands=["rd"; "rs2"; "rs1"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=true; mayStore=true };
+    InstrTable.add ans (RV32_RV64, "epmty_ins") { mnemonic="epmty_ins"; arch=RV32_RV64; operands=[]; ins=[GPR "sp"]; outs=[GPR "rd"; GPR "sp"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32_RV64, "add") { mnemonic="add"; arch=RV32_RV64; operands=["rd"; "rs1"; "rs2"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32_RV64, "addi") { mnemonic="addi"; arch=RV32_RV64; operands=["rd"; "rs1"; "imm12"]; ins=[GPR "rs1"; Imm "imm12"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV64, "addiw") { mnemonic="addiw"; arch=RV64; operands=["rd"; "rs1"; "imm12"]; ins=[GPR "rs1"; Imm "imm12"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV64, "addw") { mnemonic="addw"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV64, "add.uw") { mnemonic="add.uw"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32, "aes32dsi") { mnemonic="aes32dsi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=[GPR "rs1"; GPR "rs2"; GPR "bs"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32, "aes32dsmi") { mnemonic="aes32dsmi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=[GPR "rs1"; GPR "rs2"; GPR "bs"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32, "aes32esi") { mnemonic="aes32esi"; arch=RV32; operands=["rd"; "rs1"; "rs2"; "bs"]; ins=[GPR "rs1"; GPR "rs2"; GPR "bs"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV64, "aes64ds") { mnemonic="aes64ds"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV64, "aes64dsm") { mnemonic="aes64dsm"; arch=RV64; operands=["rd"; "rs1"; "rs2"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=false; mayStore=false; ins_csr=[]; outs_csr=[] };
+    InstrTable.add ans (RV32_RV64, "amoadd.b") { mnemonic="amoadd.b"; arch=RV32_RV64; operands=["rd"; "rs2"; "rs1"]; ins=[GPR "rs1"; GPR "rs2"]; outs=[GPR "rd"]; mayLoad=true; mayStore=true; ins_csr=[]; outs_csr=[] };
     ans
      let lookup_exn = InstrTable.find llvm_info 

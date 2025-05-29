@@ -1,6 +1,6 @@
 (cram
  (applies_to :whole_subtree)
  (deps
-  (glob_files ../../../sail-riscv/model/*.sail)
+  (glob_files ../../../sail-riscv-p/model/*.sail)
   sail_base_files_RV32.txt
   sail_base_files_RV64.txt))

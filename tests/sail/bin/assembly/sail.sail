@@ -2,8 +2,6 @@ enum my_enum = { E_value1, E_value2 }
 
 enum already_speced = { S_value1, S_value2 }
 
-enum clause extension = Test
-
 scattered union ast
 
 val execute : ast -> Retired
@@ -48,7 +46,7 @@ mapping my_enum_mnemonic : string <-> my_enum = {
 }
 
 mapping clause assembly = SPEC_BY_ENUM(op, simm6)
-  <-> my_enum_mnemonic(op) ^ spc() ^ hex_bits_signed_6(simm6)
+  <-> my_enum_mnemonic(op) ^ spc() ^ hex_bits_6(simm6)
 
 ///
 
@@ -60,10 +58,10 @@ mapping speced_mnemonic : string <-> already_speced = {
 }
 
 mapping clause assembly = SPECED_BY_ENUM(S_value1, simm6)
-  <-> speced_mnemonic(S_value1) ^ spc() ^ hex_bits_signed_6(simm6)
+  <-> speced_mnemonic(S_value1) ^ spc() ^ hex_bits_6(simm6)
 
 mapping clause assembly = SPECED_BY_ENUM(S_value2, simm6)
-  <-> speced_mnemonic(S_value2) ^ spc() ^ hex_bits_signed_6(simm6)
+  <-> speced_mnemonic(S_value2) ^ spc() ^ hex_bits_6(simm6)
 
 ///
 
@@ -77,7 +75,7 @@ mapping some_bits_map : bits(3) <-> string = {
 }
 
 mapping clause assembly = ENUMERATE_MAP(triplet, simm6)
-  <-> some_bits_map(triplet) ^ spc() ^ hex_bits_signed_8(simm6 @ 0b01)
+  <-> some_bits_map(triplet) ^ spc() ^ hex_bits_8(simm6 @ 0b01)
 
 ///
 

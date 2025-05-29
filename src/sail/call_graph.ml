@@ -296,40 +296,44 @@ let analyze_csr g funcs =
   let open Type_check in
   let open Myast_iterator in
   let csrs =
-    let csrs = ref [] in
-    let add_csr id = if List.mem id !csrs then () else csrs := id :: !csrs in
-
     let readCSR = F_usual "readCSR" in
-    let _, readCSR_body = FuncTable.find funcs readCSR in
-    let it =
-      {
-        default_iterator with
-        exp =
-          (fun self (E_aux (e, annot) as exp) ->
-            (match e with
-            | E_id id
-              when match Env.lookup_id id (env_of_annot annot) with
-                   | Register _ -> true
-                   | _ -> false ->
-                add_csr id
-            | _ -> ());
-            default_iterator.exp self exp);
-      }
-    in
-    it.exp it readCSR_body;
 
-    let on_edge (v_src, _, _) =
-      let _, body = FuncTable.find funcs v_src in
-      it.exp it body
-    in
-    rev_dfs g ~start_v:readCSR ~on_edge;
+    match FuncTable.find_opt funcs readCSR with
+    | Some (_, readCSR_body) ->
+        let csrs = ref [] in
+        let add_csr id =
+          if List.mem id !csrs then () else csrs := id :: !csrs
+        in
+        let it =
+          {
+            default_iterator with
+            exp =
+              (fun self (E_aux (e, annot) as exp) ->
+                (match e with
+                | E_id id
+                  when match Env.lookup_id id (env_of_annot annot) with
+                       | Register _ -> true
+                       | _ -> false ->
+                    add_csr id
+                | _ -> ());
+                default_iterator.exp self exp);
+          }
+        in
+        it.exp it readCSR_body;
 
-    FuncTable.iter
-      (fun func (_, body) ->
-        if get_id func = "ext_read_CSR" then it.exp it body)
-      funcs;
+        let on_edge (v_src, _, _) =
+          let _, body = FuncTable.find funcs v_src in
+          it.exp it body
+        in
+        rev_dfs g ~start_v:readCSR ~on_edge;
 
-    !csrs
+        FuncTable.iter
+          (fun func (_, body) ->
+            if get_id func = "ext_read_CSR" then it.exp it body)
+          funcs;
+
+        !csrs
+    | None -> []
   in
 
   let writers = FuncTable.create 500 in

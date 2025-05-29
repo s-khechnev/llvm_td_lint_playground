@@ -2,8 +2,6 @@ enum store_load_op = { E_Store, E_Load }
 
 ///
 
-enum clause extension = Test
-
 scattered union ast
 
 val execute : ast -> Retired
@@ -24,14 +22,14 @@ union clause ast = NOT_STORE_LOAD : (bits(12), regidx, regidx)
 
 function clause execute NOT_STORE_LOAD(imm, rs1, rd) = {
   let rs1_val = X(rs1);
-  let immext : xlenbits = sign_extend(imm);
+  let immext : xlenbits = EXTS(imm);
   let result : xlenbits = rs1_val + immext;
   X(rd) = result;
   RETIRE_SUCCESS
 }
 
 mapping clause assembly = NOT_STORE_LOAD(imm, rs1, rd)
-  <-> "not_store_load" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_signed_12(imm)
+  <-> "not_store_load" ^ spc() ^ reg_name(rd) ^ sep() ^ reg_name(rs1) ^ sep() ^ hex_bits_12(imm)
 
 ///
 

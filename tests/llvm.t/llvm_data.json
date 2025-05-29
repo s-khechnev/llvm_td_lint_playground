@@ -1,6 +1,7 @@
 {
   "empty_ins": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALU_rr", "Sched"
@@ -30,6 +31,7 @@
   },
   "ADD": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALU_rr", "Sched"
@@ -62,6 +64,7 @@
   },
   "ADDI": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstIBase", "RVInstI", "Sched", "ALU_ri"
@@ -96,6 +99,7 @@
   },
   "ADDIW": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstIBase", "RVInstI", "Sched"
@@ -132,6 +136,7 @@
   },
   "ADDW": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALUW_rr", "Sched"
@@ -166,6 +171,7 @@
   },
   "ADD_UW": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALUW_rr", "Sched"
@@ -201,6 +207,7 @@
   },
   "AES32DSI": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "RVKByteSelect"
@@ -240,6 +247,7 @@
   },
   "AES32DSMI": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "RVKByteSelect"
@@ -279,6 +287,7 @@
   },
   "AES32ESI": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "RVKByteSelect"
@@ -318,6 +327,7 @@
   },
   "AES64DS": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALU_rr"
@@ -353,6 +363,7 @@
   },
   "AES64DSM": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstR", "ALU_rr"
@@ -388,6 +399,7 @@
   },
   "AMOADD_B": {
     "!anonymous": false,
+    "!locs": [ "RISCVInstrInfoP.td:258" ],
     "!superclasses": [
       "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
       "RVInstRBase", "RVInstRAtomic", "AMO_rr", "Sched"
