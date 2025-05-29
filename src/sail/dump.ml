@@ -219,40 +219,17 @@ let remove_unused_let_binds body =
   in
   remove_unused_let_binds' body
 
-let anf_rewrite ast env =
-  let read_write_regs_funcs =
-    Type_check.Env.get_overloads (Id_aux (Id "X", Parse_ast.Unknown)) env
-  in
+let anf_rewrite ast =
   let open Libsail.Rewriter in
   let rw_funcl (FCL_aux (FCL_funcl (id, pexp), (l, annot))) =
     let pexp =
       match pexp with
       | Pat_aux (Pat_exp (pat, body), t) ->
-          let try_rw_x_call e annot =
-            match e with
-            | E_app (id, _)
-              when List.exists
-                     (fun id' -> Id.compare id id' == 0)
-                     read_write_regs_funcs -> (
-                let exp = E_aux (e, annot) in
-                let anf = Myanf.anf exp in
-                try Type_check.(check_exp (env_of exp) anf (typ_of exp))
-                with _ -> exp)
-            | e -> E_aux (e, annot)
+          let anf = Myanf.anf body in
+          let body =
+            try Type_check.(check_exp (env_of body) anf (typ_of body))
+            with _ -> body
           in
-          let anf_x_calls =
-            {
-              rewriters_base with
-              rewrite_exp =
-                (fun _ ->
-                  fold_exp
-                    {
-                      id_exp_alg with
-                      e_aux = (fun (e_aux, annot) -> try_rw_x_call e_aux annot);
-                    });
-            }
-          in
-          let body = anf_x_calls.rewrite_exp anf_x_calls body in
           Pat_aux (Pat_exp (pat, body), t)
       | _ -> pexp
     in
@@ -272,7 +249,7 @@ let anf_rewrite ast env =
 let depend_xlen_funcs = FuncTable.create 1000
 
 let dump_execute ast env effect_info =
-  let ast = anf_rewrite ast env in
+  let ast = anf_rewrite ast in
   let ast = rewrite_for_analyze_encdecs ast in
   let assemblies_info = Assembly.get_info ast in
 
@@ -433,11 +410,6 @@ let dump_execute ast env effect_info =
   in
   profile_end "collect functions" t;
 
-  let data_graphs = FuncTable.create (FuncTable.length funcs) in
-  FuncTable.iter
-    (fun f (_, body) -> FuncTable.add data_graphs f (Data_graph.generate body))
-    funcs;
-
   let t = profile_start () in
   let g =
     Call_graph.generate funcs
@@ -447,6 +419,11 @@ let dump_execute ast env effect_info =
       (fun id -> FuncTable.add depend_xlen_funcs id ())
   in
   profile_end "call graph generation" t;
+
+  let data_graphs = FuncTable.create (FuncTable.length funcs) in
+  FuncTable.iter
+    (fun f (_, body) -> FuncTable.add data_graphs f (Data_graph.generate body))
+    funcs;
 
   FuncTable.iter
     (fun f _ ->
@@ -476,11 +453,11 @@ let dump_execute ast env effect_info =
   in
 
   let outs =
-    Call_graph.propogate_operands ~g ~aliases funcs
+    Call_graph.propogate_operands ~g ~data_graphs funcs
       [ (* funcs for writing to regs *) ("wX", "r"); ("wF", "r"); ("wV", "r") ]
   in
   let ins =
-    Call_graph.propogate_operands ~g ~aliases funcs
+    Call_graph.propogate_operands ~g ~data_graphs funcs
       [
         (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
       ]
@@ -602,31 +579,6 @@ let dump_execute ast env effect_info =
         else RV32_RV64
   in
 
-  let check_pair_regs f regs =
-    match FuncTable.find_opt data_graphs f with
-    | Some data_g ->
-        let reg_srcs_pairs =
-          List.map (fun r -> (r, Data_graph.find_sources data_g r)) regs
-        in
-        (* find all unique sources *)
-        reg_srcs_pairs |> List.concat_map snd |> rm_duplicates
-        (* for each source, find the dependent ones *)
-        |> List.map (fun src ->
-               let deps_regs =
-                 List.filter_map
-                   (fun (r, srcs) ->
-                     if src <> r && List.mem src srcs then Some r else None)
-                   reg_srcs_pairs
-               in
-               (src, deps_regs))
-        |> List.map (function
-             | src, [ _; _ ] -> Operand.GPRPair src
-             | src, [ reg ] when src = reg -> Operand.GPR src
-             | src, [] -> Operand.GPR src
-             | _ -> assert false)
-    | None -> List.map (fun s -> Operand.GPR s) regs
-  in
-
   Call_graph.dump g config.dot_file;
   Out_channel.with_open_text config.ocaml_code (fun ch ->
       let ppf = Format.formatter_of_out_channel ch in
@@ -656,14 +608,14 @@ let dump_execute ast env effect_info =
                in
                let regs_ins =
                  match FuncTable.find_opt ins func with
-                 | Some ins -> check_pair_regs func ins
+                 | Some ins -> ins
                  | None -> []
                in
                regs_ins @ List.map (fun i -> Operand.Imm i) imms
              in
              let outs =
                match FuncTable.find_opt outs func with
-               | Some outs -> check_pair_regs func outs
+               | Some outs -> outs
                | None -> []
              in
              let mayStore, mayLoad =

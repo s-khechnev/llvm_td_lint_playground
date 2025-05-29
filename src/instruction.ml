@@ -43,6 +43,11 @@ module Operand = struct
     | GPRPair s -> Format.sprintf "%s : PairGPR" s
 
   let get = function Imm s | GPR s | GPRPair s -> s
+
+  let map f = function
+    | Imm s -> Imm (f s)
+    | GPR s -> GPR (f s)
+    | GPRPair s -> GPRPair (f s)
 end
 
 type t = {

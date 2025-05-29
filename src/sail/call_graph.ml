@@ -1,4 +1,5 @@
-open Checker_core.Utils
+open Checker_core
+open Utils
 open Spec
 open Func
 open Myast
@@ -168,56 +169,15 @@ let rec dfs g ~start_v ~on_edge =
       with _ -> ())
     g start_v
 
-let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
-  let result = FuncTable.create 1000 in
-  let on_edge : V.t * Edge.t * V.t -> unit =
-   fun (v_src, args, v_dst) ->
-    match FuncTable.find_opt result v_src with
-    | Some src_opers ->
-        let mapped =
-          let check_aliases func_id xs =
-            match FuncTable.find_opt aliases func_id with
-            | Some aliases ->
-                List.map
-                  (fun id ->
-                    match List.assoc_opt id aliases with
-                    | Some alias -> alias
-                    | None -> id)
-                  xs
-            | None -> xs
-          in
-          src_opers
-          |> List.map (fun id ->
-                 match List.assoc_opt id args with
-                 | Some id -> id
-                 | None -> if id = "0" then "v0" else id)
-          |> check_aliases v_dst
-        in
-        (match FuncTable.find_opt result v_dst with
-        | Some dst_opers ->
-            FuncTable.replace result v_dst (mapped @ dst_opers |> rm_duplicates)
-        | None -> FuncTable.add result v_dst mapped);
-
-        if debug then (
-          let src_str = Func.to_string v_src in
-          let dst_str = Func.to_string v_dst in
-          printfn "%s - %s - %s" src_str
-            (String.concat " "
-               (List.map (fun (a, b) -> Format.sprintf "(%s, %s) " a b) args))
-            dst_str;
-          printfn "%s opers: %s" src_str (String.concat " " src_opers);
-          printfn "mapped: %s" (String.concat " " mapped);
-          printfn "%s opers: %s\n" dst_str
-            (String.concat " " (FuncTable.find result v_dst)))
-    | None -> ()
-  in
-
+let propogate_operands ~g ~data_graphs funcs (info : (string * string) list) =
+  let open Instruction in
+  let result : Operand.t list FuncTable.t = FuncTable.create 1000 in
   G.iter_vertex
     (fun v ->
       match List.assoc_opt (get_id v) info with
       | Some op_name -> (
           match v with
-          | F_usual _ -> FuncTable.add result v [ op_name ]
+          | F_usual _ -> FuncTable.add result v [ GPR op_name ]
           | F_specialized (_, speced) -> (
               match FuncTable.find_opt funcs v with
               | Some (args, _) -> (
@@ -237,17 +197,75 @@ let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
                         else None)
                       speced
                   with
-                  | Some e -> FuncTable.add result v [ e ]
-                  | None -> FuncTable.add result v [ op_name ])
+                  | Some e -> FuncTable.add result v [ GPR e ]
+                  | None -> FuncTable.add result v [ GPR op_name ])
               | None -> ()))
       | None -> ())
     g;
 
-  let () =
-    Seq.iter
-      (fun start_v -> dfs g ~start_v ~on_edge)
-      (FuncTable.to_seq_keys result)
+  let dummy_node = F_usual "dummy_node" in
+  FuncTable.iter (fun k _ -> G.add_edge_e g (dummy_node, [], k)) result;
+
+  let on_edge (v_src, args, _) acc =
+    match FuncTable.find_opt result v_src with
+    | Some src_opers ->
+        let mapped =
+          src_opers
+          |> List.map (fun op ->
+                 Operand.map
+                   (fun op_ident ->
+                     match List.assoc_opt op_ident args with
+                     | Some id -> id
+                     | None -> if op_ident = "0" then "v0" else op_ident)
+                   op)
+        in
+        mapped @ acc
+    | None -> acc
   in
+  let analyze_pairs f opers =
+    match FuncTable.find_opt data_graphs f with
+    | Some data_g ->
+        let op_srcs =
+          List.map
+            (fun op ->
+              let op = Operand.get op in
+              (op, Data_graph.find_sources data_g op))
+            opers
+        in
+        (* find all unique sources *)
+        op_srcs |> List.concat_map snd |> rm_duplicates
+        (* for each source, find the dependent ones *)
+        |> List.map (fun src ->
+               let deps_regs =
+                 List.filter_map
+                   (fun (r, srcs) ->
+                     if src <> r && List.mem src srcs then Some r else None)
+                   op_srcs
+               in
+               (src, deps_regs))
+        |> List.map (function
+             | src, [ _; _ ] -> Operand.GPRPair src
+             | src, _ -> Operand.GPR src)
+    | None -> opers
+  in
+  let module Bfs = Graph.Traverse.Bfs (G) in
+  Bfs.iter_component
+    (fun cur_func ->
+      let opers_before =
+        match FuncTable.find_opt result cur_func with
+        | Some opers -> opers
+        | _ -> []
+      in
+      let opers =
+        let is_gpr_pair = function Operand.GPRPair _ -> true | _ -> false in
+        let opers = G.fold_pred_e on_edge g cur_func [] @ opers_before in
+        let pairs = List.filter is_gpr_pair opers in
+        let not_pairs = List.filter (fun op -> not (is_gpr_pair op)) opers in
+        analyze_pairs cur_func not_pairs @ pairs
+      in
+      FuncTable.add result cur_func opers)
+    g dummy_node;
+
   result
 
 let get_reachables_from_func g ~start_f ~break_ids =

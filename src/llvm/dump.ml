@@ -55,10 +55,12 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
     j |> from_assoc |> List.assoc "args" |> from_list
     |> List.map (function
          | `List [ `Assoc [ ("def", `String typ); _; _ ]; `String s ] ->
-             if Str.string_match (Str.regexp ".*imm.*") typ 0 then Operand.Imm s
-             else if Str.string_match (Str.regexp ".*PairOp.*") typ 0 then
-               GPRPair s
-             else GPR s
+             let typ_match rgx_str =
+               Str.string_match (Str.regexp rgx_str) typ 0
+             in
+             if typ_match ".*PairOp.*" then Operand.GPRPair s
+             else if typ_match ".*GPR.*" || typ_match ".*FPR.*" then GPR s
+             else Imm s
          | other ->
              Format.printf "Unsupported case: %a\n"
                (Yojson.Safe.pretty_print ~std:false)
