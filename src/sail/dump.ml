@@ -175,6 +175,98 @@ let rewrite_for_analyze_encdecs ast =
   in
   rewrite_ast_base rewriters ast
 
+let remove_unused_let_binds body =
+  let rec remove_unused_let_binds' body =
+    let pat_ids = ref [] in
+    let collect_let_pats =
+      {
+        default_iterator with
+        exp =
+          (fun self (E_aux (e, _) as exp) ->
+            let () =
+              match e with
+              | E_let
+                  ( LB_aux
+                      (LB_val (P_aux (P_id (Id_aux (Id pat_id, _)), _), _), _),
+                    tail_exp )
+              | E_let
+                  ( LB_aux
+                      ( LB_val
+                          ( P_aux
+                              ( P_typ
+                                  (_, P_aux (P_id (Id_aux (Id pat_id, _)), _)),
+                                _ ),
+                            _ ),
+                        _ ),
+                    tail_exp ) ->
+                  pat_ids := (pat_id, tail_exp) :: !pat_ids
+              | _ -> ()
+            in
+            default_iterator.exp self exp);
+      }
+    in
+    collect_let_pats.exp collect_let_pats body;
+
+    let used = ref [] in
+    let collect_uses pat_id =
+      {
+        default_iterator with
+        exp =
+          (fun self (E_aux (e, _) as exp) ->
+            let () =
+              match e with
+              | E_id (Id_aux (Id id, _)) when pat_id = id ->
+                  used := pat_id :: !used
+              | _ -> ()
+            in
+            default_iterator.exp self exp);
+      }
+    in
+    List.iter
+      (fun (pat_id, e) ->
+        let check = collect_uses pat_id in
+        check.exp check e)
+      !pat_ids;
+
+    let cnt_rw = ref 0 in
+    let open Rewriter in
+    let rw_e e_aux annot =
+      match e_aux with
+      | E_let
+          (LB_aux (LB_val (P_aux (P_id (Id_aux (Id pat_id, _)), _), _), _), tail)
+      | E_let
+          ( LB_aux
+              ( LB_val
+                  ( P_aux (P_typ (_, P_aux (P_id (Id_aux (Id pat_id, _)), _)), _),
+                    _ ),
+                _ ),
+            tail )
+        when not (List.mem pat_id !used) ->
+          incr cnt_rw;
+          tail
+      | _ -> E_aux (e_aux, annot)
+    in
+    let rewrites =
+      {
+        rewriters_base with
+        rewrite_exp =
+          (fun _ ->
+            fold_exp
+              {
+                id_exp_alg with
+                e_aux = (fun (e_aux, annot) -> rw_e e_aux annot);
+              });
+      }
+    in
+    let new_body =
+      let (E_aux (aux, annot)) = body in
+      rewrite_exp rewrites (rw_e aux annot)
+    in
+
+    if !cnt_rw <> 0 then remove_unused_let_binds' new_body else new_body
+  in
+  remove_unused_let_binds' body
+
 (* funcs that depend on xlen *)
 let depend_xlen_funcs = FuncTable.create 1000
 
@@ -269,8 +361,9 @@ let dump_execute ast env effect_info =
                     let pargs = pat_to_lst parg in
                     let str_args = pats_to_strs pargs in
                     let pargsi = List.mapi (fun i p -> (i, p)) pargs in
-                    let () =
+                    let add_usual () =
                       let func = Func.F_usual id in
+                      let fbody = remove_unused_let_binds fbody in
                       FuncTable.add funcs func (str_args, fbody)
                     in
                     match
@@ -279,12 +372,16 @@ let dump_execute ast env effect_info =
                     | [], [] ->
                         let func = Func.F_usual id in
                         let fbody = empty_const_prop func fbody in
+                        let fbody = remove_unused_let_binds fbody in
                         FuncTable.add funcs func (str_args, fbody)
                     | speced_args, [] ->
+                        add_usual ();
                         let func = Func.F_specialized (id, speced_args) in
                         let fbody = empty_const_prop func fbody in
+                        let fbody = remove_unused_let_binds fbody in
                         FuncTable.add funcs func (str_args, fbody)
                     | already_speced_args, args_to_spec ->
+                        add_usual ();
                         let ref_vars =
                           Constant_propagation.referenced_vars fbody
                         in
@@ -313,15 +410,17 @@ let dump_execute ast env effect_info =
                                    ref_vars (substs, KBindings.empty)
                                    Bindings.empty fbody
                                in
+                               let speced_fbody =
+                                 remove_unused_let_binds speced_fbody
+                               in
                                FuncTable.add funcs func (str_args, speced_fbody))
                     )
                 | FCL_aux
                     ( FCL_funcl
-                        ( Id_aux (Id id, Range ({ pos_fname = path; _ }, _)),
+                        ( Id_aux (Id id, Range _),
                           Pat_aux (Pat_exp (parg, body), _) ),
                       _ )
-                  when Str.string_match (Str.regexp ".*sail-riscv.*") path 0
-                       && id <> "internal_error" ->
+                  when id <> "internal_error" ->
                     let args = pat_to_lst parg |> pats_to_strs in
                     let func = Func.F_usual id in
                     FuncTable.add funcs func (args, empty_const_prop func body)
@@ -334,14 +433,19 @@ let dump_execute ast env effect_info =
 
   let t = profile_start () in
   let g =
-    Call_graph.generate funcs myconst_prop (fun id ->
-        FuncTable.add depend_xlen_funcs id ())
+    Call_graph.generate funcs
+      (fun f vars substs assignes exp ->
+        let speced_body, bs = myconst_prop f vars substs assignes exp in
+        (remove_unused_let_binds speced_body, bs))
+      (fun id -> FuncTable.add depend_xlen_funcs id ())
   in
   profile_end "call graph generation" t;
 
   FuncTable.iter
     (fun f _ ->
-      let reaches = Call_graph.get_reachables g ~start_f:f ~break_ids:[] in
+      let reaches =
+        Call_graph.get_reachables_from_func g ~start_f:f ~break_ids:[]
+      in
       FuncTable.iter (FuncTable.add depend_xlen_funcs) reaches)
     (FuncTable.copy depend_xlen_funcs);
 
@@ -371,6 +475,16 @@ let dump_execute ast env effect_info =
       [
         (* funcs for reading from regs *) ("rX", "r"); ("rF", "r"); ("rV", "r");
       ]
+  in
+
+  let break_ids = [ "translateAddr" ] in
+  let mayLoads =
+    Call_graph.get_reachables_from_func_id g funcs ~start_id:"read_ram"
+      ~break_ids
+  in
+  let mayStores =
+    Call_graph.get_reachables_from_func_id g funcs ~start_id:"write_ram"
+      ~break_ids
   in
 
   let get_arch_from_encdec =
@@ -518,6 +632,9 @@ let dump_execute ast env effect_info =
                | Some outs -> outs
                | None -> []
              in
+             let mayStore, mayLoad =
+               (FuncTable.mem mayStores func, FuncTable.mem mayLoads func)
+             in
              let arch = get_arch_from_encdec func in
              if Arch.equal arch Utils.target_arch then
                List.iter
@@ -529,7 +646,8 @@ let dump_execute ast env effect_info =
                      else arch
                    in
                    printf_add_instr ppf
-                     ({ mnemonic; arch; operands; ins; outs } : Instruction.t))
+                     ({ mnemonic; arch; operands; ins; outs; mayLoad; mayStore }
+                       : Instruction.t))
                  mnemonics);
 
       printf "@[ans@]@ ";

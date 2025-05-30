@@ -154,12 +154,14 @@ let generate (funcs : (string list * 'a exp) FuncTable.t) myconst_prop
 let rec dfs g ~start_v ~on_edge =
   G.iter_succ_e
     (fun e ->
-      on_edge e;
-      dfs g
-        ~start_v:
-          (let _, _, v_dst = e in
-           v_dst)
-        ~on_edge)
+      try
+        on_edge e;
+        dfs g
+          ~start_v:
+            (let _, _, v_dst = e in
+             v_dst)
+          ~on_edge
+      with _ -> ())
     g start_v
 
 let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
@@ -244,7 +246,7 @@ let propogate_operands ~g ~aliases funcs (info : (string * string) list) =
   in
   result
 
-let get_reachables g ~start_f ~break_ids =
+let get_reachables_from_func g ~start_f ~break_ids =
   let result = FuncTable.create 100 in
   let exception Break in
   let on_edge (_, _, v_dst) =
@@ -255,3 +257,18 @@ let get_reachables g ~start_f ~break_ids =
     dfs g ~start_v:start_f ~on_edge;
     result
   with _ -> result
+
+let get_reachables_from_func_id g funcs ~start_id ~break_ids =
+  let result = FuncTable.create 100 in
+  let start_nodes =
+    FuncTable.fold
+      (fun func _ acc -> if get_id func = start_id then func :: acc else acc)
+      funcs []
+  in
+  let exception Break in
+  let on_edge (_, _, v_dst) =
+    if List.mem (get_id v_dst) break_ids then raise Break
+    else FuncTable.add result v_dst ()
+  in
+  List.iter (fun func -> dfs g ~start_v:func ~on_edge) start_nodes;
+  result
