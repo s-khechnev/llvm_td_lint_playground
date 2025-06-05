@@ -166,8 +166,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                       ( Id_aux
                           ( Id
                               ( "reg_name" | "creg_name" | "vreg_name"
-                              | "freg_or_reg_name" | "freg_name"
-                              | "csr_name_map" ),
+                              | "freg_or_reg_name" | "freg_name" ),
                             _ ),
                         [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ] ),
                     _ ) ->
@@ -180,7 +179,8 @@ let get_info (ast : 'a Ast_defs.ast) =
                 when String.starts_with ~prefix:"hex_bits" m_id
                      || String.equal "frm_mnemonic" m_id
                      || String.equal "maybe_vmask" m_id
-                     || String.equal "fence_bits" m_id ->
+                     || String.equal "fence_bits" m_id
+                     || String.equal "csr_name_map" m_id ->
                   imms := imm :: !imms;
                   imm :: acc
               | MP_aux
