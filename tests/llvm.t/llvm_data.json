@@ -28,6 +28,38 @@
     "Defs": [ { "def": "X2", "kind": "def", "printable": "X2" } ],
     "Uses": [ { "def": "X2", "kind": "def", "printable": "X2" } ]
   },
+  "SUB_CONSTRAINT": {
+    "!anonymous": false,
+    "!superclasses": [
+      "InstructionEncoding", "Instruction", "RVInstCommon", "RVInst",
+      "RVInstRBase", "RVInstR", "ALU_rr", "Sched"
+    ],
+    "AsmString": "sub\t$rd, $rs1, $rs2",
+    "Constraints": "$out = $rd",
+    "InOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs1" ],
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "rs2" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "ins", "kind": "def", "printable": "ins" },
+      "printable": "(ins GPR:$rs1, GPR:$rs2)"
+    },
+    "OutOperandList": {
+      "args": [
+        [ { "def": "GPR", "kind": "def", "printable": "GPR" }, "out" ]
+      ],
+      "kind": "dag",
+      "operator": { "def": "outs", "kind": "def", "printable": "outs" },
+      "printable": "(outs GPR:$out)"
+    },
+    "Predicates": [],
+    "isCodeGenOnly": 0,
+    "mayLoad": 0,
+    "mayStore": 0,
+    "Defs": [],
+    "Uses": []
+  },
   "ADD": {
     "!anonymous": false,
     "!superclasses": [
