@@ -8,6 +8,7 @@
   let llvm_info =
     let ans = InstrTable.create 1000 in
     InstrTable.add ans (RV32_RV64, "epmty_ins") { mnemonic="epmty_ins"; arch=RV32_RV64; operands=[]; ins=["sp"]; outs=["rd"; "sp"]; mayLoad=false; mayStore=false };
+    InstrTable.add ans (RV32_RV64, "sub") { mnemonic="sub"; arch=RV32_RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
     InstrTable.add ans (RV32_RV64, "add") { mnemonic="add"; arch=RV32_RV64; operands=["rd"; "rs1"; "rs2"]; ins=["rs1"; "rs2"]; outs=["rd"]; mayLoad=false; mayStore=false };
     InstrTable.add ans (RV32_RV64, "addi") { mnemonic="addi"; arch=RV32_RV64; operands=["rd"; "rs1"; "imm12"]; ins=["rs1"; "imm12"]; outs=["rd"]; mayLoad=false; mayStore=false };
     InstrTable.add ans (RV64, "addiw") { mnemonic="addiw"; arch=RV64; operands=["rd"; "rs1"; "imm12"]; ins=["rs1"; "imm12"]; outs=["rd"]; mayLoad=false; mayStore=false };

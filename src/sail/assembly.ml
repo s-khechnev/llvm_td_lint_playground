@@ -166,8 +166,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                       ( Id_aux
                           ( Id
                               ( "reg_name" | "creg_name" | "vreg_name"
-                              | "freg_or_reg_name" | "freg_name"
-                              | "csr_name_map" ),
+                              | "freg_or_reg_name" | "freg_name" ),
                             _ ),
                         [ MP_aux (MP_id (Id_aux (Id reg_name, _)), _) ] ),
                     _ ) ->
@@ -180,7 +179,8 @@ let get_info (ast : 'a Ast_defs.ast) =
                 when String.starts_with ~prefix:"hex_bits" m_id
                      || String.equal "frm_mnemonic" m_id
                      || String.equal "maybe_vmask" m_id
-                     || String.equal "fence_bits" m_id ->
+                     || String.equal "fence_bits" m_id
+                     || String.equal "csr_name_map" m_id ->
                   imms := imm :: !imms;
                   imm :: acc
               | MP_aux
@@ -240,7 +240,22 @@ let get_info (ast : 'a Ast_defs.ast) =
               product to_spec
               |> List.iter (fun xs ->
                      let substs = List.map (fun (_, id, e) -> (id, e)) xs in
-                     let mnemonics = collect_mnemonics substs body in
+                     let info =
+                       let mnemonics, opers, imms =
+                         collect_mnemonics substs body
+                       in
+                       let mnemonics =
+                         (* ignore load.{aq}rl, store.{aq}rl, due not implemented in sail *)
+                         if ident = "LOAD" || ident = "STORE" then
+                           List.filter
+                             (fun s ->
+                               (not (String.ends_with ~suffix:".aq" s))
+                               && not (String.ends_with ~suffix:".rl" s))
+                             mnemonics
+                         else mnemonics
+                       in
+                       (mnemonics, opers, imms)
+                     in
                      FuncTable.add collected
                        (F_specialized
                           ( ident,
@@ -248,7 +263,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                               (fun (i1, _) (i2, _) -> compare i1 i2)
                               speced
                               (List.map (fun (i, _, e) -> (i, e)) xs) ))
-                       mnemonics))
+                       info))
       | _ -> ())
     assemblies;
   collected

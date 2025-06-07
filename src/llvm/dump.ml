@@ -1,5 +1,4 @@
 open Checker_core
-open Utils
 
 type config = {
   mutable riscv_td_json : string;
@@ -35,11 +34,34 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
         | _ -> (asm_str, []))
     | _ -> assert false
   in
+  let fconstraint =
+    match List.assoc "Constraints" j with
+    | `String str ->
+        let re =
+          (* $rd = $rd_wb *)
+          Str.regexp
+            "^[ \t]*\\$\\([^ \t=]+\\)[ \t]*=[ \t]*\\$\\([^ \t=]+\\)[ \t]*$"
+        in
+        let constraints =
+          str |> String.split_on_char ',' |> List.map String.trim
+          |> List.map (fun c ->
+                 if Str.string_match re c 0 then
+                   let lhs = Str.matched_group 1 c in
+                   let rhs = Str.matched_group 2 c in
+                   fun s ->
+                     let f a = s = a && not (List.mem a operands) in
+                     if f lhs then rhs else if f rhs then lhs else s
+                 else Fun.id)
+        in
+        List.fold_left (fun f g x -> f (g x)) Fun.id constraints
+    | _ -> assert false
+  in
   let exract_operands j =
     j |> from_assoc |> List.assoc "args" |> from_list
-    |> List.map (function
-         | `List [ `Assoc [ _; _; _ ]; `String s ] ->
-             chop_suffix s ~suffix:"_wb"
+    |> List.concat_map (function
+         | `List [ `Assoc [ ("def", `String def); _; _ ]; `String s ] ->
+             let op = fconstraint s in
+             if def = "VMaskOp" then [ "v0"; op ] else [ op ]
          | other ->
              Format.printf "Unsupported case: %a\n"
                (Yojson.Safe.pretty_print ~std:false)
@@ -68,12 +90,12 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
                other;
              assert false)
   in
-  let in_operands =
+  let ins =
     let explicit = exract_operands (List.assoc "InOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Uses" j) in
     explicit @ implicit
   in
-  let out_operands =
+  let outs =
     let explicit = exract_operands (List.assoc "OutOperandList" j) in
     let implicit = extract_implicit_gprs (List.assoc "Defs" j) in
     explicit @ implicit
@@ -99,7 +121,7 @@ let extract_info (j : (string * Yojson.Safe.t) list) =
     let f s = List.assoc s j |> from_int |> int_to_bool in
     (f "mayLoad", f "mayStore")
   in
-  (mnemonic, operands, out_operands, in_operands, arch, mayLoad, mayStore)
+  ({ mnemonic; arch; operands; ins; outs; mayLoad; mayStore } : Instruction.t)
 
 let is_good_data = function
   | `Assoc xs ->
@@ -164,11 +186,8 @@ let dump_llvm () =
                      (from_assoc j))
               in
               let xs = from_assoc j in
-              let mnemonic, operands, outs, ins, arch, mayLoad, mayStore =
-                extract_info xs
-              in
-              Utils.printf_add_instr ppf
-                { mnemonic; arch; operands; ins; outs; mayLoad; mayStore };
+              let instr = extract_info xs in
+              Utils.printf_add_instr ppf instr;
               Some (k, j))
             else None)
           xs
