@@ -43,6 +43,20 @@ jobs:
         run: |
           opam exec -- dune test --profile=release
 
+      - name: Generate report...
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p _build/report
+          opam exec -- dune exec src/comparator.exe > _build/report/report.txt
+
+      - name: Deploying report...
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build/report
+          destination_dir: ${{ github.ref_name }}
+
       - name: Send coverage report to Coveralls
         if: github.event_name != 'pull_request'
         run: |
