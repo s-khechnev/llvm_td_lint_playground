@@ -16,8 +16,8 @@ let () =
            operands = llvm_opers;
            ins = llvm_ins;
            outs = llvm_outs;
-           mayLoad = _;
-           mayStore = _;
+           mayLoad = llvm_mayLoad;
+           mayStore = llvm_mayStore;
            ins_csr = llvm_ins_csr;
            outs_csr = llvm_outs_csr;
          } : Instruction.t =
@@ -36,8 +36,8 @@ let () =
              operands = sail_opers;
              ins = sail_ins;
              outs = sail_outs;
-             mayLoad = _;
-             mayStore = _;
+             mayLoad = sail_mayLoad;
+             mayStore = sail_mayStore;
              ins_csr = sail_ins_csr;
              outs_csr = sail_outs_csr;
            } : Instruction.t =
@@ -91,6 +91,12 @@ let () =
            pp "sail outs: %s" sail_outs;
            pp "llvm ins: %s" llvm_ins;
            pp "sail ins: %s" sail_ins;
+
+           printfn "llvm: mayLoad = %B" llvm_mayLoad;
+           printfn "sail: mayLoad = %B" sail_mayLoad;
+
+           printfn "llvm: mayStore = %B" llvm_mayStore;
+           printfn "sail: mayStore = %B" sail_mayStore;
 
            let pp ppf xs =
              if List.is_empty xs then () else printfn ppf (String.concat " " xs)
@@ -148,6 +154,11 @@ let () =
            in
            check_csrs llvm_outs_csr sail_outs_csr "outs csr";
            check_csrs llvm_ins_csr sail_ins_csr "ins csr";
+
+           if llvm_mayLoad <> sail_mayLoad then
+             Queue.add "diff mayLoad" differences;
+           if llvm_mayStore <> sail_mayStore then
+             Queue.add "diff mayStore" differences;
 
            if Queue.is_empty differences then ()
            else (
