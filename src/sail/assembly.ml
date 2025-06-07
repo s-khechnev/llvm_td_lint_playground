@@ -240,7 +240,22 @@ let get_info (ast : 'a Ast_defs.ast) =
               product to_spec
               |> List.iter (fun xs ->
                      let substs = List.map (fun (_, id, e) -> (id, e)) xs in
-                     let mnemonics = collect_mnemonics substs body in
+                     let info =
+                       let mnemonics, opers, imms =
+                         collect_mnemonics substs body
+                       in
+                       let mnemonics =
+                         (* ignore load.{aq}rl, store.{aq}rl, due not implemented in sail *)
+                         if ident = "LOAD" || ident = "STORE" then
+                           List.filter
+                             (fun s ->
+                               (not (String.ends_with ~suffix:".aq" s))
+                               && not (String.ends_with ~suffix:".rl" s))
+                             mnemonics
+                         else mnemonics
+                       in
+                       (mnemonics, opers, imms)
+                     in
                      FuncTable.add collected
                        (F_specialized
                           ( ident,
@@ -248,7 +263,7 @@ let get_info (ast : 'a Ast_defs.ast) =
                               (fun (i1, _) (i2, _) -> compare i1 i2)
                               speced
                               (List.map (fun (i, _, e) -> (i, e)) xs) ))
-                       mnemonics))
+                       info))
       | _ -> ())
     assemblies;
   collected

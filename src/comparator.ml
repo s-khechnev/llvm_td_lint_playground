@@ -5,6 +5,7 @@ open Instruction
 let not_found_in_sail = ref []
 
 let () =
+  printfn "(* To find discrepancies, do search by the word `discrepancies` *)\n";
   Llvm_info.llvm_info |> InstrTable.to_seq |> List.of_seq
   |> List.sort_uniq (fun ((a1, m1), _) ((a2, m2), _) ->
          match compare m1 m2 with 0 -> Arch.compare a1 a2 | n -> n)
