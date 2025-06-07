@@ -40,7 +40,7 @@ module Operand = struct
 
   let to_string = function
     | Imm s | GPR s -> s
-    | GPRPair s -> Format.sprintf "%s : PairGPR" s
+    | GPRPair s -> Format.sprintf "%s:PairGPR" s
 
   let get = function Imm s | GPR s | GPRPair s -> s
 
