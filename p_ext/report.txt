@@ -1,0 +1,3351 @@
+(* To find discrepancies, do search by the word `discrepancies` *)
+
+Report: add16
+llvm RV32_RV64: add16 "rd" "rs1" "rs2"
+sail RV32: add16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: add32
+llvm RV64: add32 "rd" "rs1" "rs2"
+sail RV64: add32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: add64
+llvm RV32: add64 "rd" "rs1" "rs2"
+sail RV32: add64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: add8
+llvm RV32_RV64: add8 "rd" "rs1" "rs2"
+sail RV32: add8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ave
+llvm RV32_RV64: ave "rd" "rs1" "rs2"
+sail RV32: ave "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: bitrev
+llvm RV32_RV64: bitrev "rd" "rs1" "rs2"
+sail RV32: bitrev "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: bitrevi
+llvm RV32_RV64: bitrevi "rd" "rs1" "shamt"
+sail RV32: bitrevi "rd" "rs1" "imm6"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm6) (1: rs1)
+
+Report: bpick
+llvm RV32_RV64: bpick "rd" "rs1" "rs2" "rs3"
+sail RV32: bpick "rd" "rs1" "rs2" "rs3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (3: rs3) (2: rs2) (1: rs1)
+sail ins: (3: rs3) (2: rs2) (1: rs1)
+
+Report: clrs16
+llvm RV32_RV64: clrs16 "rd" "rs1"
+sail RV32: clrs16 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: clrs32
+llvm RV32_RV64: clrs32 "rd" "rs1"
+sail RV32: clrs32 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: clrs8
+llvm RV32_RV64: clrs8 "rd" "rs1"
+sail RV32: clrs8 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: clz16
+llvm RV32_RV64: clz16 "rd" "rs1"
+sail RV32: clz16 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: clz32
+llvm RV32_RV64: clz32 "rd" "rs1"
+sail RV32: clz32 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: clz8
+llvm RV32_RV64: clz8 "rd" "rs1"
+sail RV32: clz8 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: cmpeq16
+llvm RV32_RV64: cmpeq16 "rd" "rs1" "rs2"
+sail RV32: cmpeq16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: cmpeq8
+llvm RV32_RV64: cmpeq8 "rd" "rs1" "rs2"
+sail RV32: cmpeq8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: cras16
+llvm RV32_RV64: cras16 "rd" "rs1" "rs2"
+sail RV32: cras16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: cras32
+llvm RV64: cras32 "rd" "rs1" "rs2"
+sail RV32_RV64: cras32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: crsa16
+llvm RV32_RV64: crsa16 "rd" "rs1" "rs2"
+sail RV32: crsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: crsa32
+llvm RV64: crsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: crsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: insb
+llvm RV32_RV64: insb "rd" "rs1" "shamt"
+sail RV32: insb "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1) (0: rd)
+sail ins: (2: imm3) (1: rs1) (0: rd)
+
+Report: kabs16
+llvm RV32_RV64: kabs16 "rd" "rs1"
+sail RV32: kabs16 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+sail outs csr: vxsat
+kabs16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kabs32
+llvm RV64: kabs32 "rd" "rs1"
+sail RV64: kabs32 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+sail outs csr: vxsat
+kabs32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kabs8
+llvm RV32_RV64: kabs8 "rd" "rs1"
+sail RV32: kabs8 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+sail outs csr: vxsat
+kabs8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kabsw
+llvm RV32_RV64: kabsw "rd" "rs1"
+sail RV32: kabsw "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+sail outs csr: vxsat
+kabsw discrepancies:
+  in sail outs csr: vxsat
+
+Report: kadd16
+llvm RV32_RV64: kadd16 "rd" "rs1" "rs2"
+sail RV32: kadd16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kadd16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kadd32
+llvm RV64: kadd32 "rd" "rs1" "rs2"
+sail RV64: kadd32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kadd32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kadd64
+llvm RV32: kadd64 "rd" "rs1" "rs2"
+sail RV32: kadd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail outs csr: vxsat
+kadd64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kadd64
+llvm RV64: kadd64 "rd" "rs1" "rs2"
+sail RV64: kadd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kadd64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kadd8
+llvm RV32_RV64: kadd8 "rd" "rs1" "rs2"
+sail RV32: kadd8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kadd8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kaddh
+llvm RV32_RV64: kaddh "rd" "rs1" "rs2"
+sail RV32: kaddh "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kaddh discrepancies:
+  in sail outs csr: vxsat
+
+Report: kaddw
+llvm RV32_RV64: kaddw "rd" "rs1" "rs2"
+sail RV32: kaddw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kaddw discrepancies:
+  in sail outs csr: vxsat
+
+Report: kcras16
+llvm RV32_RV64: kcras16 "rd" "rs1" "rs2"
+sail RV32: kcras16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kcras16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kcras32
+llvm RV64: kcras32 "rd" "rs1" "rs2"
+sail RV32_RV64: kcras32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kcras32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kcrsa16
+llvm RV32_RV64: kcrsa16 "rd" "rs1" "rs2"
+sail RV32: kcrsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kcrsa16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kcrsa32
+llvm RV64: kcrsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: kcrsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kcrsa32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kdmabb
+llvm RV32_RV64: kdmabb "rd" "rs1" "rs2"
+sail RV32: kdmabb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmabb discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmabb16
+llvm RV64: kdmabb16 "rd" "rs1" "rs2"
+sail RV64: kdmabb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmabb16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmabt
+llvm RV32_RV64: kdmabt "rd" "rs1" "rs2"
+sail RV32: kdmabt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmabt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmabt16
+llvm RV64: kdmabt16 "rd" "rs1" "rs2"
+sail RV64: kdmabt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmabt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmatt
+llvm RV32_RV64: kdmatt "rd" "rs1" "rs2"
+sail RV32: kdmatt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmatt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmatt16
+llvm RV64: kdmatt16 "rd" "rs1" "rs2"
+sail RV64: kdmatt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmatt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmbb
+llvm RV32_RV64: kdmbb "rd" "rs1" "rs2"
+sail RV32: kdmbb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmbb discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmbb16
+llvm RV64: kdmbb16 "rd" "rs1" "rs2"
+sail RV64: kdmbb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmbb16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmbt
+llvm RV32_RV64: kdmbt "rd" "rs1" "rs2"
+sail RV32: kdmbt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmbt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmbt16
+llvm RV64: kdmbt16 "rd" "rs1" "rs2"
+sail RV64: kdmbt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmbt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmtt
+llvm RV32_RV64: kdmtt "rd" "rs1" "rs2"
+sail RV32: kdmtt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmtt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kdmtt16
+llvm RV64: kdmtt16 "rd" "rs1" "rs2"
+sail RV64: kdmtt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+kdmtt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khm16
+llvm RV32_RV64: khm16 "rd" "rs1" "rs2"
+sail RV32: khm16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khm16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khm8
+llvm RV32_RV64: khm8 "rd" "rs1" "rs2"
+sail RV32: khm8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khm8 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmbb
+llvm RV32_RV64: khmbb "rd" "rs1" "rs2"
+sail RV32: khmbb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmbb discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmbb16
+llvm RV64: khmbb16 "rd" "rs1" "rs2"
+sail RV64: khmbb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmbb16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmbt
+llvm RV32_RV64: khmbt "rd" "rs1" "rs2"
+sail RV32: khmbt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmbt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmbt16
+llvm RV64: khmbt16 "rd" "rs1" "rs2"
+sail RV64: khmbt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmbt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmtt
+llvm RV32_RV64: khmtt "rd" "rs1" "rs2"
+sail RV32: khmtt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmtt discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmtt16
+llvm RV64: khmtt16 "rd" "rs1" "rs2"
+sail RV64: khmtt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmtt16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmx16
+llvm RV32_RV64: khmx16 "rd" "rs1" "rs2"
+sail RV32: khmx16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmx16 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: khmx8
+llvm RV32_RV64: khmx8 "rd" "rs1" "rs2"
+sail RV32: khmx8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+llvm ins csr: vxsat
+khmx8 discrepancies:
+  in sail outs csr: vxsat
+  in llvm ins csr: vxsat
+
+Report: kmabb
+llvm RV32_RV64: kmabb "rd" "rs1" "rs2"
+sail RV32: kmabb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmabb discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmabb32
+llvm RV64: kmabb32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmabb32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmabb32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmabt
+llvm RV32_RV64: kmabt "rd" "rs1" "rs2"
+sail RV32: kmabt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmabt discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmabt32
+llvm RV64: kmabt32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmabt32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmabt32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmada
+llvm RV32_RV64: kmada "rd" "rs1" "rs2"
+sail RV32: kmada "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmada discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmadrs
+llvm RV32_RV64: kmadrs "rd" "rs1" "rs2"
+sail RV32: kmadrs "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmadrs discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmadrs32
+llvm RV64: kmadrs32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmadrs32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmadrs32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmads
+llvm RV32_RV64: kmads "rd" "rs1" "rs2"
+sail RV32: kmads "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmads discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmads32
+llvm RV64: kmads32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmads32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmads32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmar64
+llvm RV32: kmar64 "rd" "rs1" "rs2"
+sail RV32: kmar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail outs csr: vxsat
+kmar64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmar64
+llvm RV64: kmar64 "rd" "rs1" "rs2"
+sail RV64: kmar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmar64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmatt
+llvm RV32_RV64: kmatt "rd" "rs1" "rs2"
+sail RV32: kmatt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmatt discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmatt32
+llvm RV64: kmatt32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmatt32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmatt32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmaxda
+llvm RV32_RV64: kmaxda "rd" "rs1" "rs2"
+sail RV32: kmaxda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmaxda discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmaxda32
+llvm RV64: kmaxda32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmaxda32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmaxda32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmaxds
+llvm RV32_RV64: kmaxds "rd" "rs1" "rs2"
+sail RV32: kmaxds "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmaxds discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmaxds32
+llvm RV64: kmaxds32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmaxds32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmaxds32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmda
+llvm RV32_RV64: kmda "rd" "rs1" "rs2"
+sail RV32: kmda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmda discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmda32
+llvm RV64: kmda32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmda32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmda32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmac
+llvm RV32_RV64: kmmac "rd" "rs1" "rs2"
+sail RV32: kmmac "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmac discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmac.u
+llvm RV32_RV64: kmmac.u "rd" "rs1" "rs2"
+sail RV32: kmmac.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmac.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawb
+llvm RV32_RV64: kmmawb "rd" "rs1" "rs2"
+sail RV32: kmmawb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawb discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawb.u
+llvm RV32_RV64: kmmawb.u "rd" "rs1" "rs2"
+sail RV32: kmmawb.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawb.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawb2
+llvm RV32_RV64: kmmawb2 "rd" "rs1" "rs2"
+sail RV32: kmmawb2 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawb2 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawb2.u
+llvm RV32_RV64: kmmawb2.u "rd" "rs1" "rs2"
+sail RV32: kmmawb2.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawb2.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawt
+llvm RV32_RV64: kmmawt "rd" "rs1" "rs2"
+sail RV32: kmmawt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawt discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawt.u
+llvm RV32_RV64: kmmawt.u "rd" "rs1" "rs2"
+sail RV32: kmmawt.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawt.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawt2
+llvm RV32_RV64: kmmawt2 "rd" "rs1" "rs2"
+sail RV32: kmmawt2 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawt2 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmawt2.u
+llvm RV32_RV64: kmmawt2.u "rd" "rs1" "rs2"
+sail RV32: kmmawt2.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmawt2.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmsb
+llvm RV32_RV64: kmmsb "rd" "rs1" "rs2"
+sail RV32: kmmsb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmsb discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmsb.u
+llvm RV32_RV64: kmmsb.u "rd" "rs1" "rs2"
+sail RV32: kmmsb.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmmsb.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmwb2
+llvm RV32_RV64: kmmwb2 "rd" "rs1" "rs2"
+sail RV32: kmmwb2 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmmwb2 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmwb2.u
+llvm RV32_RV64: kmmwb2.u "rd" "rs1" "rs2"
+sail RV32: kmmwb2.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmmwb2.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmwt2
+llvm RV32_RV64: kmmwt2 "rd" "rs1" "rs2"
+sail RV32: kmmwt2 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmmwt2 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmmwt2.u
+llvm RV32_RV64: kmmwt2.u "rd" "rs1" "rs2"
+sail RV32: kmmwt2.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmmwt2.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsda
+llvm RV32_RV64: kmsda "rd" "rs1" "rs2"
+sail RV32: kmsda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmsda discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsda32
+llvm RV64: kmsda32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmsda32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmsda32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsr64
+llvm RV32: kmsr64 "rd" "rs1" "rs2"
+sail RV32: kmsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail outs csr: vxsat
+kmsr64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsr64
+llvm RV64: kmsr64 "rd" "rs1" "rs2"
+sail RV64: kmsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmsr64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsxda
+llvm RV32_RV64: kmsxda "rd" "rs1" "rs2"
+sail RV32: kmsxda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmsxda discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmsxda32
+llvm RV64: kmsxda32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmsxda32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+kmsxda32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmxda
+llvm RV32_RV64: kmxda "rd" "rs1" "rs2"
+sail RV32: kmxda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmxda discrepancies:
+  in sail outs csr: vxsat
+
+Report: kmxda32
+llvm RV64: kmxda32 "rd" "rs1" "rs2"
+sail RV32_RV64: kmxda32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kmxda32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksll16
+llvm RV32_RV64: ksll16 "rd" "rs1" "rs2"
+sail RV32: ksll16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksll16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksll32
+llvm RV64: ksll32 "rd" "rs1" "rs2"
+sail RV64: ksll32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksll32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksll8
+llvm RV32_RV64: ksll8 "rd" "rs1" "rs2"
+sail RV32: ksll8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksll8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslli16
+llvm RV32_RV64: kslli16 "rd" "rs1" "shamt"
+sail RV32: kslli16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+sail outs csr: vxsat
+kslli16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslli32
+llvm RV64: kslli32 "rd" "rs1" "shamt"
+sail RV64: kslli32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+sail outs csr: vxsat
+kslli32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslli8
+llvm RV32_RV64: kslli8 "rd" "rs1" "shamt"
+sail RV32: kslli8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+sail outs csr: vxsat
+kslli8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslliw
+llvm RV32_RV64: kslliw "rd" "rs1" "shamt"
+sail RV32: kslliw "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+sail outs csr: vxsat
+kslliw discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksllw
+llvm RV32_RV64: ksllw "rd" "rs1" "rs2"
+sail RV32: ksllw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksllw discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra16
+llvm RV32_RV64: kslra16 "rd" "rs1" "rs2"
+sail RV32: kslra16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra16.u
+llvm RV32_RV64: kslra16.u "rd" "rs1" "rs2"
+sail RV32: kslra16.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra16.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra32
+llvm RV64: kslra32 "rd" "rs1" "rs2"
+sail RV64: kslra32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra32.u
+llvm RV64: kslra32.u "rd" "rs1" "rs2"
+sail RV64: kslra32.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra32.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra8
+llvm RV32_RV64: kslra8 "rd" "rs1" "rs2"
+sail RV32: kslra8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslra8.u
+llvm RV32_RV64: kslra8.u "rd" "rs1" "rs2"
+sail RV32: kslra8.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslra8.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslraw
+llvm RV32_RV64: kslraw "rd" "rs1" "rs2"
+sail RV32: kslraw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslraw discrepancies:
+  in sail outs csr: vxsat
+
+Report: kslraw.u
+llvm RV32_RV64: kslraw.u "rd" "rs1" "rs2"
+sail RV32: kslraw.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kslraw.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: kstas16
+llvm RV32_RV64: kstas16 "rd" "rs1" "rs2"
+sail RV32: kstas16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kstas16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kstas32
+llvm RV64: kstas32 "rd" "rs1" "rs2"
+sail RV32_RV64: kstas32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kstas32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kstsa16
+llvm RV32_RV64: kstsa16 "rd" "rs1" "rs2"
+sail RV32: kstsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kstsa16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: kstsa32
+llvm RV64: kstsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: kstsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kstsa32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksub16
+llvm RV32_RV64: ksub16 "rd" "rs1" "rs2"
+sail RV32: ksub16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksub16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksub32
+llvm RV64: ksub32 "rd" "rs1" "rs2"
+sail RV64: ksub32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksub32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksub64
+llvm RV32: ksub64 "rd" "rs1" "rs2"
+sail RV32: ksub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail outs csr: vxsat
+ksub64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksub64
+llvm RV64: ksub64 "rd" "rs1" "rs2"
+sail RV64: ksub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksub64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksub8
+llvm RV32_RV64: ksub8 "rd" "rs1" "rs2"
+sail RV32: ksub8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksub8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksubh
+llvm RV32_RV64: ksubh "rd" "rs1" "rs2"
+sail RV32: ksubh "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksubh discrepancies:
+  in sail outs csr: vxsat
+
+Report: ksubw
+llvm RV32_RV64: ksubw "rd" "rs1" "rs2"
+sail RV32: ksubw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ksubw discrepancies:
+  in sail outs csr: vxsat
+
+Report: kwmmul
+llvm RV32_RV64: kwmmul "rd" "rs1" "rs2"
+sail RV32: kwmmul "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kwmmul discrepancies:
+  in sail outs csr: vxsat
+
+Report: kwmmul.u
+llvm RV32_RV64: kwmmul.u "rd" "rs1" "rs2"
+sail RV32: kwmmul.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+kwmmul.u discrepancies:
+  in sail outs csr: vxsat
+
+Report: maddr32
+llvm RV32_RV64: maddr32 "rd" "rs1" "rs2"
+sail RV32: maddr32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: maxw
+llvm RV32_RV64: maxw "rd" "rs1" "rs2"
+sail RV32: maxw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: minw
+llvm RV32_RV64: minw "rd" "rs1" "rs2"
+sail RV32: minw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: msubr32
+llvm RV32_RV64: msubr32 "rd" "rs1" "rs2"
+sail RV32: msubr32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: mulr64
+llvm RV32: mulr64 "rd" "rs1" "rs2"
+sail RV32: mulr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: mulr64
+llvm RV64: mulr64 "rd" "rs1" "rs2"
+sail RV64: mulr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: mulsr64
+llvm RV32: mulsr64 "rd" "rs1" "rs2"
+sail RV32: mulsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: mulsr64
+llvm RV64: mulsr64 "rd" "rs1" "rs2"
+sail RV64: mulsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pbsad
+llvm RV32_RV64: pbsad "rd" "rs1" "rs2"
+sail RV32: pbsad "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pbsada
+llvm RV32_RV64: pbsada "rd" "rs1" "rs2"
+sail RV32: pbsada "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: pkbb16
+llvm RV64: pkbb16 "rd" "rs1" "rs2"
+sail RV64: pkbb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pkbt16
+llvm RV32_RV64: pkbt16 "rd" "rs1" "rs2"
+sail RV32: pkbt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pkbt32
+llvm RV64: pkbt32 "rd" "rs1" "rs2"
+sail RV32_RV64: pkbt32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pktb16
+llvm RV32_RV64: pktb16 "rd" "rs1" "rs2"
+sail RV32: pktb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pktb32
+llvm RV64: pktb32 "rd" "rs1" "rs2"
+sail RV32_RV64: pktb32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: pktt16
+llvm RV64: pktt16 "rd" "rs1" "rs2"
+sail RV64: pktt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: radd16
+llvm RV32_RV64: radd16 "rd" "rs1" "rs2"
+sail RV32: radd16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: radd32
+llvm RV64: radd32 "rd" "rs1" "rs2"
+sail RV64: radd32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: radd64
+llvm RV32: radd64 "rd" "rs1" "rs2"
+sail RV32: radd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: radd64
+llvm RV64: radd64 "rd" "rs1" "rs2"
+sail RV64: radd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: radd8
+llvm RV32_RV64: radd8 "rd" "rs1" "rs2"
+sail RV32: radd8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: raddw
+llvm RV32_RV64: raddw "rd" "rs1" "rs2"
+sail RV32: raddw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rcras16
+llvm RV32_RV64: rcras16 "rd" "rs1" "rs2"
+sail RV32: rcras16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rcras32
+llvm RV64: rcras32 "rd" "rs1" "rs2"
+sail RV32_RV64: rcras32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rcrsa16
+llvm RV32_RV64: rcrsa16 "rd" "rs1" "rs2"
+sail RV32: rcrsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rcrsa32
+llvm RV64: rcrsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: rcrsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rstas16
+llvm RV32_RV64: rstas16 "rd" "rs1" "rs2"
+sail RV32: rstas16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rstas32
+llvm RV64: rstas32 "rd" "rs1" "rs2"
+sail RV32_RV64: rstas32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rstsa16
+llvm RV32_RV64: rstsa16 "rd" "rs1" "rs2"
+sail RV32: rstsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rstsa32
+llvm RV64: rstsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: rstsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rsub16
+llvm RV32_RV64: rsub16 "rd" "rs1" "rs2"
+sail RV32: rsub16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rsub32
+llvm RV64: rsub32 "rd" "rs1" "rs2"
+sail RV64: rsub32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rsub64
+llvm RV32: rsub64 "rd" "rs1" "rs2"
+sail RV32: rsub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: rsub64
+llvm RV64: rsub64 "rd" "rs1" "rs2"
+sail RV64: rsub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rsub8
+llvm RV32_RV64: rsub8 "rd" "rs1" "rs2"
+sail RV32: rsub8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: rsubw
+llvm RV32_RV64: rsubw "rd" "rs1" "rs2"
+sail RV32: rsubw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sclip16
+llvm RV32_RV64: sclip16 "rd" "rs1" "shamt"
+sail RV32: sclip16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+sail outs csr: vxsat
+sclip16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: sclip32
+llvm RV32_RV64: sclip32 "rd" "rs1" "shamt"
+sail RV32: sclip32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+sail outs csr: vxsat
+sclip32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: sclip8
+llvm RV32_RV64: sclip8 "rd" "rs1" "shamt"
+sail RV32: sclip8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+sail outs csr: vxsat
+sclip8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: scmple16
+llvm RV32_RV64: scmple16 "rd" "rs1" "rs2"
+sail RV32: scmple16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: scmple8
+llvm RV32_RV64: scmple8 "rd" "rs1" "rs2"
+sail RV32: scmple8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: scmplt16
+llvm RV32_RV64: scmplt16 "rd" "rs1" "rs2"
+sail RV32: scmplt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: scmplt8
+llvm RV32_RV64: scmplt8 "rd" "rs1" "rs2"
+sail RV32: scmplt8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sll16
+llvm RV32_RV64: sll16 "rd" "rs1" "rs2"
+sail RV32: sll16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sll32
+llvm RV64: sll32 "rd" "rs1" "rs2"
+sail RV64: sll32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sll8
+llvm RV32_RV64: sll8 "rd" "rs1" "rs2"
+sail RV32: sll8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: slli16
+llvm RV32_RV64: slli16 "rd" "rs1" "shamt"
+sail RV32: slli16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+
+Report: slli32
+llvm RV64: slli32 "rd" "rs1" "shamt"
+sail RV64: slli32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: slli8
+llvm RV32_RV64: slli8 "rd" "rs1" "shamt"
+sail RV32: slli8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+
+Report: smal
+llvm RV32: smal "rd" "rs1" "rs2"
+sail RV32: smal "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1:PairGPR)
+sail ins: (2: rs2) (1: rs1:PairGPR)
+
+Report: smal
+llvm RV64: smal "rd" "rs1" "rs2"
+sail RV64: smal "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smalbb
+llvm RV32: smalbb "rd" "rs1" "rs2"
+sail RV32: smalbb "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalbb
+llvm RV64: smalbb "rd" "rs1" "rs2"
+sail RV64: smalbb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smalbt
+llvm RV32: smalbt "rd" "rs1" "rs2"
+sail RV32: smalbt "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalbt
+llvm RV64: smalbt "rd" "rs1" "rs2"
+sail RV64: smalbt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smalda
+llvm RV32: smalda "rd" "rs1" "rs2"
+sail RV32: smalda "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalda
+llvm RV64: smalda "rd" "rs1" "rs2"
+sail RV64: smalda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smaldrs
+llvm RV32: smaldrs "rd" "rs1" "rs2"
+sail RV32: smaldrs "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smaldrs
+llvm RV64: smaldrs "rd" "rs1" "rs2"
+sail RV64: smaldrs "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smalds
+llvm RV32: smalds "rd" "rs1" "rs2"
+sail RV32: smalds "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalds
+llvm RV64: smalds "rd" "rs1" "rs2"
+sail RV64: smalds "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smaltt
+llvm RV32: smaltt "rd" "rs1" "rs2"
+sail RV32: smaltt "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smaltt
+llvm RV64: smaltt "rd" "rs1" "rs2"
+sail RV64: smaltt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smalxda
+llvm RV32: smalxda "rd" "rs1" "rs2"
+sail RV32: smalxda "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalxda
+llvm RV64: smalxda "rd" "rs1" "rs2"
+sail RV64: smalxda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smalxds
+llvm RV32: smalxds "rd" "rs1" "rs2"
+sail RV32: smalxds "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smalxds
+llvm RV64: smalxds "rd" "rs1" "rs2"
+sail RV64: smalxds "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smaqa
+llvm RV32_RV64: smaqa "rd" "rs1" "rs2"
+sail RV32: smaqa "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smaqa.su
+llvm RV32_RV64: smaqa.su "rd" "rs1" "rs2"
+sail RV32: smaqa.su "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smar64
+llvm RV32: smar64 "rd" "rs1" "rs2"
+sail RV32: smar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smar64
+llvm RV64: smar64 "rd" "rs1" "rs2"
+sail RV64: smar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smax16
+llvm RV32_RV64: smax16 "rd" "rs1" "rs2"
+sail RV32: smax16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smax32
+llvm RV64: smax32 "rd" "rs1" "rs2"
+sail RV64: smax32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smax8
+llvm RV32_RV64: smax8 "rd" "rs1" "rs2"
+sail RV32: smax8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smbb16
+llvm RV32_RV64: smbb16 "rd" "rs1" "rs2"
+sail RV32: smbb16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smbt16
+llvm RV32_RV64: smbt16 "rd" "rs1" "rs2"
+sail RV32: smbt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smbt32
+llvm RV64: smbt32 "rd" "rs1" "rs2"
+sail RV32_RV64: smbt32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smdrs
+llvm RV32_RV64: smdrs "rd" "rs1" "rs2"
+sail RV32: smdrs "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smdrs32
+llvm RV64: smdrs32 "rd" "rs1" "rs2"
+sail RV32_RV64: smdrs32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smds
+llvm RV32_RV64: smds "rd" "rs1" "rs2"
+sail RV32: smds "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smds32
+llvm RV64: smds32 "rd" "rs1" "rs2"
+sail RV32_RV64: smds32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smin16
+llvm RV32_RV64: smin16 "rd" "rs1" "rs2"
+sail RV32: smin16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smin32
+llvm RV64: smin32 "rd" "rs1" "rs2"
+sail RV64: smin32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smin8
+llvm RV32_RV64: smin8 "rd" "rs1" "rs2"
+sail RV32: smin8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmul
+llvm RV32_RV64: smmul "rd" "rs1" "rs2"
+sail RV32: smmul "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmul.u
+llvm RV32_RV64: smmul.u "rd" "rs1" "rs2"
+sail RV32: smmul.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmwb
+llvm RV32_RV64: smmwb "rd" "rs1" "rs2"
+sail RV32: smmwb "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmwb.u
+llvm RV32_RV64: smmwb.u "rd" "rs1" "rs2"
+sail RV32: smmwb.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmwt
+llvm RV32_RV64: smmwt "rd" "rs1" "rs2"
+sail RV32: smmwt "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smmwt.u
+llvm RV32_RV64: smmwt.u "rd" "rs1" "rs2"
+sail RV32: smmwt.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smslda
+llvm RV32: smslda "rd" "rs1" "rs2"
+sail RV32: smslda "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smslda
+llvm RV64: smslda "rd" "rs1" "rs2"
+sail RV64: smslda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smslxda
+llvm RV32: smslxda "rd" "rs1" "rs2"
+sail RV32: smslxda "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smslxda
+llvm RV64: smslxda "rd" "rs1" "rs2"
+sail RV64: smslxda "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smsr64
+llvm RV32: smsr64 "rd" "rs1" "rs2"
+sail RV32: smsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: smsr64
+llvm RV64: smsr64 "rd" "rs1" "rs2"
+sail RV64: smsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: smtt16
+llvm RV32_RV64: smtt16 "rd" "rs1" "rs2"
+sail RV32: smtt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smtt32
+llvm RV64: smtt32 "rd" "rs1" "rs2"
+sail RV32_RV64: smtt32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smul16
+llvm RV32: smul16 "rd" "rs1" "rs2"
+sail RV32: smul16 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smul16
+llvm RV64: smul16 "rd" "rs1" "rs2"
+sail RV64: smul16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smul8
+llvm RV32: smul8 "rd" "rs1" "rs2"
+sail RV32: smul8 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smul8
+llvm RV64: smul8 "rd" "rs1" "rs2"
+sail RV64: smul8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smulx16
+llvm RV32: smulx16 "rd" "rs1" "rs2"
+sail RV32: smulx16 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smulx16
+llvm RV64: smulx16 "rd" "rs1" "rs2"
+sail RV64: smulx16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smulx8
+llvm RV32: smulx8 "rd" "rs1" "rs2"
+sail RV32: smulx8 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smulx8
+llvm RV64: smulx8 "rd" "rs1" "rs2"
+sail RV64: smulx8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smxds
+llvm RV32_RV64: smxds "rd" "rs1" "rs2"
+sail RV32: smxds "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: smxds32
+llvm RV64: smxds32 "rd" "rs1" "rs2"
+sail RV32_RV64: smxds32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra.u
+llvm RV32_RV64: sra.u "rd" "rs1" "rs2"
+sail RV32: sra.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra16
+llvm RV32_RV64: sra16 "rd" "rs1" "rs2"
+sail RV32: sra16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra16.u
+llvm RV32_RV64: sra16.u "rd" "rs1" "rs2"
+sail RV32: sra16.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra32
+llvm RV64: sra32 "rd" "rs1" "rs2"
+sail RV64: sra32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra32.u
+llvm RV64: sra32.u "rd" "rs1" "rs2"
+sail RV64: sra32.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra8
+llvm RV32_RV64: sra8 "rd" "rs1" "rs2"
+sail RV32: sra8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sra8.u
+llvm RV32_RV64: sra8.u "rd" "rs1" "rs2"
+sail RV32: sra8.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srai.u
+llvm RV32_RV64: srai.u "rd" "rs1" "shamt"
+sail RV32: srai.u "rd" "rs1" "imm6"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm6) (1: rs1)
+
+Report: srai16
+llvm RV32_RV64: srai16 "rd" "rs1" "shamt"
+sail RV32: srai16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+
+Report: srai16.u
+llvm RV32_RV64: srai16.u "rd" "rs1" "shamt"
+sail RV32: srai16.u "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+
+Report: srai32
+llvm RV64: srai32 "rd" "rs1" "shamt"
+sail RV64: srai32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: srai32.u
+llvm RV64: srai32.u "rd" "rs1" "shamt"
+sail RV64: srai32.u "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: srai8
+llvm RV32_RV64: srai8 "rd" "rs1" "shamt"
+sail RV32: srai8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+
+Report: srai8.u
+llvm RV32_RV64: srai8.u "rd" "rs1" "shamt"
+sail RV32: srai8.u "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+
+Report: sraiw.u
+llvm RV64: sraiw.u "rd" "rs1" "shamt"
+sail RV64: sraiw.u "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: srl16
+llvm RV32_RV64: srl16 "rd" "rs1" "rs2"
+sail RV32: srl16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srl16.u
+llvm RV32_RV64: srl16.u "rd" "rs1" "rs2"
+sail RV32: srl16.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srl32
+llvm RV64: srl32 "rd" "rs1" "rs2"
+sail RV64: srl32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srl32.u
+llvm RV64: srl32.u "rd" "rs1" "rs2"
+sail RV64: srl32.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srl8
+llvm RV32_RV64: srl8 "rd" "rs1" "rs2"
+sail RV32: srl8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srl8.u
+llvm RV32_RV64: srl8.u "rd" "rs1" "rs2"
+sail RV32: srl8.u "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: srli16
+llvm RV32_RV64: srli16 "rd" "rs1" "shamt"
+sail RV32: srli16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+
+Report: srli16.u
+llvm RV32_RV64: srli16.u "rd" "rs1" "shamt"
+sail RV32: srli16.u "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+
+Report: srli32
+llvm RV64: srli32 "rd" "rs1" "shamt"
+sail RV64: srli32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: srli32.u
+llvm RV64: srli32.u "rd" "rs1" "shamt"
+sail RV64: srli32.u "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: srli8
+llvm RV32_RV64: srli8 "rd" "rs1" "shamt"
+sail RV32: srli8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+
+Report: srli8.u
+llvm RV32_RV64: srli8.u "rd" "rs1" "shamt"
+sail RV32: srli8.u "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+
+Report: stas16
+llvm RV32_RV64: stas16 "rd" "rs1" "rs2"
+sail RV32: stas16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: stas32
+llvm RV64: stas32 "rd" "rs1" "rs2"
+sail RV32_RV64: stas32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: stsa16
+llvm RV32_RV64: stsa16 "rd" "rs1" "rs2"
+sail RV32: stsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: stsa32
+llvm RV64: stsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: stsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sub16
+llvm RV32_RV64: sub16 "rd" "rs1" "rs2"
+sail RV32: sub16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sub32
+llvm RV64: sub32 "rd" "rs1" "rs2"
+sail RV64: sub32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sub64
+llvm RV32: sub64 "rd" "rs1" "rs2"
+sail RV32: sub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: sub8
+llvm RV32_RV64: sub8 "rd" "rs1" "rs2"
+sail RV32: sub8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: sunpkd810
+llvm RV32_RV64: sunpkd810 "rd" "rs1"
+sail RV32: sunpkd810 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: sunpkd820
+llvm RV32_RV64: sunpkd820 "rd" "rs1"
+sail RV32: sunpkd820 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: sunpkd830
+llvm RV32_RV64: sunpkd830 "rd" "rs1"
+sail RV32: sunpkd830 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: sunpkd831
+llvm RV32_RV64: sunpkd831 "rd" "rs1"
+sail RV32: sunpkd831 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: sunpkd832
+llvm RV32_RV64: sunpkd832 "rd" "rs1"
+sail RV32: sunpkd832 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: swap8
+llvm RV32_RV64: swap8 "rd" "rs1"
+sail RV32: swap8 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: uclip16
+llvm RV32_RV64: uclip16 "rd" "rs1" "shamt"
+sail RV32: uclip16 "rd" "rs1" "imm4"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm4) (1: rs1)
+sail outs csr: vxsat
+uclip16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uclip32
+llvm RV32_RV64: uclip32 "rd" "rs1" "shamt"
+sail RV32: uclip32 "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+sail outs csr: vxsat
+uclip32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uclip8
+llvm RV32_RV64: uclip8 "rd" "rs1" "shamt"
+sail RV32: uclip8 "rd" "rs1" "imm3"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm3) (1: rs1)
+sail outs csr: vxsat
+uclip8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ucmple16
+llvm RV32_RV64: ucmple16 "rd" "rs1" "rs2"
+sail RV32: ucmple16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ucmple8
+llvm RV32_RV64: ucmple8 "rd" "rs1" "rs2"
+sail RV32: ucmple8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ucmplt16
+llvm RV32_RV64: ucmplt16 "rd" "rs1" "rs2"
+sail RV32: ucmplt16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ucmplt8
+llvm RV32_RV64: ucmplt8 "rd" "rs1" "rs2"
+sail RV32: ucmplt8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ukadd16
+llvm RV32_RV64: ukadd16 "rd" "rs1" "rs2"
+sail RV32: ukadd16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukadd16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukadd32
+llvm RV64: ukadd32 "rd" "rs1" "rs2"
+sail RV64: ukadd32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukadd32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukadd64
+llvm RV32: ukadd64 "rd" "rs1" "rs2"
+sail RV32: ukadd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail outs csr: vxsat
+ukadd64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukadd64
+llvm RV64: ukadd64 "rd" "rs1" "rs2"
+sail RV64: ukadd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukadd64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukadd8
+llvm RV32_RV64: ukadd8 "rd" "rs1" "rs2"
+sail RV32: ukadd8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukadd8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukaddh
+llvm RV32_RV64: ukaddh "rd" "rs1" "rs2"
+sail RV32: ukaddh "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukaddh discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukaddw
+llvm RV32_RV64: ukaddw "rd" "rs1" "rs2"
+sail RV32: ukaddw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukaddw discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukcras16
+llvm RV32_RV64: ukcras16 "rd" "rs1" "rs2"
+sail RV32: ukcras16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukcras16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukcras32
+llvm RV64: ukcras32 "rd" "rs1" "rs2"
+sail RV32_RV64: ukcras32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukcras32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukcrsa16
+llvm RV32_RV64: ukcrsa16 "rd" "rs1" "rs2"
+sail RV32: ukcrsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukcrsa16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukcrsa32
+llvm RV64: ukcrsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: ukcrsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukcrsa32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukmar64
+llvm RV32: ukmar64 "rd" "rs1" "rs2"
+sail RV32: ukmar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail outs csr: vxsat
+ukmar64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukmar64
+llvm RV64: ukmar64 "rd" "rs1" "rs2"
+sail RV64: ukmar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+ukmar64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukmsr64
+llvm RV32: ukmsr64 "rd" "rs1" "rs2"
+sail RV32: ukmsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail outs csr: vxsat
+ukmsr64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukmsr64
+llvm RV64: ukmsr64 "rd" "rs1" "rs2"
+sail RV64: ukmsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+sail outs csr: vxsat
+ukmsr64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukstas16
+llvm RV32_RV64: ukstas16 "rd" "rs1" "rs2"
+sail RV32: ukstas16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukstas16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukstas32
+llvm RV64: ukstas32 "rd" "rs1" "rs2"
+sail RV32_RV64: ukstas32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukstas32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukstsa16
+llvm RV32_RV64: ukstsa16 "rd" "rs1" "rs2"
+sail RV32: ukstsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukstsa16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: ukstsa32
+llvm RV64: ukstsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: ukstsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+ukstsa32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksub16
+llvm RV32_RV64: uksub16 "rd" "rs1" "rs2"
+sail RV32: uksub16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksub16 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksub32
+llvm RV64: uksub32 "rd" "rs1" "rs2"
+sail RV64: uksub32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksub32 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksub64
+llvm RV32: uksub64 "rd" "rs1" "rs2"
+sail RV32: uksub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail outs csr: vxsat
+uksub64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksub64
+llvm RV64: uksub64 "rd" "rs1" "rs2"
+sail RV64: uksub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksub64 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksub8
+llvm RV32_RV64: uksub8 "rd" "rs1" "rs2"
+sail RV32: uksub8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksub8 discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksubh
+llvm RV32_RV64: uksubh "rd" "rs1" "rs2"
+sail RV32: uksubh "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksubh discrepancies:
+  in sail outs csr: vxsat
+
+Report: uksubw
+llvm RV32_RV64: uksubw "rd" "rs1" "rs2"
+sail RV32: uksubw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+sail outs csr: vxsat
+uksubw discrepancies:
+  in sail outs csr: vxsat
+
+Report: umaqa
+llvm RV32_RV64: umaqa "rd" "rs1" "rs2"
+sail RV32: umaqa "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: umar64
+llvm RV32: umar64 "rd" "rs1" "rs2"
+sail RV32: umar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: umar64
+llvm RV64: umar64 "rd" "rs1" "rs2"
+sail RV64: umar64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: umax16
+llvm RV32_RV64: umax16 "rd" "rs1" "rs2"
+sail RV32: umax16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umax32
+llvm RV64: umax32 "rd" "rs1" "rs2"
+sail RV64: umax32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umax8
+llvm RV32_RV64: umax8 "rd" "rs1" "rs2"
+sail RV32: umax8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umin16
+llvm RV32_RV64: umin16 "rd" "rs1" "rs2"
+sail RV32: umin16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umin32
+llvm RV64: umin32 "rd" "rs1" "rs2"
+sail RV64: umin32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umin8
+llvm RV32_RV64: umin8 "rd" "rs1" "rs2"
+sail RV32: umin8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umsr64
+llvm RV32: umsr64 "rd" "rs1" "rs2"
+sail RV32: umsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+sail ins: (2: rs2) (1: rs1) (0: rd:PairGPR)
+
+Report: umsr64
+llvm RV64: umsr64 "rd" "rs1" "rs2"
+sail RV64: umsr64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1) (0: rd)
+sail ins: (2: rs2) (1: rs1) (0: rd)
+
+Report: umul16
+llvm RV32: umul16 "rd" "rs1" "rs2"
+sail RV32: umul16 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umul16
+llvm RV64: umul16 "rd" "rs1" "rs2"
+sail RV64: umul16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umul8
+llvm RV32: umul8 "rd" "rs1" "rs2"
+sail RV32: umul8 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umul8
+llvm RV64: umul8 "rd" "rs1" "rs2"
+sail RV64: umul8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umulx16
+llvm RV32: umulx16 "rd" "rs1" "rs2"
+sail RV32: umulx16 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umulx16
+llvm RV64: umulx16 "rd" "rs1" "rs2"
+sail RV64: umulx16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umulx8
+llvm RV32: umulx8 "rd" "rs1" "rs2"
+sail RV32: umulx8 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: umulx8
+llvm RV64: umulx8 "rd" "rs1" "rs2"
+sail RV64: umulx8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: uradd16
+llvm RV32_RV64: uradd16 "rd" "rs1" "rs2"
+sail RV32: uradd16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: uradd32
+llvm RV64: uradd32 "rd" "rs1" "rs2"
+sail RV64: uradd32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: uradd64
+llvm RV32: uradd64 "rd" "rs1" "rs2"
+sail RV32: uradd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: uradd64
+llvm RV64: uradd64 "rd" "rs1" "rs2"
+sail RV64: uradd64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: uradd8
+llvm RV32_RV64: uradd8 "rd" "rs1" "rs2"
+sail RV32: uradd8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: uraddw
+llvm RV32_RV64: uraddw "rd" "rs1" "rs2"
+sail RV32: uraddw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urcras16
+llvm RV32_RV64: urcras16 "rd" "rs1" "rs2"
+sail RV32: urcras16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urcras32
+llvm RV64: urcras32 "rd" "rs1" "rs2"
+sail RV32_RV64: urcras32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urcrsa16
+llvm RV32_RV64: urcrsa16 "rd" "rs1" "rs2"
+sail RV32: urcrsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urcrsa32
+llvm RV64: urcrsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: urcrsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urstas16
+llvm RV32_RV64: urstas16 "rd" "rs1" "rs2"
+sail RV32: urstas16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urstas32
+llvm RV64: urstas32 "rd" "rs1" "rs2"
+sail RV32_RV64: urstas32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urstsa16
+llvm RV32_RV64: urstsa16 "rd" "rs1" "rs2"
+sail RV32: urstsa16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: urstsa32
+llvm RV64: urstsa32 "rd" "rs1" "rs2"
+sail RV32_RV64: urstsa32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ursub16
+llvm RV32_RV64: ursub16 "rd" "rs1" "rs2"
+sail RV32: ursub16 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ursub32
+llvm RV64: ursub32 "rd" "rs1" "rs2"
+sail RV64: ursub32 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ursub64
+llvm RV32: ursub64 "rd" "rs1" "rs2"
+sail RV32: ursub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd:PairGPR)
+sail outs: (0: rd:PairGPR)
+llvm ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+sail ins: (2: rs2:PairGPR) (1: rs1:PairGPR)
+
+Report: ursub64
+llvm RV64: ursub64 "rd" "rs1" "rs2"
+sail RV64: ursub64 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ursub8
+llvm RV32_RV64: ursub8 "rd" "rs1" "rs2"
+sail RV32: ursub8 "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: ursubw
+llvm RV32_RV64: ursubw "rd" "rs1" "rs2"
+sail RV32: ursubw "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: wext
+llvm RV32: wext "rd" "rs1" "rs2"
+sail RV32: wext "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1:PairGPR)
+sail ins: (2: rs2) (1: rs1:PairGPR)
+
+Report: wext
+llvm RV64: wext "rd" "rs1" "rs2"
+sail RV64: wext "rd" "rs1" "rs2"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: rs2) (1: rs1)
+sail ins: (2: rs2) (1: rs1)
+
+Report: wexti
+llvm RV32: wexti "rd" "rs1" "shamt"
+sail RV32: wexti "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1:PairGPR)
+sail ins: (2: imm5) (1: rs1:PairGPR)
+
+Report: wexti
+llvm RV64: wexti "rd" "rs1" "shamt"
+sail RV64: wexti "rd" "rs1" "imm5"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (2: shamt) (1: rs1)
+sail ins: (2: imm5) (1: rs1)
+
+Report: zunpkd810
+llvm RV32_RV64: zunpkd810 "rd" "rs1"
+sail RV32: zunpkd810 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: zunpkd820
+llvm RV32_RV64: zunpkd820 "rd" "rs1"
+sail RV32: zunpkd820 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: zunpkd830
+llvm RV32_RV64: zunpkd830 "rd" "rs1"
+sail RV32: zunpkd830 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: zunpkd831
+llvm RV32_RV64: zunpkd831 "rd" "rs1"
+sail RV32: zunpkd831 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Report: zunpkd832
+llvm RV32_RV64: zunpkd832 "rd" "rs1"
+sail RV32: zunpkd832 "rd" "rs1"
+llvm outs: (0: rd)
+sail outs: (0: rd)
+llvm ins: (1: rs1)
+sail ins: (1: rs1)
+
+Not found in sail: rev
+Not found in llvm: pkbb32 pktt32 clo16 clo8 clo32
