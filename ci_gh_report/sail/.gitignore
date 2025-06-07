@@ -1,6 +1,0 @@
-*.json
-*.dot
-*.svg
-pp_ast_*.txt
-sail_info_*.ml
-z3_problems
