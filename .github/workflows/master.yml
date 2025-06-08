@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: skhechnev/ocaml-5.1.0-sail
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
